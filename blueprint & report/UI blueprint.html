@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nuwan MC | Cyber Security Portfolio</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Phosphor Icons -->
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        bgDark: '#030305',
+                        surface: '#0a0a0f',
+                        borderLight: 'rgba(0, 255, 65, 0.15)',
+                        primary: '#00ff41', /* Hacker Green */
+                        primaryGlow: 'rgba(0, 255, 65, 0.4)',
+                        secondary: '#10b981' /* Emerald Green */
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+        
+        body { background-color: #030305; color: #e2e8f0; overflow-x: hidden; }
+        
+        /* Matrix/Hacker Background Grid */
+        .bg-grid {
+            background-size: 50px 50px;
+            background-image: 
+                linear-gradient(to right, rgba(0, 255, 65, 0.08) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(0, 255, 65, 0.08) 1px, transparent 1px);
+            mask-image: radial-gradient(circle at center, black 40%, transparent 100%);
+            -webkit-mask-image: radial-gradient(circle at center, black 40%, transparent 100%);
+        }
+
+        /* Gradient Text (Green) */
+        .text-gradient {
+            background: linear-gradient(to right, #00ff41, #10b981);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* Glassmorphism */
+        .glass {
+            background: rgba(10, 10, 15, 0.6);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(0, 255, 65, 0.15);
+        }
+
+        /* Scroll Reveal Animation Classes */
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s cubic-bezier(0.5, 0, 0, 1);
+        }
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #030305; }
+        ::-webkit-scrollbar-thumb { background: #1e1e2f; border-radius: 10px; border: 1px solid rgba(0, 255, 65, 0.2); }
+        ::-webkit-scrollbar-thumb:hover { background: #00ff41; }
+    </style>
+</head>
+<body class="antialiased selection:bg-primary selection:text-black relative">
+
+    <!-- Background Effects -->
+    <div class="fixed inset-0 bg-grid pointer-events-none z-0"></div>
+    <div class="fixed top-[-10%] left-[-10%] w-[40%] h-[40%] bg-primary/10 rounded-full blur-[120px] pointer-events-none z-0"></div>
+    <div class="fixed bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-secondary/10 rounded-full blur-[120px] pointer-events-none z-0"></div>
+
+    <!-- Navigation Bar -->
+    <nav class="fixed w-full top-0 z-50 glass border-b-0 border-borderLight px-6 py-4 transition-all duration-300" id="navbar">
+        <div class="max-w-7xl mx-auto flex justify-between items-center relative z-10">
+            <a href="#" class="flex items-center gap-3 group">
+                <div class="w-10 h-10 bg-gradient-to-br from-primary to-secondary rounded-xl flex items-center justify-center text-black font-bold text-xl shadow-[0_0_15px_rgba(0,255,65,0.4)] group-hover:shadow-[0_0_25px_rgba(0,255,65,0.7)] transition-all">N</div>
+                <span class="text-xl font-bold tracking-wider text-white">Nuwan MC</span>
+            </a>
+            
+            <!-- Desktop Menu -->
+            <div class="hidden md:flex gap-8 text-sm font-medium text-gray-400 bg-black/40 px-6 py-2.5 rounded-full border border-primary/20">
+                <a href="#about" class="hover:text-primary transition-colors">About</a>
+                <a href="#skills" class="hover:text-primary transition-colors">Skills</a>
+                <a href="#experience" class="hover:text-primary transition-colors">Experience</a>
+                <a href="#projects" class="hover:text-primary transition-colors">Projects</a>
+            </div>
+
+            <a href="#contact" class="hidden md:flex items-center gap-2 text-sm font-medium text-primary hover:text-black transition-all border border-primary/50 px-5 py-2.5 rounded-xl hover:bg-primary hover:border-primary">
+                Get In Touch <i class="ph ph-terminal-window"></i>
+            </a>
+        </div>
+    </nav>
+
+    <!-- Main Content Wrapper -->
+    <main class="relative z-10">
+
+        <!-- 1. Hero Section -->
+        <section id="home" class="min-h-screen flex items-center pt-20 pb-10 px-6">
+            <div class="max-w-7xl mx-auto flex flex-col-reverse md:flex-row items-center justify-between gap-12 w-full reveal active">
+                
+                <div class="md:w-3/5 space-y-6">
+                    <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-primary/50 bg-primary/10 text-primary text-xs font-medium mb-4 font-mono">
+                        <span class="relative flex h-2 w-2">
+                          <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
+                          <span class="relative inline-flex rounded-full h-2 w-2 bg-primary"></span>
+                        </span>
+                        System Online | Secure Port 443
+                    </div>
+                    <h1 class="text-5xl md:text-7xl font-extrabold text-white tracking-tight leading-[1.1]">
+                        Architecting <br /> <span class="text-gradient">Secure Digital</span> <br /> Systems.
+                    </h1>
+                    <p class="text-gray-400 text-lg md:text-xl max-w-xl leading-relaxed">
+                        I am <span class="text-primary font-medium">Nuwan MC</span>, a Full-Stack Developer & Cyber Security Enthusiast specializing in robust software architectures and zero-trust IT infrastructure.
+                    </p>
+                    <div class="flex flex-wrap gap-4 pt-4">
+                        <a href="#projects" class="flex items-center gap-2 px-7 py-3.5 bg-primary text-black hover:bg-white font-bold rounded-xl transition-all shadow-[0_0_20px_rgba(0,255,65,0.3)]">
+                            Explore Projects <i class="ph ph-arrow-right text-lg"></i>
+                        </a>
+                        <a href="/cv.pdf" download class="flex items-center gap-2 px-7 py-3.5 border border-primary/50 hover:border-primary text-primary font-medium rounded-xl transition-all bg-primary/5 hover:bg-primary/10">
+                            Download CV <i class="ph ph-download-simple"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="md:w-2/5 flex justify-center relative">
+                    <div class="relative w-72 h-72 md:w-[26rem] md:h-[26rem]">
+                        <div class="absolute inset-0 bg-gradient-to-tr from-primary to-secondary rounded-full blur-[60px] opacity-30 animate-pulse"></div>
+                        <div class="absolute inset-2 rounded-full border border-primary/30 p-2 glass">
+                            <!-- Image Tinted Green -->
+                            <img src="https://via.placeholder.com/600x600/0a0a0f/00ff41?text=Nuwan+MC" alt="Profile" class="w-full h-full object-cover rounded-full filter contrast-125 grayscale hover:grayscale-0 transition-all duration-700 opacity-90 mix-blend-screen" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 2. About Section -->
+        <section id="about" class="py-24 px-6 border-t border-borderLight bg-black/40">
+            <div class="max-w-7xl mx-auto reveal">
+                <div class="flex items-center gap-4 mb-12">
+                    <h2 class="text-3xl md:text-4xl font-bold text-white">About Me</h2>
+                    <div class="h-px bg-borderLight flex-1"></div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
+                    <div>
+                        <p class="text-gray-400 leading-relaxed text-lg mb-6">
+                            With a strong academic foundation in Information Technology from the <span class="text-primary font-medium">Advanced Technological Institute (HNDIT)</span>, I bridge the gap between creative design and robust technical engineering.
+                        </p>
+                        <p class="text-gray-400 leading-relaxed text-lg">
+                            My core philosophy is that excellent software isn't just about writing code; it's about crafting secure, scalable, and intuitive systems. From developing React-based web applications to configuring secure server environments and analyzing vulnerabilities, I take a holistic approach to IT.
+                        </p>
+                    </div>
+                    
+                    <div class="glass p-8 rounded-2xl border-primary/20">
+                        <h3 class="text-xl font-bold text-white mb-6 flex items-center gap-2"><i class="ph ph-target text-primary"></i> Core Objectives</h3>
+                        <ul class="space-y-4 font-mono text-sm">
+                            <li class="flex items-start gap-3">
+                                <span class="text-primary mt-1">>&nbsp;</span>
+                                <div>
+                                    <h4 class="text-primary font-medium">Full-Stack Engineering</h4>
+                                    <p class="text-gray-400 mt-1">Building responsive, data-driven applications.</p>
+                                </div>
+                            </li>
+                            <li class="flex items-start gap-3">
+                                <span class="text-primary mt-1">>&nbsp;</span>
+                                <div>
+                                    <h4 class="text-primary font-medium">Cyber Security & Infra</h4>
+                                    <p class="text-gray-400 mt-1">Vulnerability testing & secure routing principles.</p>
+                                </div>
+                            </li>
+                            <li class="flex items-start gap-3">
+                                <span class="text-primary mt-1">>&nbsp;</span>
+                                <div>
+                                    <h4 class="text-primary font-medium">UI/UX & Branding</h4>
+                                    <p class="text-gray-400 mt-1">Crafting premium interfaces and digital identities.</p>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 3. Skills Section -->
+        <section id="skills" class="py-24 px-6 border-t border-borderLight">
+            <div class="max-w-7xl mx-auto reveal">
+                <div class="flex items-center gap-4 mb-12">
+                    <div class="h-px bg-borderLight flex-1"></div>
+                    <h2 class="text-3xl md:text-4xl font-bold text-white">Technical Arsenal</h2>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div class="glass p-6 rounded-2xl hover:border-primary/50 transition-colors">
+                        <i class="ph ph-terminal-window text-3xl text-primary mb-4"></i>
+                        <h3 class="text-xl font-bold text-white mb-4">Frontend & Design</h3>
+                        <div class="flex flex-wrap gap-2">
+                            <span class="px-3 py-1 bg-primary/10 border border-primary/30 rounded-lg text-sm text-primary">React JS</span>
+                            <span class="px-3 py-1 bg-primary/10 border border-primary/30 rounded-lg text-sm text-primary">Tailwind CSS</span>
+                            <span class="px-3 py-1 bg-primary/10 border border-primary/30 rounded-lg text-sm text-primary">JavaScript</span>
+                            <span class="px-3 py-1 bg-primary/10 border border-primary/30 rounded-lg text-sm text-primary">Figma</span>
+                        </div>
+                    </div>
+                    
+                    <div class="glass p-6 rounded-2xl hover:border-primary/50 transition-colors">
+                        <i class="ph ph-database text-3xl text-primary mb-4"></i>
+                        <h3 class="text-xl font-bold text-white mb-4">Backend & Systems</h3>
+                        <div class="flex flex-wrap gap-2">
+                            <span class="px-3 py-1 bg-primary/10 border border-primary/30 rounded-lg text-sm text-primary">Node JS</span>
+                            <span class="px-3 py-1 bg-primary/10 border border-primary/30 rounded-lg text-sm text-primary">Python</span>
+                            <span class="px-3 py-1 bg-primary/10 border border-primary/30 rounded-lg text-sm text-primary">MongoDB</span>
+                            <span class="px-3 py-1 bg-primary/10 border border-primary/30 rounded-lg text-sm text-primary">MySQL</span>
+                        </div>
+                    </div>
+
+                    <div class="glass p-6 rounded-2xl hover:border-primary/50 transition-colors border-primary/40 shadow-[0_0_15px_rgba(0,255,65,0.1)]">
+                        <i class="ph ph-shield-check text-3xl text-primary mb-4"></i>
+                        <h3 class="text-xl font-bold text-white mb-4">Security & Infra</h3>
+                        <div class="flex flex-wrap gap-2">
+                            <span class="px-3 py-1 bg-primary/20 border border-primary/50 rounded-lg text-sm text-white">Linux / Kali</span>
+                            <span class="px-3 py-1 bg-primary/20 border border-primary/50 rounded-lg text-sm text-white">Networking</span>
+                            <span class="px-3 py-1 bg-primary/20 border border-primary/50 rounded-lg text-sm text-white">Pen-Testing</span>
+                            <span class="px-3 py-1 bg-primary/20 border border-primary/50 rounded-lg text-sm text-white">JWT Auth</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 4. Experience & Education Section -->
+        <section id="experience" class="py-24 px-6 border-t border-borderLight bg-black/40">
+            <div class="max-w-4xl mx-auto reveal">
+                <div class="flex items-center gap-4 mb-16">
+                    <h2 class="text-3xl md:text-4xl font-bold text-white">Experience & Education</h2>
+                    <div class="h-px bg-borderLight flex-1"></div>
+                </div>
+
+                <div class="relative border-l border-primary/30 ml-3 md:ml-6 space-y-12">
+                    <div class="relative pl-8 md:pl-12">
+                        <div class="absolute w-6 h-6 bg-surface border-2 border-primary rounded-full -left-[13px] top-1 flex items-center justify-center shadow-[0_0_10px_rgba(0,255,65,0.5)]">
+                            <div class="w-2 h-2 bg-primary rounded-full animate-pulse"></div>
+                        </div>
+                        <div class="text-primary font-mono text-sm font-semibold mb-2">[ 2024 - 2026 Expected ]</div>
+                        <h3 class="text-2xl font-bold text-white">HNDIT Candidate</h3>
+                        <h4 class="text-lg text-gray-400 mb-4">Advanced Technological Institute (SLIATE) - Ratnapura</h4>
+                        <p class="text-gray-400 leading-relaxed font-mono text-sm">
+                            >> Focusing on Object-Oriented Programming (OOP), Database Management Systems (DBMS), Systems Analysis, and IT Infrastructure.
+                        </p>
+                    </div>
+
+                    <div class="relative pl-8 md:pl-12">
+                        <div class="absolute w-6 h-6 bg-surface border-2 border-primary/50 rounded-full -left-[13px] top-1"></div>
+                        <div class="text-gray-500 font-mono text-sm font-semibold mb-2">[ Present ]</div>
+                        <h3 class="text-2xl font-bold text-white">Freelance Full-Stack & Security</h3>
+                        <h4 class="text-lg text-gray-400 mb-4">Independent Contractor</h4>
+                        <p class="text-gray-400 leading-relaxed font-mono text-sm">
+                            >> Developing secure web applications, configuring backend API routes, and engaging in CTF (Capture The Flag) challenges to hone security skills.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 5. Projects Section -->
+        <section id="projects" class="py-24 px-6 border-t border-borderLight">
+            <div class="max-w-7xl mx-auto reveal">
+                <h2 class="text-3xl md:text-4xl font-bold text-white mb-2">Featured Projects</h2>
+                <p class="text-primary font-mono text-sm mb-10">> Querying database records...</p>
+
+                <div class="flex flex-wrap gap-2 mb-10 pb-4 border-b border-borderLight" id="project-tabs">
+                    <button onclick="filterProjects('all')" class="tab-btn active px-5 py-2.5 rounded-xl text-sm font-medium transition-all bg-primary text-black font-bold">All Works</button>
+                    <button onclick="filterProjects('web')" class="tab-btn px-5 py-2.5 rounded-xl text-sm font-medium transition-all bg-surface border border-borderLight text-gray-400 hover:text-primary hover:border-primary/50">Web & App</button>
+                    <button onclick="filterProjects('security')" class="tab-btn px-5 py-2.5 rounded-xl text-sm font-medium transition-all bg-surface border border-borderLight text-gray-400 hover:text-primary hover:border-primary/50">Security & Infra</button>
+                    <button onclick="filterProjects('design')" class="tab-btn px-5 py-2.5 rounded-xl text-sm font-medium transition-all bg-surface border border-borderLight text-gray-400 hover:text-primary hover:border-primary/50">Design & Media</button>
+                </div>
+
+                <div id="projects-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <!-- Cards injected via JS -->
+                </div>
+            </div>
+        </section>
+
+        <!-- 6. Secure Contact Section -->
+        <section id="contact" class="py-24 px-6 relative border-t border-borderLight bg-black/40">
+            <div class="max-w-xl mx-auto reveal">
+                <div class="text-center mb-10">
+                    <div class="w-16 h-16 bg-primary/10 text-primary rounded-2xl mx-auto flex items-center justify-center mb-6 border border-primary/30 shadow-[0_0_15px_rgba(0,255,65,0.2)]">
+                        <i class="ph ph-shield-check text-3xl"></i>
+                    </div>
+                    <h2 class="text-4xl font-bold mb-3 text-white">Secure Communication</h2>
+                    <p class="text-gray-400 font-mono text-sm">> Direct, encrypted, and read-only port open.</p>
+                </div>
+
+                <div class="glass p-6 md:p-8 rounded-3xl relative overflow-hidden border-primary/20">
+                    <form id="secure-form" class="space-y-6">
+                        <div>
+                            <label class="block text-sm text-primary mb-2 font-mono">User_Name</label>
+                            <input type="text" required class="w-full bg-black/80 border border-primary/30 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-primary focus:shadow-[0_0_10px_rgba(0,255,65,0.2)] transition-all font-mono" placeholder="root">
+                        </div>
+                        <div>
+                            <label class="block text-sm text-primary mb-2 font-mono">Email_Address</label>
+                            <input type="email" required class="w-full bg-black/80 border border-primary/30 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-primary focus:shadow-[0_0_10px_rgba(0,255,65,0.2)] transition-all font-mono" placeholder="admin@local.host">
+                        </div>
+                        <div>
+                            <label class="block text-sm text-primary mb-2 font-mono">Payload_Data</label>
+                            <textarea id="message-input" required rows="4" class="w-full bg-black/80 border border-primary/30 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-primary focus:shadow-[0_0_10px_rgba(0,255,65,0.2)] transition-all resize-none font-mono text-sm" placeholder="Type your secure message here..."></textarea>
+                        </div>
+
+                        <!-- Security Alert -->
+                        <div id="error-box" class="hidden bg-red-950/80 border border-red-500/50 text-red-400 p-4 rounded-xl flex items-center gap-3">
+                            <i class="ph-fill ph-warning-circle text-xl flex-shrink-0"></i>
+                            <span class="text-sm font-mono">> FIREWALL ALERT: URLs & External links are blocked.</span>
+                        </div>
+
+                        <button type="submit" class="w-full bg-primary hover:bg-white text-black font-bold py-4 rounded-xl transition-all flex items-center justify-center gap-2 shadow-[0_0_15px_rgba(0,255,65,0.2)]">
+                            <i class="ph-fill ph-lock-key"></i> Transmit Data
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer class="border-t border-borderLight py-8 text-center text-sm text-gray-500 bg-bgDark">
+            <div class="max-w-7xl mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-4">
+                <p class="font-mono">© 2026 Nuwan MC.</p>
+                <div class="flex items-center gap-2 bg-primary/10 px-3 py-1 rounded-full border border-primary/30 text-xs font-mono text-primary">
+                    <span class="w-2 h-2 rounded-full bg-primary animate-pulse"></span> SYSTEM: ONLINE
+                </div>
+            </div>
+        </footer>
+
+    </main>
+
+    <!-- Interactive JavaScript -->
+    <script>
+        // 1. Scroll Reveal
+        const revealElements = document.querySelectorAll('.reveal');
+        const revealOnScroll = () => {
+            const windowHeight = window.innerHeight;
+            revealElements.forEach(el => {
+                const elementTop = el.getBoundingClientRect().top;
+                if (elementTop < windowHeight - 100) {
+                    el.classList.add('active');
+                }
+            });
+        };
+        window.addEventListener('scroll', revealOnScroll);
+        revealOnScroll(); 
+
+        // 2. Data & Filtering
+        const projectsData = [
+            { id: 1, cat: 'web', title: "Smart Expense Tracker", desc: "Full-stack finance application with visual data analytics.", tech: ["React", "NodeJS", "MongoDB"], img: "https://via.placeholder.com/600x400/0a0a0f/00ff41?text=App" },
+            { id: 2, cat: 'web', title: "Ride-Sharing Core", desc: "Vehicle booking and routing logic system.", tech: ["Python", "MySQL"], img: "https://via.placeholder.com/600x400/0a0a0f/00ff41?text=System" },
+            { id: 3, cat: 'security', title: "Infra & Vuln Lab", desc: "Environment for penetration testing and secure configurations.", tech: ["Linux", "Kali", "Wireshark"], img: "https://via.placeholder.com/600x400/0a0a0f/00ff41?text=Security" },
+            { id: 4, cat: 'design', title: "Creative Brand Studio", desc: "Promotional branding and interactive UI/UX prototypes.", tech: ["Figma", "Photoshop"], img: "https://via.placeholder.com/600x400/0a0a0f/00ff41?text=Design" },
+            { id: 5, cat: 'web', title: "Auth Middleware API", desc: "Secure backend API endpoints with encrypted JWT logic.", tech: ["NodeJS", "Express"], img: "https://via.placeholder.com/600x400/0a0a0f/00ff41?text=Backend" },
+        ];
+
+        function renderProjects(category) {
+            const grid = document.getElementById('projects-grid');
+            grid.innerHTML = '';
+            grid.style.opacity = '0';
+
+            setTimeout(() => {
+                const filtered = category === 'all' ? projectsData : projectsData.filter(p => p.cat === category);
+                
+                filtered.forEach(p => {
+                    const techHtml = p.tech.map(t => `<span class="text-xs font-mono bg-primary/10 border border-primary/20 px-2 py-1 rounded text-primary">${t}</span>`).join('');
+                    const card = `
+                        <div class="glass overflow-hidden rounded-2xl group hover:border-primary/60 transition-all duration-300 hover:-translate-y-1 shadow-[0_0_0_rgba(0,255,65,0)] hover:shadow-[0_5px_20px_rgba(0,255,65,0.1)]">
+                            <div class="h-48 overflow-hidden relative border-b border-primary/20">
+                                <img src="${p.img}" class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-500 transform group-hover:scale-105 opacity-80 mix-blend-screen" />
+                            </div>
+                            <div class="p-6">
+                                <h3 class="text-xl font-bold text-white mb-2">${p.title}</h3>
+                                <p class="text-sm text-gray-400 mb-5 font-mono">${p.desc}</p>
+                                <div class="flex flex-wrap gap-2">${techHtml}</div>
+                            </div>
+                        </div>
+                    `;
+                    grid.innerHTML += card;
+                });
+                grid.style.transition = 'opacity 0.4s ease';
+                grid.style.opacity = '1';
+            }, 200);
+        }
+
+        function filterProjects(cat) {
+            const buttons = document.querySelectorAll('.tab-btn');
+            buttons.forEach(btn => {
+                btn.className = "tab-btn px-5 py-2.5 rounded-xl text-sm font-medium transition-all bg-surface border border-borderLight text-gray-400 hover:text-primary hover:border-primary/50";
+            });
+            event.target.className = "tab-btn active px-5 py-2.5 rounded-xl text-sm font-medium transition-all bg-primary text-black font-bold";
+            renderProjects(cat);
+        }
+
+        renderProjects('all');
+
+        // 3. Form Validation
+        document.getElementById('secure-form').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const msg = document.getElementById('message-input').value;
+            const errorBox = document.getElementById('error-box');
+            const linkRegex = /(http:\/\/|https:\/\/|www\.|.com|.net|.lk)/i;
+            
+            if (linkRegex.test(msg)) {
+                errorBox.classList.remove('hidden');
+            } else {
+                errorBox.classList.add('hidden');
+                e.target.innerHTML = `
+                    <div class="bg-primary/10 border border-primary/50 text-primary p-6 rounded-2xl flex items-center justify-center gap-3 text-lg font-mono">
+                        <i class="ph-fill ph-check-circle text-2xl"></i> > DATA TRANSMITTED SECURELY_
+                    </div>
+                `;
+            }
+        });
+    </script>
+</body>
+</html>
