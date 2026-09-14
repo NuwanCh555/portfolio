@@ -6,7 +6,7 @@
     "dev:frontend": "cd frontend && npm run dev",
     "dev:api": "node server.js",
     "start": "concurrently \"npm run dev:api\" \"npm run dev:frontend\"",
-    "build": "cd frontend && npm run build",
+    "build": "cd frontend && npm install && npm run build",
     "install:all": "npm install && cd frontend && npm install"
   },
   "dependencies": {
