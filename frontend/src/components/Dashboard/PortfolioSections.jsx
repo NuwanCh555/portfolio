@@ -10,7 +10,10 @@ export function AboutManager() {
 
   // Forms for new items
   const [newStat, setNewStat] = useState({ val: '', label: '' });
+  const [editStatIndex, setEditStatIndex] = useState(null);
+
   const [newObj, setNewObj]   = useState({ title: '', desc: '', icon: '' });
+  const [editObjIndex, setEditObjIndex] = useState(null);
 
   useEffect(() => {
     axios.get(`${API}/portfolio`).then(({ data: resData }) => {
@@ -34,22 +37,56 @@ export function AboutManager() {
   };
 
   // ── Stats ─────────────────────────────────────────────────────────────
-  const addStat = (e) => {
+  const saveStat = (e) => {
     e.preventDefault();
     if (!newStat.val.trim() || !newStat.label.trim()) return;
-    handleSave({ ...data, stats: [...data.stats, newStat] });
+    
+    let updatedStats = [...data.stats];
+    if (editStatIndex !== null) {
+      updatedStats[editStatIndex] = newStat;
+    } else {
+      updatedStats.push(newStat);
+    }
+    
+    handleSave({ ...data, stats: updatedStats });
     setNewStat({ val: '', label: '' });
+    setEditStatIndex(null);
   };
   const removeStat = (index) => handleSave({ ...data, stats: data.stats.filter((_, i) => i !== index) });
+  const startEditStat = (index) => {
+    setNewStat(data.stats[index]);
+    setEditStatIndex(index);
+  };
+  const cancelEditStat = () => {
+    setNewStat({ val: '', label: '' });
+    setEditStatIndex(null);
+  };
 
   // ── Core Objectives ────────────────────────────────────────────────────
-  const addObj = (e) => {
+  const saveObj = (e) => {
     e.preventDefault();
     if (!newObj.title.trim() || !newObj.desc.trim()) return;
-    handleSave({ ...data, coreObjectives: [...data.coreObjectives, newObj] });
+    
+    let updatedObjs = [...data.coreObjectives];
+    if (editObjIndex !== null) {
+      updatedObjs[editObjIndex] = newObj;
+    } else {
+      updatedObjs.push(newObj);
+    }
+    
+    handleSave({ ...data, coreObjectives: updatedObjs });
     setNewObj({ title: '', desc: '', icon: '' });
+    setEditObjIndex(null);
   };
   const removeObj = (index) => handleSave({ ...data, coreObjectives: data.coreObjectives.filter((_, i) => i !== index) });
+  const startEditObj = (index) => {
+    setNewObj(data.coreObjectives[index]);
+    setEditObjIndex(index);
+  };
+  const cancelEditObj = () => {
+    setNewObj({ title: '', desc: '', icon: '' });
+    setEditObjIndex(null);
+  };
 
   return (
     <div className="space-y-12 max-w-3xl">
@@ -74,20 +111,30 @@ export function AboutManager() {
       <div className="glass p-6 rounded-2xl border-primary/20 space-y-6">
         <h3 className="text-xl font-bold text-white flex items-center gap-2"><i className="ph ph-chart-bar text-primary" /> Stats</h3>
         
-        <form onSubmit={addStat} className="flex gap-3">
-          <input type="text" placeholder="Value (e.g. 2+)" value={newStat.val} onChange={e => setNewStat({...newStat, val: e.target.value})} className="w-1/3 bg-black/80 border border-primary/30 rounded-xl px-4 py-2 text-white font-mono text-sm focus:border-primary outline-none" required />
-          <input type="text" placeholder="Label (e.g. Years Coding)" value={newStat.label} onChange={e => setNewStat({...newStat, label: e.target.value})} className="flex-1 bg-black/80 border border-primary/30 rounded-xl px-4 py-2 text-white font-mono text-sm focus:border-primary outline-none" required />
-          <button type="submit" className="px-5 py-2 bg-primary text-black font-bold rounded-xl hover:bg-white transition-all text-sm">Add</button>
+        <form onSubmit={saveStat} className="flex flex-wrap gap-3">
+          <input type="text" placeholder="Value (e.g. 2+)" value={newStat.val} onChange={e => setNewStat({...newStat, val: e.target.value})} className="w-1/3 min-w-[100px] bg-black/80 border border-primary/30 rounded-xl px-4 py-2 text-white font-mono text-sm focus:border-primary outline-none" required />
+          <input type="text" placeholder="Label (e.g. Years Coding)" value={newStat.label} onChange={e => setNewStat({...newStat, label: e.target.value})} className="flex-1 min-w-[150px] bg-black/80 border border-primary/30 rounded-xl px-4 py-2 text-white font-mono text-sm focus:border-primary outline-none" required />
+          {editStatIndex !== null ? (
+            <div className="flex gap-2">
+              <button type="submit" className="px-4 py-2 bg-yellow-400 text-black font-bold rounded-xl hover:bg-white transition-all text-sm">Update</button>
+              <button type="button" onClick={cancelEditStat} className="px-4 py-2 bg-gray-700 text-white font-bold rounded-xl hover:bg-gray-600 transition-all text-sm">Cancel</button>
+            </div>
+          ) : (
+            <button type="submit" className="px-5 py-2 bg-primary text-black font-bold rounded-xl hover:bg-white transition-all text-sm">Add</button>
+          )}
         </form>
 
-        <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {data.stats.map((s, i) => (
-            <div key={i} className="bg-black/40 border border-primary/20 rounded-xl p-3 flex justify-between items-center group">
+            <div key={i} className="bg-black/40 border border-primary/20 rounded-xl p-4 flex justify-between items-center group">
               <div>
-                <div className="text-primary font-bold">{s.val}</div>
-                <div className="text-gray-400 text-xs font-mono">{s.label}</div>
+                <div className="text-primary font-bold text-lg">{s.val}</div>
+                <div className="text-gray-400 text-sm font-mono">{s.label}</div>
               </div>
-              <button onClick={() => removeStat(i)} className="text-gray-600 hover:text-red-400 opacity-0 group-hover:opacity-100 transition-all"><i className="ph ph-trash" /></button>
+              <div className="flex gap-2">
+                <button onClick={() => startEditStat(i)} className="text-gray-400 hover:text-yellow-400 p-2 bg-gray-900/50 rounded-lg transition-all"><i className="ph ph-pencil-simple" /></button>
+                <button onClick={() => removeStat(i)} className="text-gray-400 hover:text-red-400 p-2 bg-gray-900/50 rounded-lg transition-all"><i className="ph ph-trash" /></button>
+              </div>
             </div>
           ))}
         </div>
@@ -97,28 +144,38 @@ export function AboutManager() {
       <div className="glass p-6 rounded-2xl border-primary/20 space-y-6">
         <h3 className="text-xl font-bold text-white flex items-center gap-2"><i className="ph ph-target text-primary" /> Core Objectives</h3>
         
-        <form onSubmit={addObj} className="space-y-4 bg-black/40 p-4 rounded-xl border border-dashed border-gray-700">
+        <form onSubmit={saveObj} className="space-y-4 bg-black/40 p-4 rounded-xl border border-dashed border-gray-700">
           <div className="flex gap-3">
             <input type="text" placeholder="Title" value={newObj.title} onChange={e => setNewObj({...newObj, title: e.target.value})} className="flex-1 bg-black/80 border border-primary/30 rounded-xl px-4 py-2 text-white font-mono text-sm focus:border-primary outline-none" required />
             <input type="text" placeholder="Icon (e.g. ph-code)" value={newObj.icon} onChange={e => setNewObj({...newObj, icon: e.target.value})} className="w-1/3 bg-black/80 border border-primary/30 rounded-xl px-4 py-2 text-white font-mono text-sm focus:border-primary outline-none" />
           </div>
           <div className="flex gap-3">
             <input type="text" placeholder="Description" value={newObj.desc} onChange={e => setNewObj({...newObj, desc: e.target.value})} className="flex-1 bg-black/80 border border-primary/30 rounded-xl px-4 py-2 text-white font-mono text-sm focus:border-primary outline-none" required />
-            <button type="submit" className="px-5 py-2 bg-primary text-black font-bold rounded-xl hover:bg-white transition-all text-sm">Add</button>
+            {editObjIndex !== null ? (
+              <div className="flex gap-2">
+                <button type="submit" className="px-4 py-2 bg-yellow-400 text-black font-bold rounded-xl hover:bg-white transition-all text-sm">Update</button>
+                <button type="button" onClick={cancelEditObj} className="px-4 py-2 bg-gray-700 text-white font-bold rounded-xl hover:bg-gray-600 transition-all text-sm">Cancel</button>
+              </div>
+            ) : (
+              <button type="submit" className="px-5 py-2 bg-primary text-black font-bold rounded-xl hover:bg-white transition-all text-sm">Add</button>
+            )}
           </div>
         </form>
 
-        <div className="space-y-3">
+        <div className="space-y-4">
           {data.coreObjectives.map((obj, i) => (
-            <div key={i} className="bg-black/40 border border-primary/20 rounded-xl p-4 flex gap-4 items-start group">
-              <div className="w-10 h-10 bg-primary/10 rounded-lg flex items-center justify-center flex-shrink-0 text-primary">
+            <div key={i} className="bg-black/40 border border-primary/20 rounded-xl p-5 flex gap-4 items-start group">
+              <div className="w-10 h-10 bg-primary/10 rounded-lg flex items-center justify-center flex-shrink-0 text-primary mt-1">
                 <i className={`ph ${obj.icon || 'ph-target'} text-xl`} />
               </div>
               <div className="flex-1">
-                <div className="text-white font-bold text-sm">{obj.title}</div>
-                <div className="text-gray-400 text-xs font-mono mt-1 leading-relaxed">{obj.desc}</div>
+                <div className="text-white font-bold">{obj.title}</div>
+                <div className="text-gray-400 text-sm font-mono mt-2 leading-relaxed">{obj.desc}</div>
               </div>
-              <button onClick={() => removeObj(i)} className="text-gray-600 hover:text-red-400 opacity-0 group-hover:opacity-100 transition-all p-2"><i className="ph ph-trash" /></button>
+              <div className="flex flex-col gap-2">
+                <button onClick={() => startEditObj(i)} className="text-gray-400 hover:text-yellow-400 p-2 bg-gray-900/50 rounded-lg transition-all"><i className="ph ph-pencil-simple" /></button>
+                <button onClick={() => removeObj(i)} className="text-gray-400 hover:text-red-400 p-2 bg-gray-900/50 rounded-lg transition-all"><i className="ph ph-trash" /></button>
+              </div>
             </div>
           ))}
         </div>
