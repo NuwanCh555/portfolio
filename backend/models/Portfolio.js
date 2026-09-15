@@ -1,10 +1,11 @@
 const mongoose = require('mongoose')
 
 const experienceSchema = new mongoose.Schema({
-  title:       { type: String, required: true },
-  company:     { type: String, required: true },
   duration:    { type: String, required: true },
-  description: { type: String }
+  role:        { type: String, required: true },
+  company:     { type: String, required: true },
+  description: { type: String },
+  tags:        [{ type: String }]
 })
 
 const technicalArsenalSchema = new mongoose.Schema({

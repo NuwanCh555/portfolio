@@ -380,65 +380,151 @@ export function SkillCategoriesManager() {
 
 export function ExperienceManager() {
   const [experiences, setExperiences] = useState([]);
-  const [form, setForm] = useState({ title: '', company: '', duration: '', description: '' });
-  const [showForm, setShowForm] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [msg, setMsg] = useState('');
+
+  // Form for new/edit item
+  const [form, setForm] = useState({ duration: '', role: '', company: '', description: '', tags: [] });
+  const [editIndex, setEditIndex] = useState(null);
+  const [showForm, setShowForm] = useState(false);
+
+  // Local state for tags
+  const [tempTag, setTempTag] = useState('');
 
   useEffect(() => {
     axios.get(`${API}/portfolio`).then(({ data }) => setExperiences(data.data?.experience || []));
   }, []);
 
-  const saveExperience = async (updatedExp) => {
+  const handleSave = async (updatedExp = experiences) => {
+    setLoading(true); setMsg('');
     try {
       await axios.put(`${API}/portfolio`, { experience: updatedExp });
       setExperiences(updatedExp);
       setMsg('✅ Experience updated.');
-      setShowForm(false);
-      setForm({ title: '', company: '', duration: '', description: '' });
     } catch {
-      setMsg('Failed to update.');
-    }
+      setMsg('❌ Failed to update.');
+    } finally { setLoading(false); }
   };
 
-  const handleAdd = (e) => {
+  const saveExperience = (e) => {
     e.preventDefault();
-    saveExperience([...experiences, form]);
+    if (!form.role.trim() || !form.company.trim() || !form.duration.trim()) return;
+
+    let updated = [...experiences];
+    if (editIndex !== null) {
+      updated[editIndex] = form;
+    } else {
+      updated.push(form);
+    }
+
+    handleSave(updated);
+    setForm({ duration: '', role: '', company: '', description: '', tags: [] });
+    setEditIndex(null);
+    setShowForm(false);
   };
 
-  const handleRemove = (index) => {
+  const removeExperience = (index) => {
     if(!window.confirm('Delete this experience?')) return;
-    saveExperience(experiences.filter((_, i) => i !== index));
+    handleSave(experiences.filter((_, i) => i !== index));
+  };
+
+  const startEdit = (index) => {
+    setForm(experiences[index]);
+    setEditIndex(index);
+    setShowForm(true);
+  };
+
+  const cancelEdit = () => {
+    setForm({ duration: '', role: '', company: '', description: '', tags: [] });
+    setEditIndex(null);
+    setShowForm(false);
+  };
+
+  // Add/Remove Tags
+  const addTempTag = (e) => {
+    e.preventDefault();
+    if (!tempTag.trim() || form.tags.includes(tempTag.trim())) return;
+    setForm({ ...form, tags: [...form.tags, tempTag.trim()] });
+    setTempTag('');
+  };
+  const removeTempTag = (tag) => {
+    setForm({ ...form, tags: form.tags.filter(t => t !== tag) });
   };
 
   return (
-    <div className="max-w-3xl">
+    <div className="max-w-4xl space-y-8">
       <div className="flex justify-between items-center mb-6">
-        <h2 className="text-2xl font-bold text-white">Experience</h2>
-        <button onClick={() => setShowForm(!showForm)} className="px-4 py-2 bg-primary text-black font-bold rounded-xl text-sm">Add New</button>
+        <h2 className="text-2xl font-bold text-white">Experience & Education</h2>
+        <button onClick={() => {setShowForm(!showForm); if(showForm) cancelEdit();}} className="px-4 py-2 bg-primary text-black font-bold rounded-xl text-sm transition-all shadow-[0_0_10px_rgba(0,255,65,0.2)] hover:bg-white">{showForm ? 'Close Form' : 'Add New'}</button>
       </div>
-      {msg && <div className="text-sm font-mono text-primary mb-4">{msg}</div>}
+      {msg && <div className={`p-3 rounded-xl text-sm font-mono border ${msg.startsWith('✅') ? 'bg-primary/10 border-primary/30 text-primary' : 'bg-red-950/60 border-red-500/40 text-red-400'}`}>{msg}</div>}
 
       {showForm && (
-        <form onSubmit={handleAdd} className="glass p-6 rounded-2xl mb-6 space-y-4">
-          <div className="grid grid-cols-2 gap-4">
-            <input type="text" placeholder="Job Title" required value={form.title} onChange={e => setForm({...form, title: e.target.value})} className="bg-black/80 border border-primary/30 rounded-xl px-3 py-2 text-white font-mono text-sm" />
-            <input type="text" placeholder="Company" required value={form.company} onChange={e => setForm({...form, company: e.target.value})} className="bg-black/80 border border-primary/30 rounded-xl px-3 py-2 text-white font-mono text-sm" />
-            <input type="text" placeholder="Duration (e.g. 2021 - Present)" required value={form.duration} onChange={e => setForm({...form, duration: e.target.value})} className="bg-black/80 border border-primary/30 rounded-xl px-3 py-2 text-white font-mono text-sm" />
-          </div>
-          <textarea placeholder="Description" value={form.description} onChange={e => setForm({...form, description: e.target.value})} className="w-full bg-black/80 border border-primary/30 rounded-xl px-3 py-2 text-white font-mono text-sm h-24" />
-          <button type="submit" className="px-6 py-2 bg-primary text-black font-bold rounded-xl text-sm">Save</button>
-        </form>
+        <div className="glass p-6 rounded-2xl mb-6 space-y-6 border-primary/20">
+          <h3 className="text-xl font-bold text-white flex items-center gap-2">
+            <i className="ph ph-briefcase text-primary" /> {editIndex !== null ? 'Edit Experience' : 'Add Experience'}
+          </h3>
+          <form onSubmit={saveExperience} className="space-y-4">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <input type="text" placeholder="Duration (e.g. [ 2024 - 2026 Expected ])" required value={form.duration} onChange={e => setForm({...form, duration: e.target.value})} className="bg-black/80 border border-primary/30 rounded-xl px-4 py-2 text-white font-mono text-sm focus:border-primary outline-none" />
+              <input type="text" placeholder="Role (e.g. HNDIT Candidate)" required value={form.role} onChange={e => setForm({...form, role: e.target.value})} className="bg-black/80 border border-primary/30 rounded-xl px-4 py-2 text-white font-mono text-sm focus:border-primary outline-none" />
+              <input type="text" placeholder="Company/Org" required value={form.company} onChange={e => setForm({...form, company: e.target.value})} className="bg-black/80 border border-primary/30 rounded-xl px-4 py-2 text-white font-mono text-sm focus:border-primary outline-none" />
+            </div>
+            
+            <textarea placeholder="Description (Supports multi-line)" required value={form.description} onChange={e => setForm({...form, description: e.target.value})} className="w-full bg-black/80 border border-primary/30 rounded-xl px-4 py-3 text-white font-mono text-sm h-28 focus:border-primary outline-none" />
+            
+            {/* Tags Sub-Form */}
+            <div className="bg-black/40 p-4 rounded-xl border border-dashed border-gray-700 space-y-3">
+              <label className="text-primary font-bold text-sm">Tags (Skills/Badges used)</label>
+              <div className="flex gap-2">
+                <input type="text" placeholder="Tag Name (e.g. OOP, DBMS)" value={tempTag} onChange={e => setTempTag(e.target.value)} onKeyDown={e => {if(e.key==='Enter'){e.preventDefault(); addTempTag(e);}}} className="max-w-sm bg-black/80 border border-primary/30 rounded-lg px-3 py-1.5 text-white font-mono text-xs focus:border-primary outline-none" />
+                <button type="button" onClick={addTempTag} className="px-4 py-1.5 bg-primary/20 text-primary border border-primary/30 rounded-lg hover:bg-primary hover:text-black font-bold text-xs transition-all">Add Tag</button>
+              </div>
+              <div className="flex flex-wrap gap-2">
+                {form.tags.map(t => (
+                  <div key={t} className="flex items-center gap-1 bg-primary/10 border border-primary/30 px-2 py-1 rounded text-primary font-mono text-xs">
+                    {t} <button type="button" onClick={() => removeTempTag(t)} className="text-red-400 hover:text-red-300 ml-1"><i className="ph ph-x" /></button>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            <div className="flex gap-3 pt-2">
+              {editIndex !== null ? (
+                <>
+                  <button type="submit" disabled={loading} className="px-6 py-2 bg-yellow-400 text-black font-bold rounded-xl hover:bg-white transition-all text-sm shadow-[0_0_10px_rgba(234,179,8,0.2)]">Update</button>
+                  <button type="button" onClick={cancelEdit} className="px-6 py-2 bg-gray-700 text-white font-bold rounded-xl hover:bg-gray-600 transition-all text-sm">Cancel</button>
+                </>
+              ) : (
+                <button type="submit" disabled={loading} className="px-6 py-2 bg-primary text-black font-bold rounded-xl hover:bg-white transition-all text-sm shadow-[0_0_10px_rgba(0,255,65,0.2)]">Save Experience</button>
+              )}
+            </div>
+          </form>
+        </div>
       )}
 
       <div className="space-y-4">
         {experiences.map((exp, i) => (
-          <div key={i} className="glass p-4 rounded-xl flex justify-between items-start border-primary/20">
-            <div>
-              <h4 className="text-white font-bold">{exp.title} <span className="text-primary font-mono text-sm">@ {exp.company}</span></h4>
-              <div className="text-gray-400 text-xs font-mono mb-2">{exp.duration}</div>
-              <p className="text-gray-300 text-sm">{exp.description}</p>
+          <div key={i} className="glass p-5 rounded-xl flex justify-between items-start border-primary/20 space-x-4">
+            <div className="flex-1 space-y-2">
+              <div className="text-gray-400 text-xs font-mono mb-1 bg-black/40 inline-block px-2 py-1 rounded border border-gray-800">{exp.duration}</div>
+              <h4 className="text-white text-lg font-bold">{exp.role} <span className="text-primary font-mono text-sm font-normal">@ {exp.company}</span></h4>
+              <p className="text-gray-300 text-sm whitespace-pre-wrap">{exp.description}</p>
+              
+              {exp.tags?.length > 0 && (
+                <div className="flex flex-wrap gap-2 pt-2">
+                  {exp.tags.map((t, idx) => (
+                    <span key={idx} className="px-2 py-1 bg-primary/5 border border-primary/20 text-primary/80 rounded font-mono text-xs">
+                      {t}
+                    </span>
+                  ))}
+                </div>
+              )}
             </div>
-            <button onClick={() => handleRemove(i)} className="text-red-400 p-2"><i className="ph ph-trash" /></button>
+            <div className="flex gap-2 flex-shrink-0">
+              <button onClick={() => startEdit(i)} className="text-gray-400 hover:text-yellow-400 p-2 bg-gray-900/50 rounded-lg transition-all"><i className="ph ph-pencil-simple" /></button>
+              <button onClick={() => removeExperience(i)} className="text-gray-400 hover:text-red-400 p-2 bg-gray-900/50 rounded-lg transition-all"><i className="ph ph-trash" /></button>
+            </div>
           </div>
         ))}
       </div>

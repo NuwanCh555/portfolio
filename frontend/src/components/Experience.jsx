@@ -47,11 +47,13 @@ export default function Experience({ portfolio }) {
         {/* ── Vertical Timeline ── */}
         <div className="relative border-l border-primary/30 ml-3 md:ml-6 space-y-12">
           {experiences.map((exp, idx) => {
-            // For dynamic data we don't have "active", so we'll just make the first one active
+            // Support both old static layout and new dynamic mongo schema
             const active = isDynamic ? idx === 0 : exp.active;
             const date = isDynamic ? exp.duration : exp.date;
             const org = isDynamic ? exp.company : exp.org;
-            const tags = isDynamic ? [] : exp.tags;
+            const role = isDynamic ? exp.role : exp.title;
+            const desc = isDynamic ? exp.description : exp.desc;
+            const tags = exp.tags || [];
 
             return (
               <div key={idx} className="relative pl-8 md:pl-12">
@@ -76,10 +78,10 @@ export default function Experience({ portfolio }) {
                 >
                   {date}
                 </div>
-                <h3 className="text-2xl font-bold text-white">{exp.title}</h3>
+                <h3 className="text-2xl font-bold text-white">{role}</h3>
                 <h4 className="text-lg text-gray-400 mb-3">{org}</h4>
                 <p className="text-gray-400 leading-relaxed font-mono text-sm mb-4 whitespace-pre-wrap">
-                  {exp.description || exp.desc}
+                  {desc}
                 </p>
 
                 {/* Tag chips */}
