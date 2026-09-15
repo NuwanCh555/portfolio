@@ -6,12 +6,18 @@ import ProjectManager from './ProjectManager'
 import MessageInbox   from './MessageInbox'
 import FeedbackInbox  from './FeedbackInbox'
 import VisitorLogPanel from './VisitorLog'
+import { AboutManager, SkillsManager, ExperienceManager, TechManager, MediaManager } from './PortfolioSections'
 
 const API = import.meta.env.VITE_API_URL || '/api'
 
 const NAV_ITEMS = [
   { key: 'overview',  label: 'Overview',       icon: 'ph-squares-four'      },
+  { key: 'about',     label: 'About Me',       icon: 'ph-identification-card' },
+  { key: 'skills',    label: 'Skills',         icon: 'ph-star'                },
+  { key: 'experience',label: 'Experience',     icon: 'ph-briefcase'           },
+  { key: 'tech',      label: 'Tech Arsenal',   icon: 'ph-cpu'                 },
   { key: 'projects',  label: 'Projects',        icon: 'ph-stack'             },
+  { key: 'media',     label: 'CV & Photo',     icon: 'ph-image'               },
   { key: 'contacts',  label: 'Contact Inbox',   icon: 'ph-envelope-simple'   },
   { key: 'feedbacks', label: 'Feedback Reports',icon: 'ph-bug'               },
   { key: 'visitors',  label: 'Visitor Log',     icon: 'ph-globe'             },
@@ -162,6 +168,11 @@ export default function AdminDashboard() {
           )}
 
           {active === 'projects'  && <ProjectManager  onRefresh={fetchStats} />}
+          {active === 'about'     && <AboutManager />}
+          {active === 'skills'    && <SkillsManager />}
+          {active === 'experience'&& <ExperienceManager />}
+          {active === 'tech'      && <TechManager />}
+          {active === 'media'     && <MediaManager />}
           {active === 'contacts'  && <MessageInbox    onRefresh={fetchStats} />}
           {active === 'feedbacks' && <FeedbackInbox   onRefresh={fetchStats} />}
           {active === 'visitors'  && <VisitorLogPanel />}

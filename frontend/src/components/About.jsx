@@ -16,7 +16,7 @@ const objectives = [
   },
 ]
 
-export default function About() {
+export default function About({ portfolio }) {
   return (
     <section
       id="about"
@@ -37,24 +37,32 @@ export default function About() {
 
           {/* Left: Bio text */}
           <div className="space-y-6">
-            <p className="text-gray-400 leading-relaxed text-lg">
-              With a strong academic foundation in Information Technology from the{' '}
-              <span className="text-primary font-medium">
-                Advanced Technological Institute (HNDIT)
-              </span>
-              , I bridge the gap between creative design and robust technical
-              engineering.
-            </p>
-            <p className="text-gray-400 leading-relaxed text-lg">
-              My core philosophy is that excellent software isn't just about
-              writing code — it's about crafting{' '}
-              <span className="text-white font-medium">
-                secure, scalable, and intuitive
-              </span>{' '}
-              systems. From developing React-based web applications to
-              configuring secure server environments and analyzing
-              vulnerabilities, I take a holistic approach to IT.
-            </p>
+            {portfolio?.about ? (
+              <p className="text-gray-400 leading-relaxed text-lg whitespace-pre-wrap">
+                {portfolio.about}
+              </p>
+            ) : (
+              <>
+                <p className="text-gray-400 leading-relaxed text-lg">
+                  With a strong academic foundation in Information Technology from the{' '}
+                  <span className="text-primary font-medium">
+                    Advanced Technological Institute (HNDIT)
+                  </span>
+                  , I bridge the gap between creative design and robust technical
+                  engineering.
+                </p>
+                <p className="text-gray-400 leading-relaxed text-lg">
+                  My core philosophy is that excellent software isn't just about
+                  writing code — it's about crafting{' '}
+                  <span className="text-white font-medium">
+                    secure, scalable, and intuitive
+                  </span>{' '}
+                  systems. From developing React-based web applications to
+                  configuring secure server environments and analyzing
+                  vulnerabilities, I take a holistic approach to IT.
+                </p>
+              </>
+            )}
 
             {/* Quick stats */}
             <div className="grid grid-cols-3 gap-4 pt-4">

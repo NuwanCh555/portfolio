@@ -7,7 +7,7 @@ const TITLES = [
   'CTF Competitor',
 ]
 
-export default function Hero() {
+export default function Hero({ portfolio }) {
   const [titleIdx,  setTitleIdx]  = useState(0)
   const [displayed, setDisplayed] = useState('')
   const [deleting,  setDeleting]  = useState(false)
@@ -77,7 +77,7 @@ export default function Hero() {
               Explore Projects <i className="ph ph-arrow-right text-lg" />
             </a>
             <a
-              href="/cv.pdf"
+              href={portfolio?.cvUrl || "/cv.pdf"}
               download
               id="hero-cv-btn"
               className="flex items-center gap-2 px-7 py-3.5 border border-primary/50 hover:border-primary text-primary font-medium rounded-xl transition-all bg-primary/5 hover:bg-primary/10"
@@ -124,7 +124,7 @@ export default function Hero() {
             {/* Glass ring */}
             <div className="absolute inset-2 rounded-full border border-primary/30 p-2 glass">
               <img
-                src="/profile.jpg"
+                src={portfolio?.profilePhotoUrl || "/profile.jpg"}
                 alt="Nuwan MC — Cyber Security Developer"
                 className="w-full h-full object-cover rounded-full filter contrast-125 grayscale hover:grayscale-0 transition-all duration-700 opacity-90 mix-blend-screen"
               />

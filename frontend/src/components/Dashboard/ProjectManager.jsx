@@ -13,6 +13,7 @@ export default function ProjectManager({ onRefresh }) {
   const [loading,  setLoading]  = useState(false)
   const [showForm, setShowForm] = useState(false)
   const [msg,      setMsg]      = useState('')
+  const [uploading, setUploading] = useState(false)
 
   useEffect(() => { fetchProjects() }, [])
 
@@ -57,6 +58,23 @@ export default function ProjectManager({ onRefresh }) {
       await axios.delete(`${API}/projects/${id}`)
       fetchProjects(); onRefresh?.()
     } catch { setMsg('Delete failed.') }
+  }
+
+  const handleImageUpload = async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+    setUploading(true); setMsg('Uploading image...');
+    const formData = new FormData();
+    formData.append('file', file);
+    try {
+      const { data } = await axios.post(`${API}/upload`, formData);
+      setForm({ ...form, image: data.url });
+      setMsg('✅ Image uploaded.');
+    } catch {
+      setMsg('Image upload failed.');
+    } finally {
+      setUploading(false);
+    }
   }
 
   return (
@@ -109,6 +127,13 @@ export default function ProjectManager({ onRefresh }) {
                     className="w-full bg-black/80 border border-primary/30 rounded-xl px-3 py-2.5 text-white font-mono text-sm focus:outline-none focus:border-primary transition-all">
                     {ICONS.map((ic) => <option key={ic} value={ic}>{ic}</option>)}
                   </select>
+                </div>
+              </div>
+              <div>
+                <label className="block text-primary font-mono text-xs mb-1">Project Screenshot</label>
+                <div className="flex items-center gap-3">
+                  {form.image && <img src={form.image} alt="Preview" className="w-12 h-12 rounded object-cover border border-primary/30" />}
+                  <input type="file" accept="image/*" onChange={handleImageUpload} disabled={uploading} className="text-gray-400 font-mono text-sm w-full" />
                 </div>
               </div>
               <div className="flex items-center gap-3">

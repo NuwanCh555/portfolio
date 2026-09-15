@@ -16,8 +16,12 @@ function ProjectCard({ project, idx }) {
   return (
     <div className="glass overflow-hidden rounded-2xl group hover:border-primary/60 transition-all duration-300 hover:-translate-y-2 shadow-[0_0_0_rgba(0,255,65,0)] hover:shadow-[0_8px_30px_rgba(0,255,65,0.12)] flex flex-col">
       <div className={`h-44 overflow-hidden relative border-b border-primary/20 bg-gradient-to-br ${gradient} flex items-center justify-center`}>
-        <i className={`ph ${project.icon || 'ph-terminal-window'} text-7xl text-primary/30 group-hover:text-primary/60 transition-colors duration-500 group-hover:scale-110 transform`} />
-        <div className="absolute inset-0 bg-grid opacity-40" />
+        {project.image ? (
+          <img src={project.image} alt={project.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+        ) : (
+          <i className={`ph ${project.icon || 'ph-terminal-window'} text-7xl text-primary/30 group-hover:text-primary/60 transition-colors duration-500 group-hover:scale-110 transform`} />
+        )}
+        <div className="absolute inset-0 bg-grid opacity-40 pointer-events-none" />
         <span className="absolute top-3 right-3 text-[10px] font-mono px-2 py-0.5 rounded-full border border-primary/30 bg-black/60 text-primary uppercase tracking-widest">{project.category}</span>
       </div>
       <div className="p-6 flex flex-col flex-1">

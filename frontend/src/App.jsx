@@ -1,5 +1,6 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
-import { useEffect }    from 'react'
+import { useEffect, useState }    from 'react'
+import axios from 'axios'
 import { AuthProvider } from './context/AuthContext'
 import { useAuth }      from './context/useAuth'
 
@@ -25,7 +26,14 @@ import AdminDashboard from './components/Dashboard/AdminDashboard'
 
 // ── Portfolio page (all sections) ────────────────────────────────────────────
 function PortfolioPage() {
+  const [portfolio, setPortfolio] = useState(null)
+
   useEffect(() => {
+    // Fetch portfolio data
+    axios.get(`${import.meta.env.VITE_API_URL || '/api'}/portfolio`)
+      .then(({ data }) => setPortfolio(data.data))
+      .catch(console.error)
+
     const observer = new IntersectionObserver(
       (entries) => entries.forEach((e) => { if (e.isIntersecting) e.target.classList.add('active') }),
       { threshold: 0.1, rootMargin: '0px 0px -60px 0px' }
@@ -42,10 +50,10 @@ function PortfolioPage() {
       <div className="fixed bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-secondary/10 rounded-full blur-[120px] pointer-events-none z-0" />
       <Navbar />
       <main className="relative z-10">
-        <Hero />
-        <About />
-        <Skills />
-        <Experience />
+        <Hero portfolio={portfolio} />
+        <About portfolio={portfolio} />
+        <Skills portfolio={portfolio} />
+        <Experience portfolio={portfolio} />
         <Projects />
         <Contact />
         <FeedbackForm />   {/* Only visible when logged in */}

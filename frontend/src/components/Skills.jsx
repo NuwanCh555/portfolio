@@ -54,7 +54,10 @@ function SkillBar({ name, level }) {
   )
 }
 
-export default function Skills() {
+export default function Skills({ portfolio }) {
+  const hasTech = portfolio?.technicalArsenal?.length > 0;
+  const hasSkills = portfolio?.skills?.length > 0;
+
   return (
     <section
       id="skills"
@@ -70,45 +73,75 @@ export default function Skills() {
           </h2>
         </div>
 
-        {/* ── Skill Cards ── */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {skillGroups.map(({ icon, title, glow, skills, badges }) => (
-            <div
-              key={title}
-              className={`glass p-6 rounded-2xl transition-all duration-300 hover:-translate-y-1 ${
-                glow
-                  ? 'border-primary/40 shadow-[0_0_20px_rgba(0,255,65,0.1)] hover:shadow-[0_0_30px_rgba(0,255,65,0.15)]'
-                  : 'hover:border-primary/50'
-              }`}
-            >
-              <i className={`ph ${icon} text-3xl text-primary mb-4 block`} />
-              <h3 className="text-xl font-bold text-white mb-5">{title}</h3>
-
-              {/* Skill bars */}
-              <div className="space-y-3 mb-6">
-                {skills.map((s) => (
-                  <SkillBar key={s.name} {...s} />
+        {hasTech || hasSkills ? (
+          <div>
+            {hasTech && (
+              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-6 mb-12">
+                {portfolio.technicalArsenal.map((t, i) => (
+                  <div key={i} className="glass p-6 rounded-2xl flex flex-col items-center justify-center gap-4 hover:-translate-y-1 transition-transform border-primary/20 hover:border-primary/50 text-center">
+                    {t.icon?.startsWith('http') ? (
+                      <img src={t.icon} alt={t.name} className="w-12 h-12 object-contain filter drop-shadow-[0_0_8px_rgba(0,255,65,0.5)]" />
+                    ) : (
+                      <i className={`ph ${t.icon || 'ph-code'} text-4xl text-primary drop-shadow-[0_0_8px_rgba(0,255,65,0.5)]`} />
+                    )}
+                    <span className="text-white font-bold">{t.name}</span>
+                  </div>
                 ))}
               </div>
-
-              {/* Badge chips */}
-              <div className="flex flex-wrap gap-2 pt-4 border-t border-primary/10">
-                {badges.map((b) => (
-                  <span
-                    key={b}
-                    className={`px-3 py-1 rounded-lg text-xs font-mono ${
-                      glow
-                        ? 'bg-primary/20 border border-primary/50 text-white'
-                        : 'bg-primary/10 border border-primary/30 text-primary'
-                    }`}
-                  >
-                    {b}
-                  </span>
-                ))}
+            )}
+            
+            {hasSkills && (
+              <div className="glass p-8 rounded-2xl border-primary/20">
+                <h3 className="text-xl font-bold text-white mb-6">Core Skills</h3>
+                <div className="flex flex-wrap gap-3">
+                  {portfolio.skills.map((s) => (
+                    <span key={s} className="px-4 py-2 bg-primary/10 border border-primary/30 text-primary rounded-xl font-mono text-sm">
+                      {s}
+                    </span>
+                  ))}
+                </div>
               </div>
-            </div>
-          ))}
-        </div>
+            )}
+          </div>
+        ) : (
+          /* ── Fallback Hardcoded Skill Cards ── */
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {skillGroups.map(({ icon, title, glow, skills, badges }) => (
+              <div
+                key={title}
+                className={`glass p-6 rounded-2xl transition-all duration-300 hover:-translate-y-1 ${
+                  glow
+                    ? 'border-primary/40 shadow-[0_0_20px_rgba(0,255,65,0.1)] hover:shadow-[0_0_30px_rgba(0,255,65,0.15)]'
+                    : 'hover:border-primary/50'
+                }`}
+              >
+                <i className={`ph ${icon} text-3xl text-primary mb-4 block`} />
+                <h3 className="text-xl font-bold text-white mb-5">{title}</h3>
+                
+                <div className="space-y-3 mb-6">
+                  {skills.map((s) => (
+                    <SkillBar key={s.name} {...s} />
+                  ))}
+                </div>
+
+                <div className="flex flex-wrap gap-2 pt-4 border-t border-primary/10">
+                  {badges.map((b) => (
+                    <span
+                      key={b}
+                      className={`px-3 py-1 rounded-lg text-xs font-mono ${
+                        glow
+                          ? 'bg-primary/20 border border-primary/50 text-white'
+                          : 'bg-primary/10 border border-primary/30 text-primary'
+                      }`}
+                    >
+                      {b}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
       </div>
     </section>
   )

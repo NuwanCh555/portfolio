@@ -12,6 +12,8 @@ const contactRoutes  = require('./routes/contactRoutes')
 const feedbackRoutes = require('./routes/feedbackRoutes')
 const projectRoutes  = require('./routes/projectRoutes')
 const adminRoutes    = require('./routes/adminRoutes')
+const portfolioRoutes = require('./routes/portfolioRoutes')
+const uploadRoutes    = require('./routes/uploadRoutes')
 
 // ── Connect to MongoDB ────────────────────────────────────────────────────────
 connectDB()
@@ -50,6 +52,8 @@ app.use('/api/contact',   contactRoutes)
 app.use('/api/feedback',  feedbackRoutes)
 app.use('/api/projects',  projectRoutes)
 app.use('/api/admin',     adminRoutes)
+app.use('/api/portfolio', portfolioRoutes)
+app.use('/api/upload',    uploadRoutes)
 
 // ── Health check ──────────────────────────────────────────────────────────────
 app.get('/api/health', (_, res) => res.json({ status: 'ok', timestamp: new Date().toISOString() }))

@@ -25,7 +25,10 @@ const timeline = [
   },
 ]
 
-export default function Experience() {
+export default function Experience({ portfolio }) {
+  const experiences = portfolio?.experience?.length > 0 ? portfolio.experience : timeline;
+  const isDynamic = portfolio?.experience?.length > 0;
+
   return (
     <section
       id="experience"
@@ -43,48 +46,58 @@ export default function Experience() {
 
         {/* ── Vertical Timeline ── */}
         <div className="relative border-l border-primary/30 ml-3 md:ml-6 space-y-12">
-          {timeline.map(({ date, active, title, org, desc, tags }) => (
-            <div key={title} className="relative pl-8 md:pl-12">
-              {/* Dot */}
-              <div
-                className={`absolute w-6 h-6 bg-surface border-2 rounded-full -left-[13px] top-1 flex items-center justify-center ${
-                  active
-                    ? 'border-primary shadow-[0_0_10px_rgba(0,255,65,0.5)]'
-                    : 'border-primary/40'
-                }`}
-              >
-                {active && (
-                  <div className="w-2 h-2 bg-primary rounded-full animate-pulse" />
+          {experiences.map((exp, idx) => {
+            // For dynamic data we don't have "active", so we'll just make the first one active
+            const active = isDynamic ? idx === 0 : exp.active;
+            const date = isDynamic ? exp.duration : exp.date;
+            const org = isDynamic ? exp.company : exp.org;
+            const tags = isDynamic ? [] : exp.tags;
+
+            return (
+              <div key={idx} className="relative pl-8 md:pl-12">
+                {/* Dot */}
+                <div
+                  className={`absolute w-6 h-6 bg-surface border-2 rounded-full -left-[13px] top-1 flex items-center justify-center ${
+                    active
+                      ? 'border-primary shadow-[0_0_10px_rgba(0,255,65,0.5)]'
+                      : 'border-primary/40'
+                  }`}
+                >
+                  {active && (
+                    <div className="w-2 h-2 bg-primary rounded-full animate-pulse" />
+                  )}
+                </div>
+
+                {/* Content */}
+                <div
+                  className={`font-mono text-sm font-semibold mb-2 ${
+                    active ? 'text-primary' : 'text-gray-500'
+                  }`}
+                >
+                  {date}
+                </div>
+                <h3 className="text-2xl font-bold text-white">{exp.title}</h3>
+                <h4 className="text-lg text-gray-400 mb-3">{org}</h4>
+                <p className="text-gray-400 leading-relaxed font-mono text-sm mb-4 whitespace-pre-wrap">
+                  {exp.description || exp.desc}
+                </p>
+
+                {/* Tag chips */}
+                {tags.length > 0 && (
+                  <div className="flex flex-wrap gap-2">
+                    {tags.map((tag) => (
+                      <span
+                        key={tag}
+                        className="text-xs font-mono px-2.5 py-1 rounded-lg bg-primary/5 border border-primary/20 text-primary/80"
+                      >
+                        {tag}
+                      </span>
+                    ))}
+                  </div>
                 )}
               </div>
-
-              {/* Content */}
-              <div
-                className={`font-mono text-sm font-semibold mb-2 ${
-                  active ? 'text-primary' : 'text-gray-500'
-                }`}
-              >
-                {date}
-              </div>
-              <h3 className="text-2xl font-bold text-white">{title}</h3>
-              <h4 className="text-lg text-gray-400 mb-3">{org}</h4>
-              <p className="text-gray-400 leading-relaxed font-mono text-sm mb-4">
-                {desc}
-              </p>
-
-              {/* Tag chips */}
-              <div className="flex flex-wrap gap-2">
-                {tags.map((tag) => (
-                  <span
-                    key={tag}
-                    className="text-xs font-mono px-2.5 py-1 rounded-lg bg-primary/5 border border-primary/20 text-primary/80"
-                  >
-                    {tag}
-                  </span>
-                ))}
-              </div>
-            </div>
-          ))}
+            )
+          })}
         </div>
 
       </div>
