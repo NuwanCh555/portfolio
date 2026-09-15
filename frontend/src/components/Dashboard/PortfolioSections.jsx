@@ -4,37 +4,125 @@ import axios from 'axios';
 const API = import.meta.env.VITE_API_URL || '/api';
 
 export function AboutManager() {
-  const [about, setAbout] = useState('');
+  const [data, setData] = useState({ about: '', stats: [], coreObjectives: [] });
   const [loading, setLoading] = useState(false);
   const [msg, setMsg] = useState('');
 
+  // Forms for new items
+  const [newStat, setNewStat] = useState({ val: '', label: '' });
+  const [newObj, setNewObj]   = useState({ title: '', desc: '', icon: '' });
+
   useEffect(() => {
-    axios.get(`${API}/portfolio`).then(({ data }) => setAbout(data.data?.about || ''));
+    axios.get(`${API}/portfolio`).then(({ data: resData }) => {
+      setData({
+        about:          resData.data?.about          || '',
+        stats:          resData.data?.stats          || [],
+        coreObjectives: resData.data?.coreObjectives || [],
+      });
+    });
   }, []);
 
-  const handleSave = async () => {
+  const handleSave = async (updatedData = data) => {
     setLoading(true); setMsg('');
     try {
-      await axios.put(`${API}/portfolio`, { about });
+      await axios.put(`${API}/portfolio`, updatedData);
+      setData(updatedData);
       setMsg('✅ About section updated.');
     } catch {
-      setMsg('Failed to update.');
+      setMsg('❌ Failed to update.');
     } finally { setLoading(false); }
   };
 
+  // ── Stats ─────────────────────────────────────────────────────────────
+  const addStat = (e) => {
+    e.preventDefault();
+    if (!newStat.val.trim() || !newStat.label.trim()) return;
+    handleSave({ ...data, stats: [...data.stats, newStat] });
+    setNewStat({ val: '', label: '' });
+  };
+  const removeStat = (index) => handleSave({ ...data, stats: data.stats.filter((_, i) => i !== index) });
+
+  // ── Core Objectives ────────────────────────────────────────────────────
+  const addObj = (e) => {
+    e.preventDefault();
+    if (!newObj.title.trim() || !newObj.desc.trim()) return;
+    handleSave({ ...data, coreObjectives: [...data.coreObjectives, newObj] });
+    setNewObj({ title: '', desc: '', icon: '' });
+  };
+  const removeObj = (index) => handleSave({ ...data, coreObjectives: data.coreObjectives.filter((_, i) => i !== index) });
+
   return (
-    <div className="space-y-4 max-w-2xl">
-      <h2 className="text-2xl font-bold text-white mb-6">About Me</h2>
-      {msg && <div className="text-sm font-mono text-primary mb-4">{msg}</div>}
-      <textarea
-        value={about}
-        onChange={(e) => setAbout(e.target.value)}
-        className="w-full h-48 bg-black/80 border border-primary/30 rounded-xl px-4 py-3 text-white font-mono text-sm focus:border-primary transition-all"
-        placeholder="Write your bio..."
-      />
-      <button onClick={handleSave} disabled={loading} className="px-6 py-3 bg-primary text-black font-bold rounded-xl hover:bg-white transition-all text-sm">
-        {loading ? 'Saving...' : 'Save Changes'}
-      </button>
+    <div className="space-y-12 max-w-3xl">
+      {/* ── Main Bio ── */}
+      <div className="space-y-4">
+        <div className="flex items-center justify-between">
+          <h2 className="text-2xl font-bold text-white">About Me</h2>
+          <button onClick={() => handleSave(data)} disabled={loading} className="px-5 py-2 bg-primary text-black font-bold rounded-xl hover:bg-white transition-all text-sm shadow-[0_0_10px_rgba(0,255,65,0.2)]">
+            {loading ? 'Saving...' : 'Save Bio'}
+          </button>
+        </div>
+        {msg && <div className={`p-3 rounded-xl text-sm font-mono border ${msg.startsWith('✅') ? 'bg-primary/10 border-primary/30 text-primary' : 'bg-red-950/60 border-red-500/40 text-red-400'}`}>{msg}</div>}
+        <textarea
+          value={data.about}
+          onChange={(e) => setData({ ...data, about: e.target.value })}
+          className="w-full h-48 bg-black/80 border border-primary/30 rounded-xl px-4 py-3 text-white font-mono text-sm focus:border-primary transition-all"
+          placeholder="Write your bio..."
+        />
+      </div>
+
+      {/* ── Stats ── */}
+      <div className="glass p-6 rounded-2xl border-primary/20 space-y-6">
+        <h3 className="text-xl font-bold text-white flex items-center gap-2"><i className="ph ph-chart-bar text-primary" /> Stats</h3>
+        
+        <form onSubmit={addStat} className="flex gap-3">
+          <input type="text" placeholder="Value (e.g. 2+)" value={newStat.val} onChange={e => setNewStat({...newStat, val: e.target.value})} className="w-1/3 bg-black/80 border border-primary/30 rounded-xl px-4 py-2 text-white font-mono text-sm focus:border-primary outline-none" required />
+          <input type="text" placeholder="Label (e.g. Years Coding)" value={newStat.label} onChange={e => setNewStat({...newStat, label: e.target.value})} className="flex-1 bg-black/80 border border-primary/30 rounded-xl px-4 py-2 text-white font-mono text-sm focus:border-primary outline-none" required />
+          <button type="submit" className="px-5 py-2 bg-primary text-black font-bold rounded-xl hover:bg-white transition-all text-sm">Add</button>
+        </form>
+
+        <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+          {data.stats.map((s, i) => (
+            <div key={i} className="bg-black/40 border border-primary/20 rounded-xl p-3 flex justify-between items-center group">
+              <div>
+                <div className="text-primary font-bold">{s.val}</div>
+                <div className="text-gray-400 text-xs font-mono">{s.label}</div>
+              </div>
+              <button onClick={() => removeStat(i)} className="text-gray-600 hover:text-red-400 opacity-0 group-hover:opacity-100 transition-all"><i className="ph ph-trash" /></button>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* ── Core Objectives ── */}
+      <div className="glass p-6 rounded-2xl border-primary/20 space-y-6">
+        <h3 className="text-xl font-bold text-white flex items-center gap-2"><i className="ph ph-target text-primary" /> Core Objectives</h3>
+        
+        <form onSubmit={addObj} className="space-y-4 bg-black/40 p-4 rounded-xl border border-dashed border-gray-700">
+          <div className="flex gap-3">
+            <input type="text" placeholder="Title" value={newObj.title} onChange={e => setNewObj({...newObj, title: e.target.value})} className="flex-1 bg-black/80 border border-primary/30 rounded-xl px-4 py-2 text-white font-mono text-sm focus:border-primary outline-none" required />
+            <input type="text" placeholder="Icon (e.g. ph-code)" value={newObj.icon} onChange={e => setNewObj({...newObj, icon: e.target.value})} className="w-1/3 bg-black/80 border border-primary/30 rounded-xl px-4 py-2 text-white font-mono text-sm focus:border-primary outline-none" />
+          </div>
+          <div className="flex gap-3">
+            <input type="text" placeholder="Description" value={newObj.desc} onChange={e => setNewObj({...newObj, desc: e.target.value})} className="flex-1 bg-black/80 border border-primary/30 rounded-xl px-4 py-2 text-white font-mono text-sm focus:border-primary outline-none" required />
+            <button type="submit" className="px-5 py-2 bg-primary text-black font-bold rounded-xl hover:bg-white transition-all text-sm">Add</button>
+          </div>
+        </form>
+
+        <div className="space-y-3">
+          {data.coreObjectives.map((obj, i) => (
+            <div key={i} className="bg-black/40 border border-primary/20 rounded-xl p-4 flex gap-4 items-start group">
+              <div className="w-10 h-10 bg-primary/10 rounded-lg flex items-center justify-center flex-shrink-0 text-primary">
+                <i className={`ph ${obj.icon || 'ph-target'} text-xl`} />
+              </div>
+              <div className="flex-1">
+                <div className="text-white font-bold text-sm">{obj.title}</div>
+                <div className="text-gray-400 text-xs font-mono mt-1 leading-relaxed">{obj.desc}</div>
+              </div>
+              <button onClick={() => removeObj(i)} className="text-gray-600 hover:text-red-400 opacity-0 group-hover:opacity-100 transition-all p-2"><i className="ph ph-trash" /></button>
+            </div>
+          ))}
+        </div>
+      </div>
     </div>
   );
 }

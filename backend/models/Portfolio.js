@@ -12,9 +12,22 @@ const technicalArsenalSchema = new mongoose.Schema({
   icon: { type: String } // e.g. 'ph-react' or a url
 })
 
+const statSchema = new mongoose.Schema({
+  val: { type: String, required: true },
+  label: { type: String, required: true }
+})
+
+const coreObjectiveSchema = new mongoose.Schema({
+  title: { type: String, required: true },
+  desc: { type: String, required: true },
+  icon: { type: String } // e.g. 'ph-code'
+})
+
 const portfolioSchema = new mongoose.Schema(
   {
     about: { type: String, default: '' },
+    stats: [statSchema],
+    coreObjectives: [coreObjectiveSchema],
     skills: [{ type: String }],
     experience: [experienceSchema],
     technicalArsenal: [technicalArsenalSchema],
