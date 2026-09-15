@@ -184,173 +184,193 @@ export function AboutManager() {
   );
 }
 
-export function SkillsManager() {
-  const [skills, setSkills] = useState([]);
-  const [newSkill, setNewSkill] = useState('');
+export function SkillCategoriesManager() {
+  const [categories, setCategories] = useState([]);
+  const [loading, setLoading] = useState(false);
   const [msg, setMsg] = useState('');
 
+  // Forms
+  const [newCat, setNewCat] = useState({ title: '', icon: '', skills: [], tags: [] });
+  const [editCatIndex, setEditCatIndex] = useState(null);
+  
+  // Local state for adding skills/tags to the category being edited/added
+  const [tempSkill, setTempSkill] = useState({ name: '', percentage: '' });
+  const [tempTag, setTempTag] = useState('');
+
   useEffect(() => {
-    axios.get(`${API}/portfolio`).then(({ data }) => setSkills(data.data?.skills || []));
+    axios.get(`${API}/portfolio`).then(({ data }) => {
+      setCategories(data.data?.skillCategories || []);
+    });
   }, []);
 
-  const saveSkills = async (updatedSkills) => {
-    setMsg('');
+  const handleSave = async (updatedCategories = categories) => {
+    setLoading(true); setMsg('');
     try {
-      await axios.put(`${API}/portfolio`, { skills: updatedSkills });
-      setSkills(updatedSkills);
+      await axios.put(`${API}/portfolio`, { skillCategories: updatedCategories });
+      setCategories(updatedCategories);
       setMsg('✅ Skills updated.');
     } catch {
-      setMsg('Failed to update.');
-    }
+      setMsg('❌ Failed to update.');
+    } finally { setLoading(false); }
   };
 
-  const addSkill = (e) => {
+  const saveCategory = (e) => {
     e.preventDefault();
-    if (!newSkill.trim() || skills.includes(newSkill.trim())) return;
-    saveSkills([...skills, newSkill.trim()]);
-    setNewSkill('');
+    if (!newCat.title.trim() || !newCat.icon.trim()) return;
+    
+    let updated = [...categories];
+    if (editCatIndex !== null) {
+      updated[editCatIndex] = newCat;
+    } else {
+      updated.push(newCat);
+    }
+    
+    handleSave(updated);
+    setNewCat({ title: '', icon: '', skills: [], tags: [] });
+    setEditCatIndex(null);
   };
 
-  const removeSkill = (s) => {
-    saveSkills(skills.filter(skill => skill !== s));
+  const removeCategory = (index) => handleSave(categories.filter((_, i) => i !== index));
+
+  const startEditCategory = (index) => {
+    setNewCat(categories[index]);
+    setEditCatIndex(index);
+  };
+  const cancelEditCategory = () => {
+    setNewCat({ title: '', icon: '', skills: [], tags: [] });
+    setEditCatIndex(null);
+  };
+
+  // Add/Remove Skills within the form
+  const addTempSkill = (e) => {
+    e.preventDefault();
+    if (!tempSkill.name || !tempSkill.percentage) return;
+    setNewCat({ ...newCat, skills: [...newCat.skills, tempSkill] });
+    setTempSkill({ name: '', percentage: '' });
+  };
+  const removeTempSkill = (index) => {
+    setNewCat({ ...newCat, skills: newCat.skills.filter((_, i) => i !== index) });
+  };
+
+  // Add/Remove Tags within the form
+  const addTempTag = (e) => {
+    e.preventDefault();
+    if (!tempTag.trim() || newCat.tags.includes(tempTag.trim())) return;
+    setNewCat({ ...newCat, tags: [...newCat.tags, tempTag.trim()] });
+    setTempTag('');
+  };
+  const removeTempTag = (tag) => {
+    setNewCat({ ...newCat, tags: newCat.tags.filter(t => t !== tag) });
   };
 
   return (
-    <div className="space-y-6 max-w-2xl">
-      <h2 className="text-2xl font-bold text-white">Skills</h2>
-      {msg && <div className="text-sm font-mono text-primary">{msg}</div>}
+    <div className="space-y-12 max-w-4xl">
+      <div className="flex items-center justify-between">
+        <h2 className="text-2xl font-bold text-white">Skills & Arsenal</h2>
+      </div>
+      {msg && <div className={`p-3 rounded-xl text-sm font-mono border ${msg.startsWith('✅') ? 'bg-primary/10 border-primary/30 text-primary' : 'bg-red-950/60 border-red-500/40 text-red-400'}`}>{msg}</div>}
       
-      <form onSubmit={addSkill} className="flex gap-3">
-        <input type="text" value={newSkill} onChange={e => setNewSkill(e.target.value)} placeholder="E.g. React" className="flex-1 bg-black/80 border border-primary/30 rounded-xl px-4 py-2 text-white font-mono text-sm" />
-        <button type="submit" className="px-6 py-2 bg-primary text-black font-bold rounded-xl">Add</button>
-      </form>
-
-      <div className="flex flex-wrap gap-3">
-        {skills.map(s => (
-          <div key={s} className="flex items-center gap-2 bg-primary/10 border border-primary/30 px-3 py-1.5 rounded-lg">
-            <span className="text-primary font-mono text-sm">{s}</span>
-            <button onClick={() => removeSkill(s)} className="text-red-400 hover:text-red-300"><i className="ph ph-x" /></button>
+      {/* ── Category Form ── */}
+      <div className="glass p-6 rounded-2xl border-primary/20 space-y-6">
+        <h3 className="text-xl font-bold text-white flex items-center gap-2">
+          <i className="ph ph-folder-open text-primary" /> {editCatIndex !== null ? 'Edit Category' : 'Add New Category'}
+        </h3>
+        
+        <form onSubmit={saveCategory} className="space-y-6">
+          <div className="flex gap-3">
+            <input type="text" placeholder="Category Title (e.g. Frontend)" value={newCat.title} onChange={e => setNewCat({...newCat, title: e.target.value})} className="flex-1 bg-black/80 border border-primary/30 rounded-xl px-4 py-2 text-white font-mono text-sm focus:border-primary outline-none" required />
+            <input type="text" placeholder="Icon (e.g. ph-terminal-window)" value={newCat.icon} onChange={e => setNewCat({...newCat, icon: e.target.value})} className="w-1/3 bg-black/80 border border-primary/30 rounded-xl px-4 py-2 text-white font-mono text-sm focus:border-primary outline-none" required />
           </div>
-        ))}
-      </div>
-    </div>
-  );
-}
 
-export function ExperienceManager() {
-  const [experiences, setExperiences] = useState([]);
-  const [form, setForm] = useState({ title: '', company: '', duration: '', description: '' });
-  const [showForm, setShowForm] = useState(false);
-  const [msg, setMsg] = useState('');
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 p-4 rounded-xl border border-dashed border-gray-700 bg-black/40">
+            {/* Skills Sub-Form */}
+            <div className="space-y-3">
+              <label className="text-primary font-bold text-sm">Skills (Progress Bars)</label>
+              <div className="flex gap-2">
+                <input type="text" placeholder="Name" value={tempSkill.name} onChange={e => setTempSkill({...tempSkill, name: e.target.value})} className="flex-1 bg-black/80 border border-primary/30 rounded-lg px-3 py-1.5 text-white font-mono text-xs focus:border-primary outline-none" />
+                <input type="number" placeholder="%" value={tempSkill.percentage} onChange={e => setTempSkill({...tempSkill, percentage: e.target.value})} className="w-16 bg-black/80 border border-primary/30 rounded-lg px-3 py-1.5 text-white font-mono text-xs focus:border-primary outline-none" />
+                <button type="button" onClick={addTempSkill} className="px-3 py-1.5 bg-primary/20 text-primary border border-primary/30 rounded-lg hover:bg-primary hover:text-black font-bold text-xs transition-all">Add</button>
+              </div>
+              <div className="space-y-2">
+                {newCat.skills.map((s, i) => (
+                  <div key={i} className="flex justify-between items-center bg-black/60 px-3 py-1.5 rounded-lg border border-primary/10">
+                    <span className="text-white text-xs font-mono">{s.name} <span className="text-primary ml-2">{s.percentage}%</span></span>
+                    <button type="button" onClick={() => removeTempSkill(i)} className="text-red-400 hover:text-red-300"><i className="ph ph-x" /></button>
+                  </div>
+                ))}
+              </div>
+            </div>
 
-  useEffect(() => {
-    axios.get(`${API}/portfolio`).then(({ data }) => setExperiences(data.data?.experience || []));
-  }, []);
-
-  const saveExperience = async (updatedExp) => {
-    try {
-      await axios.put(`${API}/portfolio`, { experience: updatedExp });
-      setExperiences(updatedExp);
-      setMsg('✅ Experience updated.');
-      setShowForm(false);
-      setForm({ title: '', company: '', duration: '', description: '' });
-    } catch {
-      setMsg('Failed to update.');
-    }
-  };
-
-  const handleAdd = (e) => {
-    e.preventDefault();
-    saveExperience([...experiences, form]);
-  };
-
-  const handleRemove = (index) => {
-    if(!window.confirm('Delete this experience?')) return;
-    saveExperience(experiences.filter((_, i) => i !== index));
-  };
-
-  return (
-    <div className="max-w-3xl">
-      <div className="flex justify-between items-center mb-6">
-        <h2 className="text-2xl font-bold text-white">Experience</h2>
-        <button onClick={() => setShowForm(!showForm)} className="px-4 py-2 bg-primary text-black font-bold rounded-xl text-sm">Add New</button>
-      </div>
-      {msg && <div className="text-sm font-mono text-primary mb-4">{msg}</div>}
-
-      {showForm && (
-        <form onSubmit={handleAdd} className="glass p-6 rounded-2xl mb-6 space-y-4">
-          <div className="grid grid-cols-2 gap-4">
-            <input type="text" placeholder="Job Title" required value={form.title} onChange={e => setForm({...form, title: e.target.value})} className="bg-black/80 border border-primary/30 rounded-xl px-3 py-2 text-white font-mono text-sm" />
-            <input type="text" placeholder="Company" required value={form.company} onChange={e => setForm({...form, company: e.target.value})} className="bg-black/80 border border-primary/30 rounded-xl px-3 py-2 text-white font-mono text-sm" />
-            <input type="text" placeholder="Duration (e.g. 2021 - Present)" required value={form.duration} onChange={e => setForm({...form, duration: e.target.value})} className="bg-black/80 border border-primary/30 rounded-xl px-3 py-2 text-white font-mono text-sm" />
+            {/* Tags Sub-Form */}
+            <div className="space-y-3">
+              <label className="text-primary font-bold text-sm">Tags (Badges)</label>
+              <div className="flex gap-2">
+                <input type="text" placeholder="Tag Name" value={tempTag} onChange={e => setTempTag(e.target.value)} onKeyDown={e => {if(e.key==='Enter'){e.preventDefault(); addTempTag(e);}}} className="flex-1 bg-black/80 border border-primary/30 rounded-lg px-3 py-1.5 text-white font-mono text-xs focus:border-primary outline-none" />
+                <button type="button" onClick={addTempTag} className="px-3 py-1.5 bg-primary/20 text-primary border border-primary/30 rounded-lg hover:bg-primary hover:text-black font-bold text-xs transition-all">Add</button>
+              </div>
+              <div className="flex flex-wrap gap-2">
+                {newCat.tags.map(t => (
+                  <div key={t} className="flex items-center gap-1 bg-primary/10 border border-primary/30 px-2 py-1 rounded text-primary font-mono text-xs">
+                    {t} <button type="button" onClick={() => removeTempTag(t)} className="text-red-400 hover:text-red-300 ml-1"><i className="ph ph-x" /></button>
+                  </div>
+                ))}
+              </div>
+            </div>
           </div>
-          <textarea placeholder="Description" value={form.description} onChange={e => setForm({...form, description: e.target.value})} className="w-full bg-black/80 border border-primary/30 rounded-xl px-3 py-2 text-white font-mono text-sm h-24" />
-          <button type="submit" className="px-6 py-2 bg-primary text-black font-bold rounded-xl text-sm">Save</button>
+
+          <div className="flex gap-3 pt-2">
+            {editCatIndex !== null ? (
+              <>
+                <button type="submit" disabled={loading} className="px-6 py-2 bg-yellow-400 text-black font-bold rounded-xl hover:bg-white transition-all text-sm shadow-[0_0_10px_rgba(234,179,8,0.2)]">Update Category</button>
+                <button type="button" onClick={cancelEditCategory} className="px-6 py-2 bg-gray-700 text-white font-bold rounded-xl hover:bg-gray-600 transition-all text-sm">Cancel</button>
+              </>
+            ) : (
+              <button type="submit" disabled={loading} className="px-6 py-2 bg-primary text-black font-bold rounded-xl hover:bg-white transition-all text-sm shadow-[0_0_10px_rgba(0,255,65,0.2)]">Save Category</button>
+            )}
+          </div>
         </form>
-      )}
-
-      <div className="space-y-4">
-        {experiences.map((exp, i) => (
-          <div key={i} className="glass p-4 rounded-xl flex justify-between items-start border-primary/20">
-            <div>
-              <h4 className="text-white font-bold">{exp.title} <span className="text-primary font-mono text-sm">@ {exp.company}</span></h4>
-              <div className="text-gray-400 text-xs font-mono mb-2">{exp.duration}</div>
-              <p className="text-gray-300 text-sm">{exp.description}</p>
-            </div>
-            <button onClick={() => handleRemove(i)} className="text-red-400 p-2"><i className="ph ph-trash" /></button>
-          </div>
-        ))}
       </div>
-    </div>
-  );
-}
 
-export function TechManager() {
-  const [tech, setTech] = useState([]);
-  const [form, setForm] = useState({ name: '', icon: '' });
-  const [msg, setMsg] = useState('');
-
-  useEffect(() => {
-    axios.get(`${API}/portfolio`).then(({ data }) => setTech(data.data?.technicalArsenal || []));
-  }, []);
-
-  const saveTech = async (updatedTech) => {
-    try {
-      await axios.put(`${API}/portfolio`, { technicalArsenal: updatedTech });
-      setTech(updatedTech);
-      setMsg('✅ Arsenal updated.');
-      setForm({ name: '', icon: '' });
-    } catch { setMsg('Failed to update.'); }
-  };
-
-  const handleAdd = (e) => {
-    e.preventDefault();
-    saveTech([...tech, form]);
-  };
-
-  const handleRemove = (index) => {
-    saveTech(tech.filter((_, i) => i !== index));
-  };
-
-  return (
-    <div className="max-w-2xl space-y-6">
-      <h2 className="text-2xl font-bold text-white">Technical Arsenal</h2>
-      {msg && <div className="text-sm font-mono text-primary">{msg}</div>}
-
-      <form onSubmit={handleAdd} className="flex gap-3">
-        <input type="text" placeholder="Name (e.g. React)" required value={form.name} onChange={e => setForm({...form, name: e.target.value})} className="flex-1 bg-black/80 border border-primary/30 rounded-xl px-4 py-2 text-white font-mono text-sm" />
-        <input type="text" placeholder="Icon URL or class (e.g. ph-react)" value={form.icon} onChange={e => setForm({...form, icon: e.target.value})} className="flex-1 bg-black/80 border border-primary/30 rounded-xl px-4 py-2 text-white font-mono text-sm" />
-        <button type="submit" className="px-6 py-2 bg-primary text-black font-bold rounded-xl">Add</button>
-      </form>
-
-      <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
-        {tech.map((t, i) => (
-          <div key={i} className="glass p-3 rounded-xl flex items-center justify-between border-primary/20">
-            <div className="flex items-center gap-2">
-              {t.icon?.startsWith('http') ? <img src={t.icon} alt={t.name} className="w-6 h-6 object-contain" /> : <i className={`ph ${t.icon || 'ph-code'} text-xl text-primary`} />}
-              <span className="text-white text-sm">{t.name}</span>
+      {/* ── Existing Categories ── */}
+      <div className="grid grid-cols-1 gap-6">
+        {categories.map((cat, i) => (
+          <div key={i} className="glass p-5 rounded-xl border border-primary/20 space-y-4">
+            <div className="flex justify-between items-center border-b border-primary/10 pb-3">
+              <h4 className="text-lg font-bold text-white flex items-center gap-2">
+                <i className={`ph ${cat.icon || 'ph-code'} text-primary text-xl`} /> {cat.title}
+              </h4>
+              <div className="flex gap-2">
+                <button onClick={() => startEditCategory(i)} className="text-gray-400 hover:text-yellow-400 p-2 bg-gray-900/50 rounded-lg transition-all"><i className="ph ph-pencil-simple" /></button>
+                <button onClick={() => {if(window.confirm('Delete category?')) removeCategory(i);}} className="text-gray-400 hover:text-red-400 p-2 bg-gray-900/50 rounded-lg transition-all"><i className="ph ph-trash" /></button>
+              </div>
             </div>
-            <button onClick={() => handleRemove(i)} className="text-red-400"><i className="ph ph-trash" /></button>
+            
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {/* Render Skills */}
+              <div className="space-y-2">
+                <div className="text-xs text-gray-500 font-mono mb-2 uppercase tracking-wider">Progress Bars</div>
+                {cat.skills.map((s, idx) => (
+                  <div key={idx} className="flex justify-between text-sm font-mono bg-black/40 px-3 py-1.5 rounded border border-primary/10">
+                    <span className="text-gray-300">{s.name}</span>
+                    <span className="text-primary font-bold">{s.percentage}%</span>
+                  </div>
+                ))}
+                {cat.skills.length === 0 && <span className="text-gray-600 text-xs font-mono">None</span>}
+              </div>
+              
+              {/* Render Tags */}
+              <div>
+                <div className="text-xs text-gray-500 font-mono mb-2 uppercase tracking-wider">Tags / Badges</div>
+                <div className="flex flex-wrap gap-2">
+                  {cat.tags.map((t, idx) => (
+                    <span key={idx} className="px-2 py-1 bg-primary/10 border border-primary/30 text-primary rounded font-mono text-xs">
+                      {t}
+                    </span>
+                  ))}
+                  {cat.tags.length === 0 && <span className="text-gray-600 text-xs font-mono">None</span>}
+                </div>
+              </div>
+            </div>
           </div>
         ))}
       </div>

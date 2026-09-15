@@ -23,11 +23,24 @@ const coreObjectiveSchema = new mongoose.Schema({
   icon: { type: String } // e.g. 'ph-code'
 })
 
+const skillItemSchema = new mongoose.Schema({
+  name: { type: String, required: true },
+  percentage: { type: Number, required: true }
+})
+
+const skillCategorySchema = new mongoose.Schema({
+  title: { type: String, required: true },
+  icon: { type: String, required: true },
+  skills: [skillItemSchema],
+  tags: [{ type: String }]
+})
+
 const portfolioSchema = new mongoose.Schema(
   {
     about: { type: String, default: '' },
     stats: [statSchema],
     coreObjectives: [coreObjectiveSchema],
+    skillCategories: [skillCategorySchema],
     skills: [{ type: String }],
     experience: [experienceSchema],
     technicalArsenal: [technicalArsenalSchema],
