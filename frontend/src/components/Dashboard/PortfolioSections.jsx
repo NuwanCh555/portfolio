@@ -214,18 +214,25 @@ export function TechManager() {
 }
 
 export function MediaManager() {
-  const [media, setMedia] = useState({ cvUrl: '', profilePhotoUrl: '' });
+  const [media,   setMedia]   = useState({ cvUrl: '', profilePhotoUrl: '' });
   const [loading, setLoading] = useState(false);
-  const [msg, setMsg] = useState('');
+  const [msg,     setMsg]     = useState('');
 
   useEffect(() => {
-    axios.get(`${API}/portfolio`).then(({ data }) => setMedia({ cvUrl: data.data?.cvUrl || '', profilePhotoUrl: data.data?.profilePhotoUrl || '' }));
+    axios.get(`${API}/portfolio`)
+      .then(({ data }) => setMedia({
+        cvUrl:           data.data?.cvUrl           || '',
+        profilePhotoUrl: data.data?.profilePhotoUrl || '',
+      }));
   }, []);
 
+  const flash = (text) => { setMsg(text); setTimeout(() => setMsg(''), 4000); };
+
+  // ── Upload ────────────────────────────────────────────────────────────────
   const handleUpload = async (e, field) => {
     const file = e.target.files[0];
     if (!file) return;
-    setLoading(true); setMsg('Uploading...');
+    setLoading(true); flash('⏳ Uploading…');
     const formData = new FormData();
     formData.append('file', file);
     try {
@@ -233,28 +240,142 @@ export function MediaManager() {
       const url = res.data.url;
       await axios.put(`${API}/portfolio`, { [field]: url });
       setMedia(prev => ({ ...prev, [field]: url }));
-      setMsg('✅ Uploaded & saved successfully.');
+      flash('✅ Uploaded & saved successfully.');
     } catch {
-      setMsg('Upload failed.');
-    } finally { setLoading(false); }
+      flash('❌ Upload failed. Check Cloudinary env vars on Vercel.');
+    } finally {
+      setLoading(false);
+      // Reset file input so same file can be re-selected
+      e.target.value = '';
+    }
+  };
+
+  // ── Delete ────────────────────────────────────────────────────────────────
+  const handleDelete = async (field) => {
+    const endpoint = field === 'profilePhotoUrl' ? 'profile-photo' : 'cv';
+    const label    = field === 'profilePhotoUrl' ? 'profile photo' : 'CV';
+    if (!window.confirm(`Remove current ${label} permanently?`)) return;
+    setLoading(true); flash(`⏳ Removing ${label}…`);
+    try {
+      await axios.delete(`${API}/upload/${endpoint}`);
+      setMedia(prev => ({ ...prev, [field]: '' }));
+      flash(`✅ ${label.charAt(0).toUpperCase() + label.slice(1)} removed.`);
+    } catch {
+      flash(`❌ Failed to remove ${label}.`);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
     <div className="max-w-2xl space-y-8">
-      <h2 className="text-2xl font-bold text-white">CV & Profile Photo</h2>
-      {msg && <div className="text-sm font-mono text-primary">{msg}</div>}
+      <h2 className="text-2xl font-bold text-white">CV &amp; Profile Photo</h2>
 
-      <div className="glass p-6 rounded-2xl border-primary/20">
-        <h3 className="text-white font-bold mb-4">Profile Photo</h3>
-        {media.profilePhotoUrl && <img src={media.profilePhotoUrl} alt="Profile" className="w-32 h-32 rounded-full object-cover mb-4 border-2 border-primary" />}
-        <input type="file" accept="image/*" onChange={(e) => handleUpload(e, 'profilePhotoUrl')} disabled={loading} className="text-gray-400 font-mono text-sm" />
+      {/* Status message */}
+      {msg && (
+        <div className={`p-3 rounded-xl text-sm font-mono border ${
+          msg.startsWith('✅') ? 'bg-primary/10 border-primary/30 text-primary'
+          : msg.startsWith('❌') ? 'bg-red-950/60 border-red-500/40 text-red-400'
+          : 'bg-yellow-950/40 border-yellow-600/30 text-yellow-400'
+        }`}>{msg}</div>
+      )}
+
+      {/* ── Profile Photo ── */}
+      <div className="glass p-6 rounded-2xl border-primary/20 space-y-4">
+        <h3 className="text-white font-bold text-lg flex items-center gap-2">
+          <i className="ph ph-user-circle text-primary" /> Profile Photo
+        </h3>
+
+        {media.profilePhotoUrl ? (
+          <div className="flex items-center gap-4">
+            <img
+              src={media.profilePhotoUrl}
+              alt="Profile"
+              className="w-24 h-24 rounded-full object-cover border-2 border-primary shadow-[0_0_12px_rgba(0,255,65,0.3)]"
+            />
+            <div className="flex flex-col gap-2">
+              <span className="text-xs text-gray-500 font-mono">Current photo on file</span>
+              <button
+                onClick={() => handleDelete('profilePhotoUrl')}
+                disabled={loading}
+                className="flex items-center gap-2 px-4 py-2 bg-red-950/60 border border-red-500/40 text-red-400 hover:bg-red-900/60 hover:text-red-300 rounded-xl text-sm font-mono transition-all disabled:opacity-50"
+              >
+                <i className="ph ph-trash" /> Remove Photo
+              </button>
+            </div>
+          </div>
+        ) : (
+          <div className="flex items-center gap-3 p-4 rounded-xl bg-black/40 border border-dashed border-gray-700">
+            <i className="ph ph-image-broken text-gray-600 text-3xl" />
+            <span className="text-gray-500 font-mono text-sm">No profile photo uploaded yet.</span>
+          </div>
+        )}
+
+        <div>
+          <label className="block text-primary font-mono text-xs mb-2">
+            {media.profilePhotoUrl ? 'Replace Photo' : 'Upload Photo'} (JPG, PNG, WEBP)
+          </label>
+          <input
+            type="file"
+            accept="image/*"
+            onChange={(e) => handleUpload(e, 'profilePhotoUrl')}
+            disabled={loading}
+            className="text-gray-400 font-mono text-sm file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-sm file:font-bold file:bg-primary/20 file:text-primary hover:file:bg-primary/30 file:cursor-pointer file:transition-all"
+          />
+        </div>
       </div>
 
-      <div className="glass p-6 rounded-2xl border-primary/20">
-        <h3 className="text-white font-bold mb-4">CV (PDF)</h3>
-        {media.cvUrl && <a href={media.cvUrl} target="_blank" rel="noreferrer" className="text-primary hover:underline block mb-4 font-mono text-sm">View Current CV</a>}
-        <input type="file" accept=".pdf" onChange={(e) => handleUpload(e, 'cvUrl')} disabled={loading} className="text-gray-400 font-mono text-sm" />
+      {/* ── CV (PDF) ── */}
+      <div className="glass p-6 rounded-2xl border-primary/20 space-y-4">
+        <h3 className="text-white font-bold text-lg flex items-center gap-2">
+          <i className="ph ph-file-pdf text-primary" /> CV / Resume
+        </h3>
+
+        {media.cvUrl ? (
+          <div className="flex items-center justify-between p-4 rounded-xl bg-black/40 border border-primary/20">
+            <div className="flex items-center gap-3">
+              <i className="ph ph-file-pdf text-red-400 text-3xl" />
+              <div>
+                <a
+                  href={media.cvUrl}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="text-primary hover:text-white font-mono text-sm transition-colors flex items-center gap-1"
+                >
+                  View Current CV <i className="ph ph-arrow-square-out text-xs" />
+                </a>
+                <span className="text-xs text-gray-600 font-mono">Hosted on Cloudinary</span>
+              </div>
+            </div>
+            <button
+              onClick={() => handleDelete('cvUrl')}
+              disabled={loading}
+              className="flex items-center gap-2 px-4 py-2 bg-red-950/60 border border-red-500/40 text-red-400 hover:bg-red-900/60 hover:text-red-300 rounded-xl text-sm font-mono transition-all disabled:opacity-50"
+            >
+              <i className="ph ph-trash" /> Remove CV
+            </button>
+          </div>
+        ) : (
+          <div className="flex items-center gap-3 p-4 rounded-xl bg-black/40 border border-dashed border-gray-700">
+            <i className="ph ph-file-dashed text-gray-600 text-3xl" />
+            <span className="text-gray-500 font-mono text-sm">No CV uploaded yet.</span>
+          </div>
+        )}
+
+        <div>
+          <label className="block text-primary font-mono text-xs mb-2">
+            {media.cvUrl ? 'Replace CV' : 'Upload CV'} (PDF only, max 10 MB)
+          </label>
+          <input
+            type="file"
+            accept=".pdf"
+            onChange={(e) => handleUpload(e, 'cvUrl')}
+            disabled={loading}
+            className="text-gray-400 font-mono text-sm file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-sm file:font-bold file:bg-primary/20 file:text-primary hover:file:bg-primary/30 file:cursor-pointer file:transition-all"
+          />
+        </div>
       </div>
     </div>
   );
 }
+
