@@ -4,17 +4,42 @@ const { upload, cloudinary } = require('../config/cloudinary');
 const { protect, adminOnly } = require('../middleware/authMiddleware');
 const Portfolio  = require('../models/Portfolio');
 
-// ── POST /api/upload ─────────────────────────────────────────────────────────
-// Upload a file to Cloudinary; returns the secure URL
-router.post('/', protect, adminOnly, upload.single('file'), (req, res) => {
-  if (!req.file) {
-    return res.status(400).json({ success: false, message: 'No file uploaded.' });
+// ── POST /api/upload ──────────────────────────────────────────────────────────
+// Wraps multer in a Promise so we can catch and surface the EXACT Cloudinary
+// error instead of silently swallowing it.
+router.post('/', protect, adminOnly, async (req, res) => {
+  // Run multer manually so errors don't disappear
+  const runUpload = () =>
+    new Promise((resolve, reject) => {
+      upload.single('file')(req, res, (err) => {
+        if (err) return reject(err);
+        resolve();
+      });
+    });
+
+  try {
+    await runUpload();
+
+    if (!req.file) {
+      return res.status(400).json({ success: false, message: 'No file was received by the server.' });
+    }
+
+    return res.status(200).json({
+      success:   true,
+      url:       req.file.path,
+      public_id: req.file.filename,
+    });
+  } catch (err) {
+    // Log the full Cloudinary / multer error server-side
+    console.error('[POST /api/upload] Cloudinary/multer error:', err);
+
+    // Return the exact error message to the frontend
+    const message = err?.message || err?.error?.message || JSON.stringify(err);
+    return res.status(500).json({
+      success: false,
+      message: `Upload failed: ${message}`,
+    });
   }
-  res.status(200).json({
-    success:   true,
-    url:       req.file.path,
-    public_id: req.file.filename,
-  });
 });
 
 // ── DELETE /api/upload/profile-photo ─────────────────────────────────────────

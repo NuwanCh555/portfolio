@@ -2,10 +2,12 @@ const cloudinary = require('cloudinary').v2;
 const { CloudinaryStorage } = require('multer-storage-cloudinary');
 const multer = require('multer');
 
-// ── Validate that credentials are present at startup ─────────────────────────
+// ── Debug: validate credentials are present at startup ─────────────────────
 const { CLOUDINARY_CLOUD_NAME, CLOUDINARY_API_KEY, CLOUDINARY_API_SECRET } = process.env;
+console.log('[cloudinary] cloud_name:', CLOUDINARY_CLOUD_NAME || '*** MISSING ***');
+console.log('[cloudinary] api_key   :', CLOUDINARY_API_KEY ? '***' + CLOUDINARY_API_KEY.slice(-4) : '*** MISSING ***');
 if (!CLOUDINARY_CLOUD_NAME || !CLOUDINARY_API_KEY || !CLOUDINARY_API_SECRET) {
-  console.warn('[cloudinary] WARNING: One or more Cloudinary env vars are missing. Uploads will fail.');
+  console.error('[cloudinary] FATAL: One or more Cloudinary env vars are missing. Uploads will fail.');
 }
 
 cloudinary.config({

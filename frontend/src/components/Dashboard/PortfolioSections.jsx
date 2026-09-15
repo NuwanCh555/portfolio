@@ -241,8 +241,10 @@ export function MediaManager() {
       await axios.put(`${API}/portfolio`, { [field]: url });
       setMedia(prev => ({ ...prev, [field]: url }));
       flash('✅ Uploaded & saved successfully.');
-    } catch {
-      flash('❌ Upload failed. Check Cloudinary env vars on Vercel.');
+    } catch (err) {
+      // Show the EXACT error message from the server (Cloudinary / multer)
+      const serverMsg = err?.response?.data?.message || err?.message || 'Unknown error';
+      flash(`❌ ${serverMsg}`);
     } finally {
       setLoading(false);
       // Reset file input so same file can be re-selected
