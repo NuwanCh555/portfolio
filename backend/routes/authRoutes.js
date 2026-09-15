@@ -10,6 +10,6 @@ router.post('/register',        authLimiter, register)
 router.post('/login',           authLimiter, login)
 router.get( '/me',              protect,     getMe)
 router.post('/forgot-password', authLimiter, forgotPassword)
-router.post('/reset-password/:token', authLimiter, resetPassword)
+router.post('/reset-password',  authLimiter, resetPassword)
 
 module.exports = router

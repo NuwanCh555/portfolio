@@ -117,69 +117,69 @@ exports.forgotPassword = async (req, res) => {
     const user = await User.findOne({ email: email.toLowerCase() })
     // Always return 200 to prevent user enumeration
     if (!user)
-      return res.json({ success: true, message: 'If that email exists, a reset link has been sent.' })
+      return res.json({ success: true, message: 'If that email exists, an OTP has been sent.' })
 
-    // Generate secure random token
-    const resetToken  = crypto.randomBytes(32).toString('hex')
-    const tokenHashed = crypto.createHash('sha256').update(resetToken).digest('hex')
+    // Generate secure 6-digit OTP
+    const otpCode = Math.floor(100000 + Math.random() * 900000).toString()
+    const otpHashed = crypto.createHash('sha256').update(otpCode).digest('hex')
 
-    user.resetPasswordToken   = tokenHashed
-    user.resetPasswordExpires = Date.now() + 60 * 60 * 1000 // 1 hour
+    user.otpCode    = otpHashed
+    user.otpExpires = Date.now() + 10 * 60 * 1000 // 10 minutes
     await user.save({ validateBeforeSave: false })
-
-    const resetUrl = `${process.env.FRONTEND_URL}/auth/reset-password/${resetToken}`
 
     await transporter.sendMail({
       from:    `"Nuwan MC Portfolio" <${process.env.EMAIL_USER}>`,
       to:       user.email,
-      subject: 'Password Reset — Nuwan MC Portfolio',
+      subject: 'Your 6-Digit OTP — Nuwan MC Portfolio',
       html: `
         <div style="font-family:monospace;background:#030305;color:#e2e8f0;padding:40px;border-radius:12px;border:1px solid rgba(0,255,65,0.2)">
-          <h2 style="color:#00ff41">&gt; Password Reset Request_</h2>
-          <p>Click the link below to reset your password. <strong>This link expires in 1 hour.</strong></p>
-          <a href="${resetUrl}"
-             style="display:inline-block;margin:20px 0;padding:14px 28px;background:#00ff41;color:#000;font-weight:bold;border-radius:8px;text-decoration:none">
-            Reset Password
-          </a>
+          <h2 style="color:#00ff41">&gt; OTP Verification Request_</h2>
+          <p>You requested a password reset. Here is your 6-digit verification code. <strong>This code expires in 10 minutes.</strong></p>
+          <div style="margin:30px 0;padding:20px;background:#0a0a0f;border:1px solid #00ff41;text-align:center;font-size:32px;letter-spacing:10px;font-weight:bold;color:#00ff41;">
+            ${otpCode}
+          </div>
           <p style="color:#6b7280;font-size:12px">If you did not request this, ignore this email. Your password is safe.</p>
-          <p style="color:#6b7280;font-size:12px">Link: ${resetUrl}</p>
         </div>
       `,
     })
 
-    res.json({ success: true, message: 'If that email exists, a reset link has been sent.' })
+    res.json({ success: true, message: 'If that email exists, an OTP has been sent.' })
   } catch (err) {
     console.error('[auth/forgot-password]', err)
-    res.status(500).json({ success: false, message: 'Could not send reset email. Try again.' })
+    res.status(500).json({ success: false, message: err.message || 'Could not send reset email.' })
   }
 }
 
 // ────────────────────────────────────────────────────────────────────────────
-// POST /api/auth/reset-password/:token
+// POST /api/auth/reset-password
 // ────────────────────────────────────────────────────────────────────────────
 exports.resetPassword = async (req, res) => {
   try {
-    const { password } = req.body
-    if (!password || password.length < 6)
+    const { email, otpCode, newPassword } = req.body
+    if (!email || !otpCode || !newPassword)
+      return res.status(400).json({ success: false, message: 'Email, OTP, and new password are required.' })
+      
+    if (newPassword.length < 6)
       return res.status(400).json({ success: false, message: 'Password must be at least 6 characters.' })
 
-    // Hash the incoming raw token to compare against DB
-    const tokenHashed = crypto
+    // Hash the incoming OTP to compare against DB
+    const otpHashed = crypto
       .createHash('sha256')
-      .update(req.params.token)
+      .update(otpCode)
       .digest('hex')
 
     const user = await User.findOne({
-      resetPasswordToken:   tokenHashed,
-      resetPasswordExpires: { $gt: Date.now() },
+      email: email.toLowerCase(),
+      otpCode: otpHashed,
+      otpExpires: { $gt: Date.now() },
     })
 
     if (!user)
-      return res.status(400).json({ success: false, message: 'Invalid or expired reset link.' })
+      return res.status(400).json({ success: false, message: 'Invalid or expired OTP.' })
 
-    user.password             = password
-    user.resetPasswordToken   = undefined
-    user.resetPasswordExpires = undefined
+    user.password   = newPassword
+    user.otpCode    = undefined
+    user.otpExpires = undefined
     await user.save()
 
     const token = signToken(user._id)
@@ -191,6 +191,6 @@ exports.resetPassword = async (req, res) => {
     })
   } catch (err) {
     console.error('[auth/reset-password]', err)
-    res.status(500).json({ success: false, message: 'Server error.' })
+    res.status(500).json({ success: false, message: err.message || 'Server error.' })
   }
 }

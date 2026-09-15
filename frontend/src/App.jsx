@@ -19,7 +19,6 @@ import Footer     from './components/Footer'
 import LoginPage      from './components/Auth/LoginPage'
 import RegisterPage   from './components/Auth/RegisterPage'
 import ForgotPassword from './components/Auth/ForgotPassword'
-import ResetPassword  from './components/Auth/ResetPassword'
 
 // Admin
 import AdminDashboard from './components/Dashboard/AdminDashboard'
@@ -118,7 +117,6 @@ export default function App() {
           <Route path="/auth/login"          element={<GuestRoute><LoginPage /></GuestRoute>} />
           <Route path="/auth/register"        element={<GuestRoute><RegisterPage /></GuestRoute>} />
           <Route path="/auth/forgot-password" element={<GuestRoute><ForgotPassword /></GuestRoute>} />
-          <Route path="/auth/reset-password/:token" element={<ResetPassword />} />
 
           {/* Admin dashboard — admin role only */}
           <Route path="/dashboard" element={<AdminRoute><AdminDashboard /></AdminRoute>} />

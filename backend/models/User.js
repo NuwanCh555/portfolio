@@ -14,9 +14,9 @@ const userSchema = new mongoose.Schema(
     },
     password: { type: String, required: true, minlength: 6, select: false },
     role:     { type: String, enum: ['user', 'admin'], default: 'user' },
-    // Password reset
-    resetPasswordToken:   { type: String, select: false },
-    resetPasswordExpires: { type: Date,   select: false },
+    // Password reset (OTP)
+    otpCode:    { type: String, select: false },
+    otpExpires: { type: Date,   select: false },
     // Profile
     avatar: { type: String, default: '' },
     isActive: { type: Boolean, default: true },
