@@ -96,6 +96,7 @@ export default function App() {
 
           {/* Admin dashboard — admin role only */}
           <Route path="/dashboard" element={<AdminRoute><AdminDashboard /></AdminRoute>} />
+          <Route path="/admin" element={<Navigate to="/dashboard" replace />} />
 
           {/* Catch-all */}
           <Route path="*" element={<Navigate to="/" replace />} />
