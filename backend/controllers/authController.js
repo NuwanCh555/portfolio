@@ -32,7 +32,10 @@ exports.register = async (req, res) => {
     if (exists)
       return res.status(409).json({ success: false, message: 'Email already registered.' })
 
-    const user = await User.create({ name, email, password })
+    const adminEmail = (process.env.ADMIN_EMAIL || 'nchathuranga533@gmail.com').toLowerCase()
+    const role = (email.toLowerCase() === adminEmail) ? 'admin' : 'user'
+
+    const user = await User.create({ name, email, password, role })
     const token = signToken(user._id)
 
     res.status(201).json({
@@ -62,6 +65,22 @@ exports.login = async (req, res) => {
 
     if (!user.isActive)
       return res.status(403).json({ success: false, message: 'Account is deactivated.' })
+
+    const adminEmail = (process.env.ADMIN_EMAIL || 'nchathuranga533@gmail.com').toLowerCase()
+    
+    // Enforce single super admin rule dynamically on login
+    let roleUpdated = false
+    if (user.email === adminEmail && user.role !== 'admin') {
+      user.role = 'admin'
+      roleUpdated = true
+    } else if (user.email !== adminEmail && user.role === 'admin') {
+      user.role = 'user'
+      roleUpdated = true
+    }
+    
+    if (roleUpdated) {
+      await user.save()
+    }
 
     const token = signToken(user._id)
 
