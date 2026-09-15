@@ -378,6 +378,74 @@ export function SkillCategoriesManager() {
   );
 }
 
+export function ExperienceManager() {
+  const [experiences, setExperiences] = useState([]);
+  const [form, setForm] = useState({ title: '', company: '', duration: '', description: '' });
+  const [showForm, setShowForm] = useState(false);
+  const [msg, setMsg] = useState('');
+
+  useEffect(() => {
+    axios.get(`${API}/portfolio`).then(({ data }) => setExperiences(data.data?.experience || []));
+  }, []);
+
+  const saveExperience = async (updatedExp) => {
+    try {
+      await axios.put(`${API}/portfolio`, { experience: updatedExp });
+      setExperiences(updatedExp);
+      setMsg('✅ Experience updated.');
+      setShowForm(false);
+      setForm({ title: '', company: '', duration: '', description: '' });
+    } catch {
+      setMsg('Failed to update.');
+    }
+  };
+
+  const handleAdd = (e) => {
+    e.preventDefault();
+    saveExperience([...experiences, form]);
+  };
+
+  const handleRemove = (index) => {
+    if(!window.confirm('Delete this experience?')) return;
+    saveExperience(experiences.filter((_, i) => i !== index));
+  };
+
+  return (
+    <div className="max-w-3xl">
+      <div className="flex justify-between items-center mb-6">
+        <h2 className="text-2xl font-bold text-white">Experience</h2>
+        <button onClick={() => setShowForm(!showForm)} className="px-4 py-2 bg-primary text-black font-bold rounded-xl text-sm">Add New</button>
+      </div>
+      {msg && <div className="text-sm font-mono text-primary mb-4">{msg}</div>}
+
+      {showForm && (
+        <form onSubmit={handleAdd} className="glass p-6 rounded-2xl mb-6 space-y-4">
+          <div className="grid grid-cols-2 gap-4">
+            <input type="text" placeholder="Job Title" required value={form.title} onChange={e => setForm({...form, title: e.target.value})} className="bg-black/80 border border-primary/30 rounded-xl px-3 py-2 text-white font-mono text-sm" />
+            <input type="text" placeholder="Company" required value={form.company} onChange={e => setForm({...form, company: e.target.value})} className="bg-black/80 border border-primary/30 rounded-xl px-3 py-2 text-white font-mono text-sm" />
+            <input type="text" placeholder="Duration (e.g. 2021 - Present)" required value={form.duration} onChange={e => setForm({...form, duration: e.target.value})} className="bg-black/80 border border-primary/30 rounded-xl px-3 py-2 text-white font-mono text-sm" />
+          </div>
+          <textarea placeholder="Description" value={form.description} onChange={e => setForm({...form, description: e.target.value})} className="w-full bg-black/80 border border-primary/30 rounded-xl px-3 py-2 text-white font-mono text-sm h-24" />
+          <button type="submit" className="px-6 py-2 bg-primary text-black font-bold rounded-xl text-sm">Save</button>
+        </form>
+      )}
+
+      <div className="space-y-4">
+        {experiences.map((exp, i) => (
+          <div key={i} className="glass p-4 rounded-xl flex justify-between items-start border-primary/20">
+            <div>
+              <h4 className="text-white font-bold">{exp.title} <span className="text-primary font-mono text-sm">@ {exp.company}</span></h4>
+              <div className="text-gray-400 text-xs font-mono mb-2">{exp.duration}</div>
+              <p className="text-gray-300 text-sm">{exp.description}</p>
+            </div>
+            <button onClick={() => handleRemove(i)} className="text-red-400 p-2"><i className="ph ph-trash" /></button>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
 export function MediaManager() {
   const [media,   setMedia]   = useState({ cvUrl: '', profilePhotoUrl: '' });
   const [loading, setLoading] = useState(false);
