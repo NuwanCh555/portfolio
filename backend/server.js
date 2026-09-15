@@ -28,10 +28,20 @@ const ALLOWED_ORIGINS = (process.env.FRONTEND_URL || 'http://localhost:5173')
   .split(',')
   .map((o) => o.trim().replace(/\/$/, ''))
 
+// Regex for Vercel preview deployments (e.g. https://portfolio-6j0dguz18-nuwan-mc.vercel.app)
+const VERCEL_PREVIEW_REGEX = /^https:\/\/portfolio-.*-nuwan-mc\.vercel\.app$/
+
 app.use(
   cors({
     origin: (origin, cb) => {
-      if (!origin || ALLOWED_ORIGINS.includes(origin)) return cb(null, true)
+      if (!origin) return cb(null, true)
+      
+      // Check explicit allowed origins from env
+      if (ALLOWED_ORIGINS.includes(origin)) return cb(null, true)
+      
+      // Check Vercel dynamic preview URLs
+      if (VERCEL_PREVIEW_REGEX.test(origin)) return cb(null, true)
+
       cb(new Error(`CORS: ${origin} is not allowed`))
     },
     methods:     ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
