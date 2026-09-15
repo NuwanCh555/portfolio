@@ -65,9 +65,35 @@ function PortfolioPage() {
 
 // ── Admin route guard ─────────────────────────────────────────────────────────
 function AdminRoute({ children }) {
-  const { user, loading } = useAuth()
+  const { user, loading, logout } = useAuth()
+  
   if (loading) return <div className="min-h-screen bg-bgDark flex items-center justify-center text-primary font-mono animate-pulse">&gt; Verifying credentials...</div>
-  if (!user || user.role !== 'admin') return <Navigate to="/auth/login" replace />
+  
+  if (!user) return <Navigate to="/auth/login" replace />
+  
+  if (user.role !== 'admin') {
+    return (
+      <div className="min-h-screen bg-bgDark flex flex-col items-center justify-center px-4 text-center">
+        <i className="ph-fill ph-shield-warning text-6xl text-red-500 mb-4 animate-pulse" />
+        <h1 className="text-3xl text-white font-bold mb-2">Access Denied</h1>
+        <p className="text-gray-400 mb-8 max-w-md font-mono text-sm">
+          You are currently authenticated as a standard user ({user.email}). Administrator privileges are required to access this sector.
+        </p>
+        <div className="flex gap-4">
+          <a href="/" className="px-6 py-3 border border-gray-600 text-gray-300 hover:text-white hover:border-gray-400 rounded-xl transition-colors font-mono">
+            &lt; Go Back
+          </a>
+          <button 
+            onClick={() => { logout(); window.location.href = '/auth/login' }} 
+            className="px-6 py-3 bg-primary text-black hover:bg-white font-bold rounded-xl shadow-[0_0_15px_rgba(0,255,65,0.3)] transition-all flex items-center gap-2"
+          >
+            <i className="ph ph-sign-out" /> Logout & Switch Account
+          </button>
+        </div>
+      </div>
+    )
+  }
+  
   return children
 }
 
