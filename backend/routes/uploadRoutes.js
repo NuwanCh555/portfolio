@@ -70,6 +70,31 @@ router.delete('/profile-photo', protect, adminOnly, async (req, res) => {
   }
 });
 
+// ── DELETE /api/upload/hacker-profile-photo ──────────────────────────────────
+// Clear hacker profile photo from DB (and optionally destroy from Cloudinary)
+router.delete('/hacker-profile-photo', protect, adminOnly, async (req, res) => {
+  try {
+    const portfolio = await Portfolio.findOne();
+    if (!portfolio) return res.status(404).json({ success: false, message: 'Portfolio not found.' });
+
+    if (portfolio.hackerProfileImage) {
+      try {
+        const match = portfolio.hackerProfileImage.match(/\/upload\/(?:v\d+\/)?(.+)\.[a-z]+$/i);
+        if (match) await cloudinary.uploader.destroy(match[1], { resource_type: 'image' });
+      } catch (cdnErr) {
+        console.warn('[upload/hacker-profile-photo delete] Cloudinary destroy failed:', cdnErr.message);
+      }
+    }
+
+    portfolio.hackerProfileImage = '';
+    await portfolio.save();
+    res.json({ success: true, message: 'Hacker mode profile photo removed.' });
+  } catch (err) {
+    console.error('[upload/hacker-profile-photo delete]', err);
+    res.status(500).json({ success: false, message: 'Server error.' });
+  }
+});
+
 // ── DELETE /api/upload/cv ─────────────────────────────────────────────────────
 // Clear CV from DB (and optionally destroy from Cloudinary)
 router.delete('/cv', protect, adminOnly, async (req, res) => {

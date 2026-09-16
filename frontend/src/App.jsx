@@ -140,7 +140,7 @@ function PortfolioPage() {
       <div className="fixed bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-secondary/10 rounded-full blur-[120px] pointer-events-none z-0" />
       <Navbar />
       <main className="relative z-10">
-        <Hero portfolio={portfolio} toggleHackerMode={toggleHackerMode} />
+        <Hero portfolio={portfolio} toggleHackerMode={toggleHackerMode} hackerMode={hackerMode} />
         <About portfolio={portfolio} />
         <Skills portfolio={portfolio} />
         <Experience portfolio={portfolio} />

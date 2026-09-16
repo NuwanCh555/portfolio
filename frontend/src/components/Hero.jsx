@@ -7,7 +7,7 @@ const TITLES = [
   'CTF Competitor',
 ]
 
-export default function Hero({ portfolio, toggleHackerMode }) {
+export default function Hero({ portfolio, toggleHackerMode, hackerMode }) {
   const [titleIdx,  setTitleIdx]  = useState(0)
   const [displayed, setDisplayed] = useState('')
   const [deleting,  setDeleting]  = useState(false)
@@ -169,11 +169,15 @@ export default function Hero({ portfolio, toggleHackerMode }) {
               onTouchStart={handlePointerDown}
               onTouchEnd={handlePointerUp}
             >
-              {portfolio?.profilePhotoUrl ? (
+              {(hackerMode && portfolio?.hackerProfileImage) || portfolio?.profilePhotoUrl ? (
                 <img
-                  src={portfolio.profilePhotoUrl}
+                  src={hackerMode && portfolio?.hackerProfileImage ? portfolio.hackerProfileImage : portfolio?.profilePhotoUrl}
                   alt="Nuwan MC — Cyber Security Developer"
-                  className="w-full h-full object-cover rounded-full filter contrast-125 grayscale hover:grayscale-0 transition-all duration-700 opacity-90 mix-blend-screen select-none"
+                  className={`w-full h-full object-cover rounded-full transition-all duration-300 opacity-90 mix-blend-screen select-none ${
+                    hackerMode 
+                      ? 'filter-none grayscale-0' 
+                      : 'filter contrast-125 grayscale hover:grayscale-0'
+                  }`}
                   onContextMenu={(e) => e.preventDefault()}
                   draggable="false"
                   style={{ WebkitTouchCallout: 'none' }}

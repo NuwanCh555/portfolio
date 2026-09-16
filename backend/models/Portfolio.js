@@ -47,6 +47,7 @@ const portfolioSchema = new mongoose.Schema(
     technicalArsenal: [technicalArsenalSchema],
     cvUrl: { type: String, default: '' },
     profilePhotoUrl: { type: String, default: '' },
+    hackerProfileImage: { type: String, default: '' },
   },
   { timestamps: true }
 )

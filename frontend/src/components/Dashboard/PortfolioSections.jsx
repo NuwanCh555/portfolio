@@ -533,7 +533,7 @@ export function ExperienceManager() {
 }
 
 export function MediaManager() {
-  const [media,   setMedia]   = useState({ cvUrl: '', profilePhotoUrl: '' });
+  const [media,   setMedia]   = useState({ cvUrl: '', profilePhotoUrl: '', hackerProfileImage: '' });
   const [loading, setLoading] = useState(false);
   const [msg,     setMsg]     = useState('');
 
@@ -542,6 +542,7 @@ export function MediaManager() {
       .then(({ data }) => setMedia({
         cvUrl:           data.data?.cvUrl           || '',
         profilePhotoUrl: data.data?.profilePhotoUrl || '',
+        hackerProfileImage: data.data?.hackerProfileImage || '',
       }));
   }, []);
 
@@ -573,8 +574,12 @@ export function MediaManager() {
 
   // ── Delete ────────────────────────────────────────────────────────────────
   const handleDelete = async (field) => {
-    const endpoint = field === 'profilePhotoUrl' ? 'profile-photo' : 'cv';
-    const label    = field === 'profilePhotoUrl' ? 'profile photo' : 'CV';
+    const endpoint = field === 'profilePhotoUrl' ? 'profile-photo' 
+                   : field === 'hackerProfileImage' ? 'hacker-profile-photo'
+                   : 'cv';
+    const label    = field === 'profilePhotoUrl' ? 'profile photo'
+                   : field === 'hackerProfileImage' ? 'hacker mode profile photo'
+                   : 'CV';
     if (!window.confirm(`Remove current ${label} permanently?`)) return;
     setLoading(true); flash(`⏳ Removing ${label}…`);
     try {
@@ -604,7 +609,7 @@ export function MediaManager() {
       {/* ── Profile Photo ── */}
       <div className="glass p-6 rounded-2xl border-primary/20 space-y-4">
         <h3 className="text-white font-bold text-lg flex items-center gap-2">
-          <i className="ph ph-user-circle text-primary" /> Profile Photo
+          <i className="ph ph-user-circle text-primary" /> Default Profile Picture (Green Theme)
         </h3>
 
         {media.profilePhotoUrl ? (
@@ -642,6 +647,51 @@ export function MediaManager() {
             onChange={(e) => handleUpload(e, 'profilePhotoUrl')}
             disabled={loading}
             className="text-gray-400 font-mono text-sm file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-sm file:font-bold file:bg-primary/20 file:text-primary hover:file:bg-primary/30 file:cursor-pointer file:transition-all"
+          />
+        </div>
+      </div>
+
+      {/* ── Hacker Profile Photo ── */}
+      <div className="glass p-6 rounded-2xl border-red-500/20 space-y-4">
+        <h3 className="text-white font-bold text-lg flex items-center gap-2">
+          <i className="ph ph-user-circle text-red-500" /> Hacker Mode Profile Picture (Red Theme)
+        </h3>
+
+        {media.hackerProfileImage ? (
+          <div className="flex items-center gap-4">
+            <img
+              src={media.hackerProfileImage}
+              alt="Hacker Profile"
+              className="w-24 h-24 rounded-full object-cover border-2 border-red-500 shadow-[0_0_12px_rgba(239,68,68,0.3)] filter sepia hue-rotate-[300deg] saturate-200"
+            />
+            <div className="flex flex-col gap-2">
+              <span className="text-xs text-gray-500 font-mono">Current hacker photo on file</span>
+              <button
+                onClick={() => handleDelete('hackerProfileImage')}
+                disabled={loading}
+                className="flex items-center gap-2 px-4 py-2 bg-red-950/60 border border-red-500/40 text-red-400 hover:bg-red-900/60 hover:text-red-300 rounded-xl text-sm font-mono transition-all disabled:opacity-50"
+              >
+                <i className="ph ph-trash" /> Remove Hacker Photo
+              </button>
+            </div>
+          </div>
+        ) : (
+          <div className="flex items-center gap-3 p-4 rounded-xl bg-black/40 border border-dashed border-gray-700">
+            <i className="ph ph-image-broken text-gray-600 text-3xl" />
+            <span className="text-gray-500 font-mono text-sm">No hacker profile photo uploaded yet.</span>
+          </div>
+        )}
+
+        <div>
+          <label className="block text-red-500 font-mono text-xs mb-2">
+            {media.hackerProfileImage ? 'Replace Hacker Photo' : 'Upload Hacker Photo'} (JPG, PNG, WEBP)
+          </label>
+          <input
+            type="file"
+            accept="image/*"
+            onChange={(e) => handleUpload(e, 'hackerProfileImage')}
+            disabled={loading}
+            className="text-gray-400 font-mono text-sm file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-sm file:font-bold file:bg-red-500/20 file:text-red-500 hover:file:bg-red-500/30 file:cursor-pointer file:transition-all"
           />
         </div>
       </div>
