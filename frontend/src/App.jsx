@@ -91,10 +91,10 @@ function PortfolioPage() {
       {restoring && (
         <div className="fixed inset-0 bg-black z-50 flex flex-col items-center justify-center">
           <div className="w-full max-w-2xl px-6">
-            <p className="text-primary font-mono text-xl mb-4 animate-pulse">&gt; PURGING_MALWARE...</p>
-            <p className="text-primary font-mono text-xl mb-8">&gt; RESTORING_SECURE_CONNECTION...</p>
+            <p className="text-green-400 font-mono text-xl mb-4 animate-pulse">&gt; PURGING_MALWARE...</p>
+            <p className="text-green-400 font-mono text-xl mb-8">&gt; RESTORING_SECURE_CONNECTION...</p>
             <div className="w-full h-1 bg-green-900 rounded-full overflow-hidden">
-              <div className="h-full bg-primary w-full origin-left animate-[scale-x_2s_ease-out]" style={{ animationName: 'scaleX', animationDuration: '2s', animationTimingFunction: 'linear' }} />
+              <div className="h-full bg-green-500 w-full origin-left animate-[scale-x_2s_ease-out]" style={{ animationName: 'scaleX', animationDuration: '2s', animationTimingFunction: 'linear' }} />
             </div>
             <style>{`@keyframes scaleX { 0% { transform: scaleX(0); } 100% { transform: scaleX(1); } }`}</style>
           </div>
