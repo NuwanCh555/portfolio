@@ -34,7 +34,7 @@ export default function RegisterPage() {
       <div className="relative z-10 w-full max-w-md">
         <div className="text-center mb-8">
           <Link to="/" className="inline-flex items-center gap-3 mb-6 group">
-            <div className="w-10 h-10 bg-gradient-to-br from-primary to-secondary rounded-xl flex items-center justify-center text-black font-bold text-xl shadow-[0_0_15px_rgba(0,255,65,0.4)]">N</div>
+            <div className="w-10 h-10 bg-gradient-to-br from-primary to-secondary rounded-xl flex items-center justify-center text-black font-bold text-xl shadow-[0_0_15px_rgba(var(--color-primary-rgb),0.4)]">N</div>
             <span className="text-xl font-bold text-white">Nuwan MC</span>
           </Link>
           <div className="w-14 h-14 bg-primary/10 rounded-2xl flex items-center justify-center mx-auto mb-4 border border-primary/30">
@@ -63,12 +63,12 @@ export default function RegisterPage() {
                 <input id={id} name={name} type={type} required value={form[name]}
                   onChange={(e) => setForm({ ...form, [name]: e.target.value })}
                   placeholder={placeholder}
-                  className="w-full bg-black/80 border border-primary/30 rounded-xl px-4 py-3 text-white font-mono placeholder:text-gray-700 focus:outline-none focus:border-primary focus:shadow-[0_0_10px_rgba(0,255,65,0.2)] transition-all" />
+                  className="w-full bg-black/80 border border-primary/30 rounded-xl px-4 py-3 text-white font-mono placeholder:text-gray-700 focus:outline-none focus:border-primary focus:shadow-[0_0_10px_rgba(var(--color-primary-rgb),0.2)] transition-all" />
               </div>
             ))}
 
             <button id="register-submit" type="submit" disabled={loading}
-              className="w-full bg-primary hover:bg-white disabled:opacity-60 text-black font-bold py-4 rounded-xl transition-all flex items-center justify-center gap-2 shadow-[0_0_15px_rgba(0,255,65,0.2)]">
+              className="w-full bg-primary hover:bg-white disabled:opacity-60 text-black font-bold py-4 rounded-xl transition-all flex items-center justify-center gap-2 shadow-[0_0_15px_rgba(var(--color-primary-rgb),0.2)]">
               {loading ? <><i className="ph ph-circle-notch animate-spin" /> Creating...</> : <><i className="ph-fill ph-user-circle-plus" /> Create Account</>}
             </button>
           </form>

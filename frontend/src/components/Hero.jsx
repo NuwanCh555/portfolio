@@ -110,7 +110,7 @@ export default function Hero({ portfolio, toggleHackerMode }) {
             <a
               href="#projects"
               id="hero-explore-btn"
-              className="flex items-center gap-2 px-7 py-3.5 bg-primary text-black hover:bg-white font-bold rounded-xl transition-all shadow-[0_0_20px_rgba(0,255,65,0.3)]"
+              className="flex items-center gap-2 px-7 py-3.5 bg-primary text-black hover:bg-white font-bold rounded-xl transition-all shadow-[0_0_20px_rgba(var(--color-primary-rgb),0.3)]"
             >
               Explore Projects <i className="ph ph-arrow-right text-lg" />
             </a>
@@ -179,11 +179,11 @@ export default function Hero({ portfolio, toggleHackerMode }) {
                   style={{ WebkitTouchCallout: 'none' }}
                 />
               ) : (
-                <div className="w-full h-full rounded-full bg-primary/5 animate-pulse border border-primary/20 shadow-[inset_0_0_20px_rgba(0,255,65,0.2)]" />
+                <div className="w-full h-full rounded-full bg-primary/5 animate-pulse border border-primary/20 shadow-[inset_0_0_20px_rgba(var(--color-primary-rgb),0.2)]" />
               )}
             </div>
             {/* Orbiting decoration dots */}
-            <div className="absolute top-4 right-4 w-3 h-3 bg-primary rounded-full shadow-[0_0_8px_rgba(0,255,65,0.8)] animate-pulse" />
+            <div className="absolute top-4 right-4 w-3 h-3 bg-primary rounded-full shadow-[0_0_8px_rgba(var(--color-primary-rgb),0.8)] animate-pulse" />
             <div className="absolute bottom-8 left-2 w-2 h-2 bg-secondary rounded-full shadow-[0_0_6px_rgba(16,185,129,0.8)] animate-pulse-slow" />
           </div>
         </div>

@@ -128,7 +128,7 @@ export default function FeedbackForm() {
               <label htmlFor="fb-title" className="block text-primary font-mono text-sm mb-2">Report_Title</label>
               <input id="fb-title" name="title" type="text" required value={form.title} onChange={handleChange}
                 placeholder="Brief summary of the issue..."
-                className="w-full bg-black/80 border border-primary/30 rounded-xl px-4 py-3 text-white font-mono placeholder:text-gray-700 focus:outline-none focus:border-primary focus:shadow-[0_0_10px_rgba(0,255,65,0.2)] transition-all" />
+                className="w-full bg-black/80 border border-primary/30 rounded-xl px-4 py-3 text-white font-mono placeholder:text-gray-700 focus:outline-none focus:border-primary focus:shadow-[0_0_10px_rgba(var(--color-primary-rgb),0.2)] transition-all" />
             </div>
 
             {/* Description */}
@@ -136,11 +136,11 @@ export default function FeedbackForm() {
               <label htmlFor="fb-desc" className="block text-primary font-mono text-sm mb-2">Detailed_Description</label>
               <textarea id="fb-desc" name="description" rows={5} required value={form.description} onChange={handleChange}
                 placeholder="Provide detailed steps to reproduce, expected vs actual behavior, or your suggestion..."
-                className="w-full bg-black/80 border border-primary/30 rounded-xl px-4 py-3 text-white font-mono text-sm placeholder:text-gray-700 focus:outline-none focus:border-primary focus:shadow-[0_0_10px_rgba(0,255,65,0.2)] transition-all resize-none" />
+                className="w-full bg-black/80 border border-primary/30 rounded-xl px-4 py-3 text-white font-mono text-sm placeholder:text-gray-700 focus:outline-none focus:border-primary focus:shadow-[0_0_10px_rgba(var(--color-primary-rgb),0.2)] transition-all resize-none" />
             </div>
 
             <button id="feedback-submit" type="submit" disabled={status === 'loading'}
-              className="w-full bg-primary hover:bg-white disabled:opacity-60 text-black font-bold py-4 rounded-xl transition-all flex items-center justify-center gap-2 shadow-[0_0_15px_rgba(0,255,65,0.2)]">
+              className="w-full bg-primary hover:bg-white disabled:opacity-60 text-black font-bold py-4 rounded-xl transition-all flex items-center justify-center gap-2 shadow-[0_0_15px_rgba(var(--color-primary-rgb),0.2)]">
               {status === 'loading'
                 ? <><i className="ph ph-circle-notch animate-spin" /> Submitting Report...</>
                 : <><i className="ph-fill ph-paper-plane-tilt" /> Submit Report</>}

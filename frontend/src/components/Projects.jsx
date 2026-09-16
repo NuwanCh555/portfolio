@@ -14,7 +14,7 @@ const ACCENT_COLORS = ['from-primary/20 to-secondary/20','from-secondary/20 to-p
 function ProjectCard({ project, idx }) {
   const gradient = ACCENT_COLORS[idx % ACCENT_COLORS.length]
   return (
-    <div className="glass overflow-hidden rounded-2xl group hover:border-primary/60 transition-all duration-300 hover:-translate-y-2 shadow-[0_0_0_rgba(0,255,65,0)] hover:shadow-[0_8px_30px_rgba(0,255,65,0.12)] flex flex-col">
+    <div className="glass overflow-hidden rounded-2xl group hover:border-primary/60 transition-all duration-300 hover:-translate-y-2 shadow-[0_0_0_rgba(var(--color-primary-rgb),0)] hover:shadow-[0_8px_30px_rgba(var(--color-primary-rgb),0.12)] flex flex-col">
       <div className={`h-44 overflow-hidden relative border-b border-primary/20 bg-gradient-to-br ${gradient} flex items-center justify-center`}>
         {project.image ? (
           <img src={project.image} alt={project.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />

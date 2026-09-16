@@ -94,7 +94,7 @@ export function AboutManager() {
       <div className="space-y-4">
         <div className="flex items-center justify-between">
           <h2 className="text-2xl font-bold text-white">About Me</h2>
-          <button onClick={() => handleSave(data)} disabled={loading} className="px-5 py-2 bg-primary text-black font-bold rounded-xl hover:bg-white transition-all text-sm shadow-[0_0_10px_rgba(0,255,65,0.2)]">
+          <button onClick={() => handleSave(data)} disabled={loading} className="px-5 py-2 bg-primary text-black font-bold rounded-xl hover:bg-white transition-all text-sm shadow-[0_0_10px_rgba(var(--color-primary-rgb),0.2)]">
             {loading ? 'Saving...' : 'Save Bio'}
           </button>
         </div>
@@ -325,7 +325,7 @@ export function SkillCategoriesManager() {
                 <button type="button" onClick={cancelEditCategory} className="px-6 py-2 bg-gray-700 text-white font-bold rounded-xl hover:bg-gray-600 transition-all text-sm">Cancel</button>
               </>
             ) : (
-              <button type="submit" disabled={loading} className="px-6 py-2 bg-primary text-black font-bold rounded-xl hover:bg-white transition-all text-sm shadow-[0_0_10px_rgba(0,255,65,0.2)]">Save Category</button>
+              <button type="submit" disabled={loading} className="px-6 py-2 bg-primary text-black font-bold rounded-xl hover:bg-white transition-all text-sm shadow-[0_0_10px_rgba(var(--color-primary-rgb),0.2)]">Save Category</button>
             )}
           </div>
         </form>
@@ -455,7 +455,7 @@ export function ExperienceManager() {
     <div className="max-w-4xl space-y-8">
       <div className="flex justify-between items-center mb-6">
         <h2 className="text-2xl font-bold text-white">Experience & Education</h2>
-        <button onClick={() => {setShowForm(!showForm); if(showForm) cancelEdit();}} className="px-4 py-2 bg-primary text-black font-bold rounded-xl text-sm transition-all shadow-[0_0_10px_rgba(0,255,65,0.2)] hover:bg-white">{showForm ? 'Close Form' : 'Add New'}</button>
+        <button onClick={() => {setShowForm(!showForm); if(showForm) cancelEdit();}} className="px-4 py-2 bg-primary text-black font-bold rounded-xl text-sm transition-all shadow-[0_0_10px_rgba(var(--color-primary-rgb),0.2)] hover:bg-white">{showForm ? 'Close Form' : 'Add New'}</button>
       </div>
       {msg && <div className={`p-3 rounded-xl text-sm font-mono border ${msg.startsWith('✅') ? 'bg-primary/10 border-primary/30 text-primary' : 'bg-red-950/60 border-red-500/40 text-red-400'}`}>{msg}</div>}
 
@@ -496,7 +496,7 @@ export function ExperienceManager() {
                   <button type="button" onClick={cancelEdit} className="px-6 py-2 bg-gray-700 text-white font-bold rounded-xl hover:bg-gray-600 transition-all text-sm">Cancel</button>
                 </>
               ) : (
-                <button type="submit" disabled={loading} className="px-6 py-2 bg-primary text-black font-bold rounded-xl hover:bg-white transition-all text-sm shadow-[0_0_10px_rgba(0,255,65,0.2)]">Save Experience</button>
+                <button type="submit" disabled={loading} className="px-6 py-2 bg-primary text-black font-bold rounded-xl hover:bg-white transition-all text-sm shadow-[0_0_10px_rgba(var(--color-primary-rgb),0.2)]">Save Experience</button>
               )}
             </div>
           </form>
@@ -612,7 +612,7 @@ export function MediaManager() {
             <img
               src={media.profilePhotoUrl}
               alt="Profile"
-              className="w-24 h-24 rounded-full object-cover border-2 border-primary shadow-[0_0_12px_rgba(0,255,65,0.3)]"
+              className="w-24 h-24 rounded-full object-cover border-2 border-primary shadow-[0_0_12px_rgba(var(--color-primary-rgb),0.3)]"
             />
             <div className="flex flex-col gap-2">
               <span className="text-xs text-gray-500 font-mono">Current photo on file</span>

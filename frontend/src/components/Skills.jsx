@@ -78,7 +78,7 @@ export default function Skills({ portfolio }) {
               key={title}
               className={`glass p-6 rounded-2xl transition-all duration-300 hover:-translate-y-1 ${
                 glow
-                  ? 'border-primary/40 shadow-[0_0_20px_rgba(0,255,65,0.1)] hover:shadow-[0_0_30px_rgba(0,255,65,0.15)]'
+                  ? 'border-primary/40 shadow-[0_0_20px_rgba(var(--color-primary-rgb),0.1)] hover:shadow-[0_0_30px_rgba(var(--color-primary-rgb),0.15)]'
                   : 'hover:border-primary/50'
               }`}
             >

@@ -61,7 +61,7 @@ export default function Experience({ portfolio }) {
                 <div
                   className={`absolute w-6 h-6 bg-surface border-2 rounded-full -left-[13px] top-1 flex items-center justify-center ${
                     active
-                      ? 'border-primary shadow-[0_0_10px_rgba(0,255,65,0.5)]'
+                      ? 'border-primary shadow-[0_0_10px_rgba(var(--color-primary-rgb),0.5)]'
                       : 'border-primary/40'
                   }`}
                 >

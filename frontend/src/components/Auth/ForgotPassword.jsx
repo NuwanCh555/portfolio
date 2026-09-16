@@ -73,7 +73,7 @@ export default function ForgotPassword() {
               </div>
               <h3 className="text-white font-bold text-xl font-mono">&gt; RESET_SUCCESSFUL_</h3>
               <p className="text-gray-400 font-mono text-sm">Your password has been securely updated. You can now access the system.</p>
-              <button onClick={() => navigate('/auth/login')} className="w-full mt-4 bg-primary hover:bg-white text-black font-bold py-3 rounded-xl transition-all shadow-[0_0_15px_rgba(0,255,65,0.2)]">
+              <button onClick={() => navigate('/auth/login')} className="w-full mt-4 bg-primary hover:bg-white text-black font-bold py-3 rounded-xl transition-all shadow-[0_0_15px_rgba(var(--color-primary-rgb),0.2)]">
                 Proceed to Login
               </button>
             </div>
@@ -88,10 +88,10 @@ export default function ForgotPassword() {
                 <label htmlFor="forgot-email" className="block text-primary font-mono text-sm mb-2">Email_Address</label>
                 <input id="forgot-email" type="email" required value={email} onChange={(e) => setEmail(e.target.value)}
                   placeholder="admin@local.host"
-                  className="w-full bg-black/80 border border-primary/30 rounded-xl px-4 py-3 text-white font-mono placeholder:text-gray-700 focus:outline-none focus:border-primary focus:shadow-[0_0_10px_rgba(0,255,65,0.2)] transition-all" />
+                  className="w-full bg-black/80 border border-primary/30 rounded-xl px-4 py-3 text-white font-mono placeholder:text-gray-700 focus:outline-none focus:border-primary focus:shadow-[0_0_10px_rgba(var(--color-primary-rgb),0.2)] transition-all" />
               </div>
               <button type="submit" disabled={status === 'loading'}
-                className="w-full bg-primary hover:bg-white disabled:opacity-60 text-black font-bold py-4 rounded-xl transition-all flex items-center justify-center gap-2 shadow-[0_0_15px_rgba(0,255,65,0.2)]">
+                className="w-full bg-primary hover:bg-white disabled:opacity-60 text-black font-bold py-4 rounded-xl transition-all flex items-center justify-center gap-2 shadow-[0_0_15px_rgba(var(--color-primary-rgb),0.2)]">
                 {status === 'loading' ? <><i className="ph ph-circle-notch animate-spin" /> Dispatching...</> : <><i className="ph-fill ph-paper-plane-tilt" /> Request OTP</>}
               </button>
             </form>
@@ -109,7 +109,7 @@ export default function ForgotPassword() {
                 <label className="block text-primary font-mono text-sm mb-2">6-Digit_OTP_Code</label>
                 <input type="text" required maxLength="6" value={otpCode} onChange={(e) => setOtpCode(e.target.value.replace(/\D/g, ''))}
                   placeholder="000000"
-                  className="w-full bg-black/80 border border-primary/30 rounded-xl px-4 py-3 text-white font-mono tracking-[0.5em] text-center text-lg placeholder:text-gray-700 focus:outline-none focus:border-primary focus:shadow-[0_0_10px_rgba(0,255,65,0.2)] transition-all" />
+                  className="w-full bg-black/80 border border-primary/30 rounded-xl px-4 py-3 text-white font-mono tracking-[0.5em] text-center text-lg placeholder:text-gray-700 focus:outline-none focus:border-primary focus:shadow-[0_0_10px_rgba(var(--color-primary-rgb),0.2)] transition-all" />
               </div>
               <div>
                 <label className="block text-primary font-mono text-sm mb-2">New_Password</label>
@@ -124,7 +124,7 @@ export default function ForgotPassword() {
                   className="w-full bg-black/80 border border-primary/30 rounded-xl px-4 py-3 text-white font-mono placeholder:text-gray-700 focus:outline-none focus:border-primary transition-all" />
               </div>
               <button type="submit" disabled={status === 'loading'}
-                className="w-full bg-primary hover:bg-white disabled:opacity-60 text-black font-bold py-4 rounded-xl transition-all flex items-center justify-center gap-2 shadow-[0_0_15px_rgba(0,255,65,0.2)]">
+                className="w-full bg-primary hover:bg-white disabled:opacity-60 text-black font-bold py-4 rounded-xl transition-all flex items-center justify-center gap-2 shadow-[0_0_15px_rgba(var(--color-primary-rgb),0.2)]">
                 {status === 'loading' ? <><i className="ph ph-circle-notch animate-spin" /> Verifying...</> : <><i className="ph-fill ph-lock-key" /> Reset Password</>}
               </button>
               <button type="button" onClick={() => setStep(1)} className="w-full text-center text-gray-500 hover:text-primary transition-colors font-mono text-xs mt-2">

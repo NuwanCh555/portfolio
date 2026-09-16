@@ -39,12 +39,12 @@ export default function Navbar() {
     `transition-colors font-medium ${activeSection === id ? 'text-primary' : 'text-gray-400 hover:text-primary'}`
 
   return (
-    <nav className={`fixed w-full top-0 z-50 glass border-b border-borderLight px-6 py-4 transition-all duration-300 ${scrolled ? 'shadow-[0_4px_30px_rgba(0,255,65,0.07)]' : ''}`}>
+    <nav className={`fixed w-full top-0 z-50 glass border-b border-borderLight px-6 py-4 transition-all duration-300 ${scrolled ? 'shadow-[0_4px_30px_rgba(var(--color-primary-rgb),0.07)]' : ''}`}>
       <div className="max-w-7xl mx-auto flex justify-between items-center relative z-10">
 
         {/* Logo */}
         <Link to="/" className="flex items-center gap-3 group">
-          <div className="w-10 h-10 bg-gradient-to-br from-primary to-secondary rounded-xl flex items-center justify-center text-black font-bold text-xl shadow-[0_0_15px_rgba(0,255,65,0.4)] group-hover:shadow-[0_0_25px_rgba(0,255,65,0.7)] transition-all">N</div>
+          <div className="w-10 h-10 bg-gradient-to-br from-primary to-secondary rounded-xl flex items-center justify-center text-black font-bold text-xl shadow-[0_0_15px_rgba(var(--color-primary-rgb),0.4)] group-hover:shadow-[0_0_25px_rgba(var(--color-primary-rgb),0.7)] transition-all">N</div>
           <span className="text-xl font-bold tracking-wider text-white">Nuwan MC</span>
         </Link>
 
@@ -66,7 +66,7 @@ export default function Navbar() {
             <>
               {user.role === 'admin' && (
                 <Link to="/dashboard"
-                  className="flex items-center gap-2 text-sm font-medium text-black bg-primary px-4 py-2 rounded-xl hover:bg-white transition-all shadow-[0_0_10px_rgba(0,255,65,0.3)]">
+                  className="flex items-center gap-2 text-sm font-medium text-black bg-primary px-4 py-2 rounded-xl hover:bg-white transition-all shadow-[0_0_10px_rgba(var(--color-primary-rgb),0.3)]">
                   <i className="ph ph-squares-four" /> Admin Panel
                 </Link>
               )}

@@ -24,7 +24,7 @@ const NAV_ITEMS = [
 
 function StatCard({ label, value, icon, sub, color = 'primary' }) {
   const colors = {
-    primary:  'border-primary/30 shadow-[0_0_15px_rgba(0,255,65,0.08)]',
+    primary:  'border-primary/30 shadow-[0_0_15px_rgba(var(--color-primary-rgb),0.08)]',
     yellow:   'border-yellow-500/30 shadow-[0_0_15px_rgba(234,179,8,0.08)]',
     blue:     'border-blue-500/30 shadow-[0_0_15px_rgba(59,130,246,0.08)]',
     red:      'border-red-500/30 shadow-[0_0_15px_rgba(239,68,68,0.08)]',
@@ -33,7 +33,7 @@ function StatCard({ label, value, icon, sub, color = 'primary' }) {
   return (
     <div className={`glass p-6 rounded-2xl border ${colors[color]}`}>
       <div className="flex items-start justify-between mb-3">
-        <div className={`w-10 h-10 rounded-xl flex items-center justify-center bg-current/10 border border-current/20 ${textColors[color]}`} style={{background:'rgba(0,255,65,0.07)'}}>
+        <div className={`w-10 h-10 rounded-xl flex items-center justify-center bg-current/10 border border-current/20 ${textColors[color]}`} style={{background:'rgba(var(--color-primary-rgb),0.07)'}}>
           <i className={`ph ${icon} text-xl ${textColors[color]}`} />
         </div>
         <span className={`text-3xl font-extrabold ${textColors[color]}`}>{value}</span>
@@ -85,7 +85,7 @@ export default function AdminDashboard() {
         {/* Logo */}
         <div className="p-6 border-b border-primary/15 flex justify-between items-center">
           <div className="flex items-center gap-3">
-            <div className="w-9 h-9 bg-gradient-to-br from-primary to-secondary rounded-xl flex items-center justify-center text-black font-bold shadow-[0_0_12px_rgba(0,255,65,0.4)]">N</div>
+            <div className="w-9 h-9 bg-gradient-to-br from-primary to-secondary rounded-xl flex items-center justify-center text-black font-bold shadow-[0_0_12px_rgba(var(--color-primary-rgb),0.4)]">N</div>
             <div>
               <div className="text-white font-bold text-sm">Nuwan MC</div>
               <div className="text-primary text-xs font-mono">Admin Panel</div>

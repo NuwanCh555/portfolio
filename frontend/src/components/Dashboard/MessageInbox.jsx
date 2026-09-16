@@ -47,7 +47,7 @@ export default function MessageInbox({ onRefresh }) {
                   ? 'bg-primary/15 border-primary/40'
                   : m.isRead
                     ? 'glass border-primary/10 hover:border-primary/30'
-                    : 'glass border-primary/30 shadow-[0_0_8px_rgba(0,255,65,0.1)]'
+                    : 'glass border-primary/30 shadow-[0_0_8px_rgba(var(--color-primary-rgb),0.1)]'
               }`}>
               <div className="flex items-center justify-between mb-1">
                 <span className={`font-medium text-sm ${m.isRead ? 'text-gray-300' : 'text-white'}`}>{m.name}</span>

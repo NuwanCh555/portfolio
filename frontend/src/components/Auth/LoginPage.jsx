@@ -40,10 +40,10 @@ export default function LoginPage() {
         {/* Header */}
         <div className="text-center mb-8">
           <Link to="/" className="inline-flex items-center gap-3 mb-6 group">
-            <div className="w-10 h-10 bg-gradient-to-br from-primary to-secondary rounded-xl flex items-center justify-center text-black font-bold text-xl shadow-[0_0_15px_rgba(0,255,65,0.4)] group-hover:shadow-[0_0_25px_rgba(0,255,65,0.7)] transition-all">N</div>
+            <div className="w-10 h-10 bg-gradient-to-br from-primary to-secondary rounded-xl flex items-center justify-center text-black font-bold text-xl shadow-[0_0_15px_rgba(var(--color-primary-rgb),0.4)] group-hover:shadow-[0_0_25px_rgba(var(--color-primary-rgb),0.7)] transition-all">N</div>
             <span className="text-xl font-bold text-white">Nuwan MC</span>
           </Link>
-          <div className="w-14 h-14 bg-primary/10 rounded-2xl flex items-center justify-center mx-auto mb-4 border border-primary/30 shadow-[0_0_15px_rgba(0,255,65,0.2)]">
+          <div className="w-14 h-14 bg-primary/10 rounded-2xl flex items-center justify-center mx-auto mb-4 border border-primary/30 shadow-[0_0_15px_rgba(var(--color-primary-rgb),0.2)]">
             <i className="ph ph-lock-key text-2xl text-primary" />
           </div>
           <h1 className="text-3xl font-extrabold text-white">Access Gateway</h1>
@@ -51,7 +51,7 @@ export default function LoginPage() {
         </div>
 
         {/* Form card */}
-        <div className="glass p-8 rounded-3xl border-primary/20 shadow-[0_0_40px_rgba(0,255,65,0.06)]">
+        <div className="glass p-8 rounded-3xl border-primary/20 shadow-[0_0_40px_rgba(var(--color-primary-rgb),0.06)]">
           <form id="login-form" onSubmit={handleSubmit} className="space-y-5">
 
             {error && (
@@ -64,7 +64,7 @@ export default function LoginPage() {
               <label htmlFor="login-email" className="block text-primary font-mono text-sm mb-2">Email_Address</label>
               <input id="login-email" name="email" type="email" required value={form.email} onChange={handleChange}
                 placeholder="admin@local.host"
-                className="w-full bg-black/80 border border-primary/30 rounded-xl px-4 py-3 text-white font-mono placeholder:text-gray-700 focus:outline-none focus:border-primary focus:shadow-[0_0_10px_rgba(0,255,65,0.2)] transition-all" />
+                className="w-full bg-black/80 border border-primary/30 rounded-xl px-4 py-3 text-white font-mono placeholder:text-gray-700 focus:outline-none focus:border-primary focus:shadow-[0_0_10px_rgba(var(--color-primary-rgb),0.2)] transition-all" />
             </div>
 
             <div>
@@ -72,7 +72,7 @@ export default function LoginPage() {
               <div className="relative">
                 <input id="login-password" name="password" type={showPass ? 'text' : 'password'} required value={form.password} onChange={handleChange}
                   placeholder="••••••••"
-                  className="w-full bg-black/80 border border-primary/30 rounded-xl px-4 py-3 pr-12 text-white font-mono placeholder:text-gray-700 focus:outline-none focus:border-primary focus:shadow-[0_0_10px_rgba(0,255,65,0.2)] transition-all" />
+                  className="w-full bg-black/80 border border-primary/30 rounded-xl px-4 py-3 pr-12 text-white font-mono placeholder:text-gray-700 focus:outline-none focus:border-primary focus:shadow-[0_0_10px_rgba(var(--color-primary-rgb),0.2)] transition-all" />
                 <button type="button" onClick={() => setShowPass(!showPass)} className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-primary transition-colors">
                   <i className={`ph ${showPass ? 'ph-eye-slash' : 'ph-eye'} text-lg`} />
                 </button>
@@ -85,7 +85,7 @@ export default function LoginPage() {
             </div>
 
             <button id="login-submit" type="submit" disabled={loading}
-              className="w-full bg-primary hover:bg-white disabled:opacity-60 disabled:cursor-not-allowed text-black font-bold py-4 rounded-xl transition-all flex items-center justify-center gap-2 shadow-[0_0_15px_rgba(0,255,65,0.2)]">
+              className="w-full bg-primary hover:bg-white disabled:opacity-60 disabled:cursor-not-allowed text-black font-bold py-4 rounded-xl transition-all flex items-center justify-center gap-2 shadow-[0_0_15px_rgba(var(--color-primary-rgb),0.2)]">
               {loading ? <><i className="ph ph-circle-notch animate-spin" /> Authenticating...</> : <><i className="ph-fill ph-sign-in" /> Login</>}
             </button>
           </form>

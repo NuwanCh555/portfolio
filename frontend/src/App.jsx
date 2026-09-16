@@ -105,7 +105,7 @@ function PortfolioPage() {
           <BinaryBackground />
           {/* Scanline */}
           <div className="fixed inset-0 pointer-events-none z-10 overflow-hidden">
-            <div className="w-full h-[2px] bg-red-500 shadow-[0_0_15px_#ef4444] animate-scanline mix-blend-screen opacity-50" />
+            <div className="w-full h-[2px] bg-red-500 shadow-[0_0_15px_rgba(var(--color-primary-rgb),0.5)] animate-scanline mix-blend-screen opacity-50" />
           </div>
         </>
       )}
@@ -175,7 +175,7 @@ function AdminRoute({ children }) {
           </a>
           <button 
             onClick={() => { logout(); window.location.href = '/auth/login' }} 
-            className="px-6 py-3 bg-primary text-black hover:bg-white font-bold rounded-xl shadow-[0_0_15px_rgba(0,255,65,0.3)] transition-all flex items-center gap-2"
+            className="px-6 py-3 bg-primary text-black hover:bg-white font-bold rounded-xl shadow-[0_0_15px_rgba(var(--color-primary-rgb),0.3)] transition-all flex items-center gap-2"
           >
             <i className="ph ph-sign-out" /> Logout & Switch Account
           </button>

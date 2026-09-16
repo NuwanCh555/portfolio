@@ -76,7 +76,7 @@ export default function Contact() {
             <div className="space-y-4">
               {CONTACT_DETAILS.map(({ icon, label, value, link }) => (
                 <div key={label} className="glass p-4 rounded-2xl border-primary/20 flex items-center gap-4 hover:border-primary/40 transition-all group">
-                  <div className="w-11 h-11 bg-primary/10 border border-primary/30 rounded-xl flex items-center justify-center flex-shrink-0 group-hover:shadow-[0_0_10px_rgba(0,255,65,0.2)] transition-all">
+                  <div className="w-11 h-11 bg-primary/10 border border-primary/30 rounded-xl flex items-center justify-center flex-shrink-0 group-hover:shadow-[0_0_10px_rgba(var(--color-primary-rgb),0.2)] transition-all">
                     <i className={`ph ${icon} text-xl text-primary`} />
                   </div>
                   <div>
@@ -127,7 +127,7 @@ export default function Contact() {
                   <div>
                     <label htmlFor="contact-name" className="block text-primary font-mono text-sm mb-2">User_Name</label>
                     <input id="contact-name" name="name" type="text" value={form.name} onChange={handleChange} placeholder="root"
-                      className={`w-full bg-black/80 border rounded-xl px-4 py-3 text-white font-mono placeholder:text-gray-700 focus:outline-none transition-all ${errors.name ? 'border-red-500/60' : 'border-primary/30 focus:border-primary focus:shadow-[0_0_10px_rgba(0,255,65,0.2)]'}`} />
+                      className={`w-full bg-black/80 border rounded-xl px-4 py-3 text-white font-mono placeholder:text-gray-700 focus:outline-none transition-all ${errors.name ? 'border-red-500/60' : 'border-primary/30 focus:border-primary focus:shadow-[0_0_10px_rgba(var(--color-primary-rgb),0.2)]'}`} />
                     {errors.name && <p className="mt-1 text-xs font-mono text-red-400 flex items-center gap-1"><i className="ph-fill ph-warning-circle" />{errors.name}</p>}
                   </div>
 
@@ -135,7 +135,7 @@ export default function Contact() {
                   <div>
                     <label htmlFor="contact-email" className="block text-primary font-mono text-sm mb-2">Email_Address</label>
                     <input id="contact-email" name="email" type="email" value={form.email} onChange={handleChange} placeholder="admin@local.host"
-                      className={`w-full bg-black/80 border rounded-xl px-4 py-3 text-white font-mono placeholder:text-gray-700 focus:outline-none transition-all ${errors.email ? 'border-red-500/60' : 'border-primary/30 focus:border-primary focus:shadow-[0_0_10px_rgba(0,255,65,0.2)]'}`} />
+                      className={`w-full bg-black/80 border rounded-xl px-4 py-3 text-white font-mono placeholder:text-gray-700 focus:outline-none transition-all ${errors.email ? 'border-red-500/60' : 'border-primary/30 focus:border-primary focus:shadow-[0_0_10px_rgba(var(--color-primary-rgb),0.2)]'}`} />
                     {errors.email && <p className="mt-1 text-xs font-mono text-red-400 flex items-center gap-1"><i className="ph-fill ph-warning-circle" />{errors.email}</p>}
                   </div>
 
@@ -143,7 +143,7 @@ export default function Contact() {
                   <div>
                     <label htmlFor="contact-message" className="block text-primary font-mono text-sm mb-2">Payload_Data</label>
                     <textarea id="contact-message" name="message" rows={5} value={form.message} onChange={handleChange} placeholder="Type your secure message here..."
-                      className={`w-full bg-black/80 border rounded-xl px-4 py-3 text-white font-mono text-sm placeholder:text-gray-700 focus:outline-none transition-all resize-none ${errors.message ? 'border-red-500/60' : 'border-primary/30 focus:border-primary focus:shadow-[0_0_10px_rgba(0,255,65,0.2)]'}`} />
+                      className={`w-full bg-black/80 border rounded-xl px-4 py-3 text-white font-mono text-sm placeholder:text-gray-700 focus:outline-none transition-all resize-none ${errors.message ? 'border-red-500/60' : 'border-primary/30 focus:border-primary focus:shadow-[0_0_10px_rgba(var(--color-primary-rgb),0.2)]'}`} />
                     {errors.message && (
                       <div id="error-box" className="mt-2 bg-red-950/80 border border-red-500/50 text-red-400 p-3 rounded-xl flex items-center gap-3">
                         <i className="ph-fill ph-warning-circle text-lg flex-shrink-0" />
@@ -159,7 +159,7 @@ export default function Contact() {
                   )}
 
                   <button id="contact-submit-btn" type="submit" disabled={status === 'loading'}
-                    className="w-full bg-primary hover:bg-white disabled:opacity-60 text-black font-bold py-4 rounded-xl transition-all flex items-center justify-center gap-2 shadow-[0_0_15px_rgba(0,255,65,0.2)]">
+                    className="w-full bg-primary hover:bg-white disabled:opacity-60 text-black font-bold py-4 rounded-xl transition-all flex items-center justify-center gap-2 shadow-[0_0_15px_rgba(var(--color-primary-rgb),0.2)]">
                     {status === 'loading'
                       ? <><i className="ph ph-circle-notch animate-spin" /> Transmitting...</>
                       : <><i className="ph-fill ph-lock-key" /> Transmit Data</>}
