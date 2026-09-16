@@ -1,3 +1,39 @@
+// Utility to parse bio text and apply custom styling
+const parseBioText = (text) => {
+  if (!text) return null;
+  // Regex matches: "text" (Group 1) OR 'text' (Group 2)
+  const regex = /"([^"]+)"|'([^']+)'/g;
+  const parts = [];
+  let lastIndex = 0;
+  let match;
+
+  while ((match = regex.exec(text)) !== null) {
+    if (match.index > lastIndex) {
+      parts.push(text.substring(lastIndex, match.index));
+    }
+    if (match[1]) {
+      // Double quotes -> Primary Color & Bold
+      parts.push(
+        <span key={match.index} className="text-primary font-bold">
+          {match[1]}
+        </span>
+      );
+    } else if (match[2]) {
+      // Single quotes -> White & Bold
+      parts.push(
+        <span key={match.index} className="text-white font-bold">
+          {match[2]}
+        </span>
+      );
+    }
+    lastIndex = regex.lastIndex;
+  }
+  if (lastIndex < text.length) {
+    parts.push(text.substring(lastIndex));
+  }
+  return parts;
+};
+
 // Core Objectives fallback if none exist in DB
 const fallbackObjectives = [
   {
@@ -47,7 +83,7 @@ export default function About({ portfolio }) {
           <div className="space-y-6">
             {portfolio?.about ? (
               <p className="text-gray-400 leading-relaxed text-lg whitespace-pre-wrap">
-                {portfolio.about}
+                {parseBioText(portfolio.about)}
               </p>
             ) : (
               <>
