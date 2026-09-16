@@ -90,7 +90,7 @@ body {
 }
 .tab-btn:not(.active) {
   background-color: #0a0a0f;
-  @apply border border-borderLight text-gray-400 hover:text-primary hover:border-primary/50;
+  @apply border border-borderLight text-gray-400 hover:text-primary hover:border-primaryGlow;
 }
 
 /* ─── Typewriter cursor blink ─── */
