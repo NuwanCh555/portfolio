@@ -70,9 +70,15 @@ function PortfolioPage() {
       <div className="fixed inset-0 bg-grid pointer-events-none z-0" />
       
       {hackerMode && (
-        <div className="fixed inset-0 pointer-events-none z-[1] flex items-center justify-center opacity-20 mix-blend-screen">
-          <div className="relative w-full h-full flex items-center justify-center">
-            <img src="/hacker-mask.jpg" className="absolute w-auto h-[80vh] object-contain" alt="Hacker Mask" />
+        <div className="fixed inset-0 pointer-events-none -z-10 opacity-15 mix-blend-screen overflow-hidden">
+          <div 
+            className="absolute inset-0 w-full h-full"
+            style={{ 
+              maskImage: 'radial-gradient(circle at center, black 30%, transparent 80%)',
+              WebkitMaskImage: 'radial-gradient(circle at center, black 30%, transparent 80%)'
+            }}
+          >
+            <img src="/hacker-mask.jpg" className="w-[100vw] h-[100vh] object-cover" alt="Hacker Mask" />
             <div className="absolute inset-0 bg-red-600 mix-blend-multiply" />
           </div>
         </div>
