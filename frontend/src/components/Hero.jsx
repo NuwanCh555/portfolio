@@ -127,7 +127,10 @@ export default function Hero({ portfolio }) {
                 <img
                   src={portfolio.profilePhotoUrl}
                   alt="Nuwan MC — Cyber Security Developer"
-                  className="w-full h-full object-cover rounded-full filter contrast-125 grayscale hover:grayscale-0 transition-all duration-700 opacity-90 mix-blend-screen"
+                  className="w-full h-full object-cover rounded-full filter contrast-125 grayscale hover:grayscale-0 transition-all duration-700 opacity-90 mix-blend-screen select-none"
+                  onContextMenu={(e) => e.preventDefault()}
+                  draggable="false"
+                  style={{ WebkitTouchCallout: 'none' }}
                 />
               ) : (
                 <div className="w-full h-full rounded-full bg-primary/5 animate-pulse border border-primary/20 shadow-[inset_0_0_20px_rgba(0,255,65,0.2)]" />
