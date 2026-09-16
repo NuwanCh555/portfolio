@@ -50,6 +50,7 @@ export default function AdminDashboard() {
   const [active,  setActive]  = useState('overview')
   const [stats,   setStats]   = useState(null)
   const [loading, setLoading] = useState(true)
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false)
 
   useEffect(() => {
     if (!user || user.role !== 'admin') { navigate('/auth/login'); return }
@@ -74,10 +75,15 @@ export default function AdminDashboard() {
 
   return (
     <div className="min-h-screen bg-bgDark flex">
+      {/* Mobile Backdrop */}
+      {isSidebarOpen && (
+        <div className="fixed inset-0 z-40 bg-black/50 md:hidden" onClick={() => setIsSidebarOpen(false)} />
+      )}
+
       {/* ── Sidebar ── */}
-      <aside className="w-64 flex-shrink-0 glass border-r border-primary/15 flex flex-col">
+      <aside className={`fixed inset-y-0 left-0 z-50 w-64 bg-black/90 backdrop-blur-md shadow-2xl transition-transform duration-300 md:relative md:translate-x-0 glass border-r border-primary/15 flex flex-col ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'}`}>
         {/* Logo */}
-        <div className="p-6 border-b border-primary/15">
+        <div className="p-6 border-b border-primary/15 flex justify-between items-center">
           <div className="flex items-center gap-3">
             <div className="w-9 h-9 bg-gradient-to-br from-primary to-secondary rounded-xl flex items-center justify-center text-black font-bold shadow-[0_0_12px_rgba(0,255,65,0.4)]">N</div>
             <div>
@@ -85,12 +91,15 @@ export default function AdminDashboard() {
               <div className="text-primary text-xs font-mono">Admin Panel</div>
             </div>
           </div>
+          <button onClick={() => setIsSidebarOpen(false)} className="md:hidden text-primary p-2 border border-primary/30 rounded-lg hover:bg-primary/10">
+            <i className="ph ph-x text-xl" />
+          </button>
         </div>
 
         {/* Nav */}
-        <nav className="flex-1 p-4 space-y-1">
+        <nav className="flex-1 p-4 space-y-1 overflow-y-auto">
           {NAV_ITEMS.map(({ key, label, icon }) => (
-            <button key={key} onClick={() => setActive(key)}
+            <button key={key} onClick={() => { setActive(key); setIsSidebarOpen(false); }}
               className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all ${
                 active === key
                   ? 'bg-primary/15 text-primary border border-primary/30'
@@ -125,11 +134,19 @@ export default function AdminDashboard() {
       </aside>
 
       {/* ── Main Content ── */}
-      <main className="flex-1 overflow-auto p-8">
+      <main className="flex-1 overflow-auto p-4 md:p-8">
         {/* Fixed ambient background */}
         <div className="fixed inset-0 bg-grid pointer-events-none z-0 opacity-40" />
 
         <div className="relative z-10">
+          {/* Mobile Header Toggle */}
+          <div className="md:hidden flex items-center mb-6">
+            <button onClick={() => setIsSidebarOpen(true)} className="text-primary p-2 border border-primary/30 rounded-lg bg-black/40 hover:bg-primary/10">
+              <i className="ph ph-list text-2xl" />
+            </button>
+            <span className="ml-4 font-bold text-white text-lg tracking-wider">Admin Panel</span>
+          </div>
+
           {active === 'overview' && (
             <div>
               <h1 className="text-2xl font-bold text-white mb-1">Dashboard Overview</h1>
