@@ -94,9 +94,22 @@ export default function Navbar() {
         </button>
       </div>
 
-      {/* Mobile Drawer */}
+      {/* Mobile Overlay Backdrop */}
       {mobileOpen && (
-        <div className="md:hidden mt-4 glass rounded-2xl p-6 mx-2 border-primary/20 space-y-3">
+        <div 
+          className="md:hidden fixed inset-0 z-40 bg-black/50 backdrop-blur-sm" 
+          onClick={() => setMobileOpen(false)} 
+        />
+      )}
+      
+      {/* Mobile Drawer */}
+      <div className={`md:hidden fixed top-0 right-0 h-full w-64 glass border-l border-primary/20 p-6 space-y-6 z-50 transition-transform duration-300 transform ${mobileOpen ? 'translate-x-0' : 'translate-x-full'}`}>
+        <div className="flex justify-end">
+          <button onClick={() => setMobileOpen(false)} className="text-primary p-2 rounded-lg border border-primary/30 hover:bg-primary/10 transition-all">
+            <i className="ph ph-x text-2xl" />
+          </button>
+        </div>
+        <div className="flex flex-col space-y-4">
           {navLinks.map(({ href, label }) => (
             <a key={href} href={href} className="block text-gray-400 hover:text-primary font-medium font-mono transition-colors"
               onClick={() => setMobileOpen(false)}>&gt; {label}</a>
@@ -106,15 +119,15 @@ export default function Navbar() {
               {user.role === 'admin' && (
                 <Link to="/dashboard" onClick={() => setMobileOpen(false)} className="block text-primary font-mono">&gt; Admin Panel</Link>
               )}
-              <button onClick={() => { handleLogout(); setMobileOpen(false) }} className="block text-red-400 font-mono text-sm">&gt; Logout</button>
+              <button onClick={() => { handleLogout(); setMobileOpen(false) }} className="block text-red-400 font-mono text-sm text-left">&gt; Logout</button>
             </>
           ) : (
-            <Link to="/auth/login" onClick={() => setMobileOpen(false)} className="block mt-2 text-center text-sm font-bold text-black bg-primary rounded-xl py-3">
+            <Link to="/auth/login" onClick={() => setMobileOpen(false)} className="block mt-4 text-center text-sm font-bold text-black bg-primary hover:bg-white transition-colors rounded-xl py-3">
               Get In Touch
             </Link>
           )}
         </div>
-      )}
+      </div>
     </nav>
   )
 }
