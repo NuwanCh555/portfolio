@@ -92,13 +92,13 @@ function PortfolioPage() {
   }, [])
 
   return (
-    <div className="antialiased relative">
+    <div className="antialiased relative overflow-x-hidden w-full">
       <div className="fixed inset-0 bg-grid pointer-events-none z-0" />
       
       {hackerMode && (
         <>
-          <div className="fixed inset-0 w-screen h-screen z-0 pointer-events-none flex items-center justify-center overflow-hidden">
-            <img src="/hacker-mask.jpeg" className="w-full h-full object-cover opacity-20 filter sepia hue-rotate-[300deg] saturate-200" alt="Hacker Mask" />
+          <div className="fixed inset-0 w-full h-full z-0 pointer-events-none flex items-center justify-center overflow-hidden">
+            <img src="/hacker-mask.jpeg" className="w-full h-full object-cover md:object-contain max-w-none md:max-w-[80vw] opacity-20 filter sepia hue-rotate-[300deg] saturate-200" alt="Hacker Mask" />
             <div className="absolute inset-0 bg-red-950/40 pointer-events-none" />
           </div>
           {/* Binary Background */}
