@@ -23,6 +23,32 @@ import ForgotPassword from './components/Auth/ForgotPassword'
 // Admin
 import AdminDashboard from './components/Dashboard/AdminDashboard'
 
+// ── Hacker Mode Components ──────────────────────────────────────────────────
+const BinaryBlock = ({ top, left, delay, duration }) => {
+  const bin = Array.from({length: 120}, () => Math.random() > 0.5 ? '1' : '0').join('');
+  return (
+    <div 
+      className="absolute font-mono text-red-500 text-xs break-all opacity-20 mix-blend-screen"
+      style={{
+        top: `${top}%`, left: `${left}%`, width: '120px',
+        animation: `flicker ${duration}s ease-in-out ${delay}s infinite alternate`
+      }}
+    >
+      {bin}
+    </div>
+  )
+}
+
+const BinaryBackground = () => (
+  <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden">
+    <BinaryBlock top={10} left={5} delay={0} duration={3} />
+    <BinaryBlock top={40} left={80} delay={1} duration={4} />
+    <BinaryBlock top={75} left={15} delay={0.5} duration={2.5} />
+    <BinaryBlock top={25} left={65} delay={2} duration={3.5} />
+    <BinaryBlock top={85} left={75} delay={1.5} duration={3} />
+  </div>
+)
+
 // ── Portfolio page (all sections) ────────────────────────────────────────────
 function PortfolioPage() {
   const [portfolio, setPortfolio] = useState(null)
@@ -70,12 +96,20 @@ function PortfolioPage() {
       <div className="fixed inset-0 bg-grid pointer-events-none z-0" />
       
       {hackerMode && (
-        <div className="fixed inset-0 pointer-events-none z-0 opacity-20 mix-blend-screen flex items-center justify-center">
-          <div className="relative w-full h-full flex items-center justify-center max-h-[85vh] scale-90">
-            <img src="/hacker-mask.jpg" className="w-full h-full object-contain" alt="Hacker Mask" />
-            <div className="absolute inset-0 bg-red-600 mix-blend-multiply" />
+        <>
+          <div className="fixed inset-0 pointer-events-none z-0 opacity-20 mix-blend-screen flex items-center justify-center">
+            <div className="relative w-full h-full flex items-center justify-center max-h-[85vh] scale-90">
+              <img src="/hacker-mask.jpg" className="w-full h-full object-contain" alt="Hacker Mask" />
+              <div className="absolute inset-0 bg-red-600 mix-blend-multiply" />
+            </div>
           </div>
-        </div>
+          {/* Binary Background */}
+          <BinaryBackground />
+          {/* Scanline */}
+          <div className="fixed inset-0 pointer-events-none z-10 overflow-hidden">
+            <div className="w-full h-[2px] bg-red-500 shadow-[0_0_15px_#ef4444] animate-scanline mix-blend-screen opacity-50" />
+          </div>
+        </>
       )}
 
       {initializing && (

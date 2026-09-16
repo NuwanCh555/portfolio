@@ -96,3 +96,21 @@ body {
 /* ─── Typewriter cursor blink ─── */
 @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
 .cursor { animation: blink 1s step-end infinite; }
+
+/* ─── Hacker Mode Cinematic Animations ─── */
+@keyframes scanline {
+  0% { transform: translateY(-100vh); }
+  100% { transform: translateY(100vh); }
+}
+.animate-scanline {
+  animation: scanline 6s linear infinite;
+}
+
+@keyframes flicker {
+  0% { opacity: 0.1; }
+  50% { opacity: 0.4; }
+  100% { opacity: 0.1; }
+}
+.animate-flicker {
+  animation: flicker 3s ease-in-out infinite;
+}
