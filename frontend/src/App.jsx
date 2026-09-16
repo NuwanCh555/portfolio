@@ -70,8 +70,11 @@ function PortfolioPage() {
       <div className="fixed inset-0 bg-grid pointer-events-none z-0" />
       
       {hackerMode && (
-        <div className="fixed inset-0 pointer-events-none z-[1] flex items-center justify-center opacity-10">
-          <div className="text-[15vw] font-bold text-primary tracking-widest uppercase">ROOT</div>
+        <div className="fixed inset-0 pointer-events-none z-[1] flex items-center justify-center opacity-20 mix-blend-screen">
+          <div className="relative w-full h-full flex items-center justify-center">
+            <img src="/hacker-mask.jpg" className="absolute w-auto h-[80vh] object-contain" alt="Hacker Mask" />
+            <div className="absolute inset-0 bg-red-600 mix-blend-multiply" />
+          </div>
         </div>
       )}
 
