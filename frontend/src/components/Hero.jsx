@@ -7,10 +7,21 @@ const TITLES = [
   'CTF Competitor',
 ]
 
-export default function Hero({ portfolio }) {
+export default function Hero({ portfolio, toggleHackerMode }) {
   const [titleIdx,  setTitleIdx]  = useState(0)
   const [displayed, setDisplayed] = useState('')
   const [deleting,  setDeleting]  = useState(false)
+  const [clicks, setClicks] = useState(0)
+
+  useEffect(() => {
+    if (clicks === 3) {
+      if (toggleHackerMode) toggleHackerMode()
+      setClicks(0)
+    } else if (clicks > 0) {
+      const timer = setTimeout(() => setClicks(0), 500)
+      return () => clearTimeout(timer)
+    }
+  }, [clicks, toggleHackerMode])
 
   // ── Typewriter effect ────────────────────────────────────────────────────
   useEffect(() => {
@@ -134,7 +145,10 @@ export default function Hero({ portfolio }) {
             {/* Ambient glow */}
             <div className="absolute inset-0 bg-gradient-to-tr from-primary to-secondary rounded-full blur-[60px] opacity-30 animate-pulse" />
             {/* Glass ring */}
-            <div className="absolute inset-2 rounded-full border border-primary/30 p-2 glass">
+            <div 
+              className="absolute inset-2 rounded-full border border-primary/30 p-2 glass cursor-pointer"
+              onClick={() => setClicks(c => c + 1)}
+            >
               {portfolio?.profilePhotoUrl ? (
                 <img
                   src={portfolio.profilePhotoUrl}

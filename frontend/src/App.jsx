@@ -26,6 +26,22 @@ import AdminDashboard from './components/Dashboard/AdminDashboard'
 // ── Portfolio page (all sections) ────────────────────────────────────────────
 function PortfolioPage() {
   const [portfolio, setPortfolio] = useState(null)
+  const [hackerMode, setHackerMode] = useState(false)
+  const [initializing, setInitializing] = useState(false)
+
+  const toggleHackerMode = () => {
+    if (hackerMode) {
+      setHackerMode(false);
+      document.documentElement.classList.remove('hacker-mode');
+    } else {
+      setInitializing(true);
+      setTimeout(() => {
+        setInitializing(false);
+        setHackerMode(true);
+        document.documentElement.classList.add('hacker-mode');
+      }, 2000);
+    }
+  }
 
   useEffect(() => {
     // Fetch portfolio data
@@ -45,11 +61,31 @@ function PortfolioPage() {
   return (
     <div className="antialiased relative">
       <div className="fixed inset-0 bg-grid pointer-events-none z-0" />
+      
+      {hackerMode && (
+        <div className="fixed inset-0 pointer-events-none z-[1] flex items-center justify-center opacity-10">
+          <div className="text-[15vw] font-bold text-primary tracking-widest uppercase">ROOT</div>
+        </div>
+      )}
+
+      {initializing && (
+        <div className="fixed inset-0 bg-black z-50 flex flex-col items-center justify-center">
+          <div className="w-full max-w-2xl px-6">
+            <p className="text-red-500 font-mono text-xl mb-4 animate-pulse">&gt; INITIALIZING_ROOT_ACCESS...</p>
+            <p className="text-red-500 font-mono text-xl mb-8">&gt; BYPASSING_FIREWALL...</p>
+            <div className="w-full h-1 bg-red-900 rounded-full overflow-hidden">
+              <div className="h-full bg-red-500 w-full origin-left animate-[scale-x_2s_ease-out]" style={{ animationName: 'scaleX', animationDuration: '2s', animationTimingFunction: 'linear' }} />
+            </div>
+            <style>{`@keyframes scaleX { 0% { transform: scaleX(0); } 100% { transform: scaleX(1); } }`}</style>
+          </div>
+        </div>
+      )}
+
       <div className="fixed top-[-10%] left-[-10%] w-[40%] h-[40%] bg-primary/10 rounded-full blur-[120px] pointer-events-none z-0" />
       <div className="fixed bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-secondary/10 rounded-full blur-[120px] pointer-events-none z-0" />
       <Navbar />
       <main className="relative z-10">
-        <Hero portfolio={portfolio} />
+        <Hero portfolio={portfolio} toggleHackerMode={toggleHackerMode} />
         <About portfolio={portfolio} />
         <Skills portfolio={portfolio} />
         <Experience portfolio={portfolio} />

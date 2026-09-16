@@ -7,12 +7,12 @@ export default {
   theme: {
     extend: {
       colors: {
-        bgDark:      '#030305',
-        surface:     '#0a0a0f',
-        borderLight: 'rgba(0, 255, 65, 0.15)',
-        primary:     '#00ff41',
-        primaryGlow: 'rgba(0, 255, 65, 0.4)',
-        secondary:   '#10b981',
+        bgDark:      'var(--color-bgDark)',
+        surface:     'var(--color-surface)',
+        borderLight: 'var(--color-borderLight)',
+        primary:     'var(--color-primary)',
+        primaryGlow: 'var(--color-primaryGlow)',
+        secondary:   'var(--color-secondary)',
       },
       fontFamily: {
         sans: ['Inter', 'sans-serif'],
