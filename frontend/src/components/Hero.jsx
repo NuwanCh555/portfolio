@@ -123,11 +123,15 @@ export default function Hero({ portfolio }) {
             <div className="absolute inset-0 bg-gradient-to-tr from-primary to-secondary rounded-full blur-[60px] opacity-30 animate-pulse" />
             {/* Glass ring */}
             <div className="absolute inset-2 rounded-full border border-primary/30 p-2 glass">
-              <img
-                src={portfolio?.profilePhotoUrl || "/profile.jpg"}
-                alt="Nuwan MC — Cyber Security Developer"
-                className="w-full h-full object-cover rounded-full filter contrast-125 grayscale hover:grayscale-0 transition-all duration-700 opacity-90 mix-blend-screen"
-              />
+              {portfolio?.profilePhotoUrl ? (
+                <img
+                  src={portfolio.profilePhotoUrl}
+                  alt="Nuwan MC — Cyber Security Developer"
+                  className="w-full h-full object-cover rounded-full filter contrast-125 grayscale hover:grayscale-0 transition-all duration-700 opacity-90 mix-blend-screen"
+                />
+              ) : (
+                <div className="w-full h-full rounded-full bg-primary/5 animate-pulse border border-primary/20 shadow-[inset_0_0_20px_rgba(0,255,65,0.2)]" />
+              )}
             </div>
             {/* Orbiting decoration dots */}
             <div className="absolute top-4 right-4 w-3 h-3 bg-primary rounded-full shadow-[0_0_8px_rgba(0,255,65,0.8)] animate-pulse" />
