@@ -97,11 +97,9 @@ function PortfolioPage() {
       
       {hackerMode && (
         <>
-          <div className="fixed inset-0 pointer-events-none z-0 opacity-20 mix-blend-screen flex items-center justify-center">
-            <div className="relative w-[90vw] md:w-[70vw] lg:w-[50vw] max-w-[600px] flex items-center justify-center">
-              <img src="/hacker-mask.jpeg" className="w-full h-auto object-contain" alt="Hacker Mask" />
-              <div className="absolute inset-0 bg-red-600 mix-blend-multiply pointer-events-none" />
-            </div>
+          <div className="fixed inset-0 w-screen h-screen z-0 pointer-events-none flex items-center justify-center overflow-hidden">
+            <img src="/hacker-mask.jpeg" className="w-full h-full object-cover opacity-20 filter sepia hue-rotate-[300deg] saturate-200" alt="Hacker Mask" />
+            <div className="absolute inset-0 bg-red-950/40 pointer-events-none" />
           </div>
           {/* Binary Background */}
           <BinaryBackground />
