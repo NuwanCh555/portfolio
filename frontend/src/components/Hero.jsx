@@ -13,6 +13,7 @@ export default function Hero({ portfolio, toggleHackerMode, hackerMode }) {
   const [deleting,  setDeleting]  = useState(false)
   const [clicks, setClicks] = useState(0)
   const [holdTimer, setHoldTimer] = useState(null)
+  const [isTouched, setIsTouched] = useState(false)
 
   useEffect(() => {
     if (clicks === 3) {
@@ -173,11 +174,11 @@ export default function Hero({ portfolio, toggleHackerMode, hackerMode }) {
                 <img
                   src={hackerMode && portfolio?.hackerProfileImage ? portfolio.hackerProfileImage : portfolio?.profilePhotoUrl}
                   alt="Nuwan MC — Cyber Security Developer"
-                  className={`w-full h-full object-cover rounded-full transition-all duration-300 opacity-90 mix-blend-screen select-none ${
-                    hackerMode 
-                      ? 'filter-none grayscale-0' 
-                      : 'filter contrast-125 grayscale hover:grayscale-0'
-                  }`}
+                  className={`w-full h-full object-cover rounded-full opacity-90 mix-blend-screen select-none filter contrast-125 transition-all duration-500 grayscale ${isTouched ? 'grayscale-0' : 'md:hover:grayscale-0'}`}
+                  onTouchStart={() => {
+                    setIsTouched(true);
+                    setTimeout(() => setIsTouched(false), 2000);
+                  }}
                   onContextMenu={(e) => e.preventDefault()}
                   draggable="false"
                   style={{ WebkitTouchCallout: 'none' }}
