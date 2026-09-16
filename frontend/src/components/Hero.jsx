@@ -49,19 +49,31 @@ export default function Hero({ portfolio }) {
           </div>
 
           {/* Headline */}
-          <h1 className="text-5xl md:text-7xl font-extrabold text-white tracking-tight leading-[1.1]">
+          <h1 
+            className="text-5xl md:text-7xl font-extrabold text-white tracking-tight leading-[1.1] select-none"
+            onContextMenu={(e) => e.preventDefault()}
+            style={{ WebkitTouchCallout: 'none' }}
+          >
             Architecting <br />
             <span className="text-gradient">Secure Digital</span> <br />
             Systems.
           </h1>
 
           {/* Typewriter subtitle */}
-          <p className="text-primary font-mono text-lg">
+          <p 
+            className="text-primary font-mono text-lg select-none"
+            onContextMenu={(e) => e.preventDefault()}
+            style={{ WebkitTouchCallout: 'none' }}
+          >
             &gt; {displayed}<span className="cursor">_</span>
           </p>
 
           {/* Bio */}
-          <p className="text-gray-400 text-lg md:text-xl max-w-xl leading-relaxed">
+          <p 
+            className="text-gray-400 text-lg md:text-xl max-w-xl leading-relaxed select-none"
+            onContextMenu={(e) => e.preventDefault()}
+            style={{ WebkitTouchCallout: 'none' }}
+          >
             I am <span className="text-primary font-medium">Nuwan MC</span>, a
             Full-Stack Developer &amp; Cyber Security Enthusiast specializing in
             robust software architectures and zero-trust IT infrastructure.
