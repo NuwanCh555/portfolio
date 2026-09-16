@@ -12,16 +12,31 @@ export default function Hero({ portfolio, toggleHackerMode }) {
   const [displayed, setDisplayed] = useState('')
   const [deleting,  setDeleting]  = useState(false)
   const [clicks, setClicks] = useState(0)
+  const [holdTimer, setHoldTimer] = useState(null)
 
   useEffect(() => {
     if (clicks === 3) {
-      if (toggleHackerMode) toggleHackerMode()
+      if (toggleHackerMode) toggleHackerMode(true) // entering
       setClicks(0)
     } else if (clicks > 0) {
       const timer = setTimeout(() => setClicks(0), 500)
       return () => clearTimeout(timer)
     }
   }, [clicks, toggleHackerMode])
+
+  const handlePointerDown = () => {
+    const timer = setTimeout(() => {
+      if (toggleHackerMode) toggleHackerMode(false) // exiting
+    }, 3000)
+    setHoldTimer(timer)
+  }
+
+  const handlePointerUp = () => {
+    if (holdTimer) {
+      clearTimeout(holdTimer)
+      setHoldTimer(null)
+    }
+  }
 
   // ── Typewriter effect ────────────────────────────────────────────────────
   useEffect(() => {
@@ -148,6 +163,11 @@ export default function Hero({ portfolio, toggleHackerMode }) {
             <div 
               className="absolute inset-2 rounded-full border border-primary/30 p-2 glass cursor-pointer"
               onClick={() => setClicks(c => c + 1)}
+              onMouseDown={handlePointerDown}
+              onMouseUp={handlePointerUp}
+              onMouseLeave={handlePointerUp}
+              onTouchStart={handlePointerDown}
+              onTouchEnd={handlePointerUp}
             >
               {portfolio?.profilePhotoUrl ? (
                 <img

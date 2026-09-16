@@ -28,17 +28,24 @@ function PortfolioPage() {
   const [portfolio, setPortfolio] = useState(null)
   const [hackerMode, setHackerMode] = useState(false)
   const [initializing, setInitializing] = useState(false)
+  const [restoring, setRestoring] = useState(false)
 
-  const toggleHackerMode = () => {
-    if (hackerMode) {
-      setHackerMode(false);
-      document.documentElement.classList.remove('hacker-mode');
-    } else {
+  const toggleHackerMode = (isEntering) => {
+    if (isEntering) {
+      if (hackerMode) return;
       setInitializing(true);
       setTimeout(() => {
         setInitializing(false);
         setHackerMode(true);
         document.documentElement.classList.add('hacker-mode');
+      }, 2000);
+    } else {
+      if (!hackerMode) return;
+      setRestoring(true);
+      setTimeout(() => {
+        setRestoring(false);
+        setHackerMode(false);
+        document.documentElement.classList.remove('hacker-mode');
       }, 2000);
     }
   }
@@ -75,6 +82,19 @@ function PortfolioPage() {
             <p className="text-red-500 font-mono text-xl mb-8">&gt; BYPASSING_FIREWALL...</p>
             <div className="w-full h-1 bg-red-900 rounded-full overflow-hidden">
               <div className="h-full bg-red-500 w-full origin-left animate-[scale-x_2s_ease-out]" style={{ animationName: 'scaleX', animationDuration: '2s', animationTimingFunction: 'linear' }} />
+            </div>
+            <style>{`@keyframes scaleX { 0% { transform: scaleX(0); } 100% { transform: scaleX(1); } }`}</style>
+          </div>
+        </div>
+      )}
+
+      {restoring && (
+        <div className="fixed inset-0 bg-black z-50 flex flex-col items-center justify-center">
+          <div className="w-full max-w-2xl px-6">
+            <p className="text-primary font-mono text-xl mb-4 animate-pulse">&gt; PURGING_MALWARE...</p>
+            <p className="text-primary font-mono text-xl mb-8">&gt; RESTORING_SECURE_CONNECTION...</p>
+            <div className="w-full h-1 bg-green-900 rounded-full overflow-hidden">
+              <div className="h-full bg-primary w-full origin-left animate-[scale-x_2s_ease-out]" style={{ animationName: 'scaleX', animationDuration: '2s', animationTimingFunction: 'linear' }} />
             </div>
             <style>{`@keyframes scaleX { 0% { transform: scaleX(0); } 100% { transform: scaleX(1); } }`}</style>
           </div>
