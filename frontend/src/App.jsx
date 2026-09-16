@@ -70,7 +70,7 @@ function PortfolioPage() {
       <div className="fixed inset-0 bg-grid pointer-events-none z-0" />
       
       {hackerMode && (
-        <div className="fixed inset-0 pointer-events-none -z-10 opacity-15 mix-blend-screen overflow-hidden">
+        <div className="absolute top-0 left-0 w-full h-full pointer-events-none -z-10 opacity-15 mix-blend-screen overflow-hidden">
           <div 
             className="absolute inset-0 w-full h-full"
             style={{ 
@@ -78,7 +78,7 @@ function PortfolioPage() {
               WebkitMaskImage: 'radial-gradient(circle at center, black 30%, transparent 80%)'
             }}
           >
-            <img src="/hacker-mask.jpg" className="w-[100vw] h-[100vh] object-cover" alt="Hacker Mask" />
+            <img src="/hacker-mask.jpg" className="w-full h-full object-cover object-top" alt="Hacker Mask" />
             <div className="absolute inset-0 bg-red-600 mix-blend-multiply" />
           </div>
         </div>
