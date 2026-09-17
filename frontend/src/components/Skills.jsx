@@ -42,16 +42,16 @@ const defaultDummyData = [
   },
 ]
 
-function SkillBar({ name, percentage }) {
+function SkillBar({ name, percentage, hackerMode }) {
   return (
     <div>
       <div className="flex justify-between text-xs font-mono mb-1.5">
         <span className="text-gray-300">{name}</span>
-        <span className="text-primary">{percentage}%</span>
+        <span className={`font-bold ${hackerMode ? 'text-red-400' : 'text-green-400'}`}>{percentage}%</span>
       </div>
-      <div className="h-1.5 bg-black/60 rounded-full overflow-hidden border border-primary/10">
+      <div className={`h-1.5 bg-black/60 rounded-full overflow-hidden border ${hackerMode ? 'border-red-500/20' : 'border-green-500/20'}`}>
         <div
-          className="h-full bg-gradient-to-r from-primary to-secondary rounded-full transition-all duration-1000"
+          className={`h-full rounded-full transition-all duration-1000 ${hackerMode ? 'bg-red-500' : 'bg-green-500'}`}
           style={{ width: `${percentage}%` }}
         />
       </div>
@@ -59,7 +59,7 @@ function SkillBar({ name, percentage }) {
   )
 }
 
-export default function Skills() {
+export default function Skills({ hackerMode }) {
   const [portfolio, setPortfolio] = useState(null);
 
   useEffect(() => {
@@ -103,7 +103,7 @@ export default function Skills() {
               
               <div className="space-y-3 mb-6">
                 {skills.map((s, idx) => (
-                  <SkillBar key={idx} name={s.name} percentage={s.percentage || s.level} />
+                  <SkillBar key={idx} name={s.name} percentage={s.percentage || s.level} hackerMode={hackerMode} />
                 ))}
               </div>
 
@@ -111,11 +111,7 @@ export default function Skills() {
                 {(tags || []).map((b, idx) => (
                   <span
                     key={idx}
-                    className={`px-3 py-1 rounded-lg text-xs font-mono ${
-                      glow
-                        ? 'bg-primary/20 border border-primary/50 text-white'
-                        : 'bg-primary/10 border border-primary/30 text-primary'
-                    }`}
+                    className={`px-3 py-1 rounded-lg text-xs font-mono bg-black/40 border ${hackerMode ? 'border-red-500 text-red-400' : 'border-green-500 text-green-400'}`}
                   >
                     {b}
                   </span>

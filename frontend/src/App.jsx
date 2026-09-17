@@ -137,7 +137,7 @@ function PortfolioPage() {
       <main className="relative z-10 min-h-screen">
         <Hero toggleHackerMode={toggleHackerMode} hackerMode={hackerMode} />
         <About />
-        <Skills />
+        <Skills hackerMode={hackerMode} />
         <Experience />
         <Projects />
         <Contact />
