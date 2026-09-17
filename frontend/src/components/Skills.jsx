@@ -1,4 +1,41 @@
-// No fallback data needed since we have a loading state in App.jsx
+const fallbackSkillGroups = [
+  {
+    icon:   'ph-terminal-window',
+    title:  'Frontend & Design',
+    glow:   false,
+    skills: [
+      { name: 'React JS',      percentage: 88 },
+      { name: 'Tailwind CSS',  percentage: 92 },
+      { name: 'JavaScript',    percentage: 85 },
+      { name: 'Figma',         percentage: 78 },
+    ],
+    tags: ['React JS', 'Tailwind CSS', 'JavaScript', 'Figma', 'HTML5', 'CSS3'],
+  },
+  {
+    icon:   'ph-database',
+    title:  'Backend & Systems',
+    glow:   false,
+    skills: [
+      { name: 'Node JS',  percentage: 82 },
+      { name: 'Python',   percentage: 75 },
+      { name: 'MongoDB',  percentage: 70 },
+      { name: 'MySQL',    percentage: 72 },
+    ],
+    tags: ['Node JS', 'Express', 'Python', 'MongoDB', 'MySQL', 'REST APIs'],
+  },
+  {
+    icon:   'ph-shield-check',
+    title:  'Security & Infra',
+    glow:   true,
+    skills: [
+      { name: 'Linux/Kali',   percentage: 80 },
+      { name: 'Networking',   percentage: 77 },
+      { name: 'Pen-Testing',  percentage: 73 },
+      { name: 'JWT Auth',     percentage: 85 },
+    ],
+    tags: ['Linux / Kali', 'Networking', 'Pen-Testing', 'JWT Auth', 'Wireshark', 'OWASP'],
+  },
+]
 
 function SkillBar({ name, percentage }) {
   return (
@@ -18,8 +55,10 @@ function SkillBar({ name, percentage }) {
 }
 
 export default function Skills({ portfolio }) {
-  const categories = portfolio?.skillCategories || [];
-  const sortedCategories = [...categories].reverse();
+  const apiCategories = portfolio?.skillCategories || [];
+  const displayCategories = apiCategories.length > 0 ? apiCategories : fallbackSkillGroups;
+  // Reverse API data to show newest first, but keep fallback order as is
+  const sortedCategories = apiCategories.length > 0 ? [...apiCategories].reverse() : displayCategories;
 
   return (
     <section

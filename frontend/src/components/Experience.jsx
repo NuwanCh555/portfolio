@@ -1,9 +1,36 @@
-// No fallback data needed since we have a loading state in App.jsx
+const fallbackTimeline = [
+  {
+    date:     '[ 2024 – 2026 Expected ]',
+    active:   true,
+    title:    'HNDIT Candidate',
+    org:      'Advanced Technological Institute (SLIATE) – Ratnapura',
+    desc:     '>> Focusing on Object-Oriented Programming (OOP), Database Management Systems (DBMS), Systems Analysis, and IT Infrastructure. Maintaining strong academic performance while building real-world projects.',
+    tags:     ['OOP', 'DBMS', 'Systems Analysis', 'IT Infra'],
+  },
+  {
+    date:     '[ 2023 – Present ]',
+    active:   false,
+    title:    'Freelance Full-Stack & Security',
+    org:      'Independent Contractor',
+    desc:     '>> Developing secure web applications, configuring backend API routes, and engaging in CTF (Capture The Flag) challenges to hone offensive and defensive security skills.',
+    tags:     ['React', 'Node.js', 'Penetration Testing', 'CTF'],
+  },
+  {
+    date:     '[ 2022 – 2023 ]',
+    active:   false,
+    title:    'Self-Directed Learning',
+    org:      'Online Platforms & Community',
+    desc:     '>> Completed intensive courses in web development, Linux fundamentals, and network security. Built a portfolio of 10+ projects from scratch across various technology stacks.',
+    tags:     ['HTML/CSS', 'JavaScript', 'Linux', 'Networking'],
+  },
+]
 
 export default function Experience({ portfolio }) {
-  const experiences = portfolio?.experience || [];
-  const sortedExperiences = [...experiences].reverse();
-  const isDynamic = true; // Always dynamic now
+  const apiExperiences = portfolio?.experience || [];
+  const displayExperiences = apiExperiences.length > 0 ? apiExperiences : fallbackTimeline;
+  // Reverse API data to show newest first, but keep fallback order as is
+  const sortedExperiences = apiExperiences.length > 0 ? [...apiExperiences].reverse() : displayExperiences;
+  const isDynamic = apiExperiences.length > 0;
 
   return (
     <section

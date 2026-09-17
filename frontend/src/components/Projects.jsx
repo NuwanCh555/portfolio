@@ -11,6 +11,36 @@ const TABS = [
 ]
 const ACCENT_COLORS = ['from-primary/20 to-secondary/20','from-secondary/20 to-primary/10','from-primary/10 to-primary/20']
 
+const fallbackProjects = [
+  {
+    _id: '1',
+    title: 'Zero-Trust Secure Network',
+    description: 'A mock enterprise network architecture demonstrating zero-trust principles, micro-segmentation, and strict access controls.',
+    category: 'security',
+    tech: ['Linux', 'Docker', 'WireGuard', 'pfSense'],
+    icon: 'ph-shield-check',
+    createdAt: new Date().toISOString()
+  },
+  {
+    _id: '2',
+    title: 'E-Commerce Dashboard UI',
+    description: 'A modern, premium admin dashboard for e-commerce platforms featuring real-time analytics and dynamic theming.',
+    category: 'web',
+    tech: ['React', 'Tailwind', 'Chart.js', 'Framer Motion'],
+    icon: 'ph-browsers',
+    createdAt: new Date().toISOString()
+  },
+  {
+    _id: '3',
+    title: 'Brand Identity Concept',
+    description: 'A complete branding package including logo design, color typography, and UI guidelines for a fintech startup.',
+    category: 'design',
+    tech: ['Figma', 'Illustrator', 'Photoshop'],
+    icon: 'ph-bezier-curve',
+    createdAt: new Date().toISOString()
+  }
+]
+
 function ProjectCard({ project, idx }) {
   const gradient = ACCENT_COLORS[idx % ACCENT_COLORS.length]
   return (
@@ -54,7 +84,9 @@ export default function Projects() {
   useEffect(() => {
     axios.get(`${API}/projects`)
       .then(({ data }) => {
-        const sorted = (data.projects || []).sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+        const apiProjects = data.projects || [];
+        const displayProjects = apiProjects.length > 0 ? apiProjects : fallbackProjects;
+        const sorted = [...displayProjects].sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
         setAllProjects(sorted);
         setVisible(sorted);
       })

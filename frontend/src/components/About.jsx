@@ -34,14 +34,42 @@ const parseBioText = (text) => {
   return parts;
 };
 
-// No fallback data needed since we have a loading state in App.jsx
+// Core Objectives fallback
+const fallbackObjectives = [
+  {
+    title: 'Full-Stack Engineering',
+    desc:  'Building responsive, data-driven applications with modern frameworks.',
+    icon:  'ph-code',
+  },
+  {
+    title: 'Cyber Security & Infra',
+    desc:  'Vulnerability testing & secure zero-trust routing principles.',
+    icon:  'ph-shield-check',
+  },
+  {
+    title: 'UI/UX & Branding',
+    desc:  'Crafting premium interfaces and cohesive digital identities.',
+    icon:  'ph-pen-nib',
+  },
+]
+
+// Stats fallback
+const fallbackStats = [
+  { val: '2+',  label: 'Years Coding'    },
+  { val: '10+', label: 'Projects Built'  },
+  { val: '5+',  label: 'CTF Challenges'  },
+]
 
 export default function About({ portfolio }) {
-  const stats = portfolio?.stats || [];
-  const coreObjectives = portfolio?.coreObjectives || [];
-  // Reverse to show newest at the top
-  const sortedStats = [...stats].reverse();
-  const sortedObjectives = [...coreObjectives].reverse();
+  const apiStats = portfolio?.stats || [];
+  const apiObjectives = portfolio?.coreObjectives || [];
+  
+  const displayStats = apiStats.length > 0 ? apiStats : fallbackStats;
+  const displayObjectives = apiObjectives.length > 0 ? apiObjectives : fallbackObjectives;
+
+  // Reverse API data to show newest at the top, but for fallbacks just keep as is
+  const sortedStats = apiStats.length > 0 ? [...apiStats].reverse() : displayStats;
+  const sortedObjectives = apiObjectives.length > 0 ? [...apiObjectives].reverse() : displayObjectives;
 
   return (
     <section
