@@ -7,7 +7,7 @@ const TITLES = [
   'CTF Competitor',
 ]
 
-export default function Hero({ portfolio, toggleHackerMode, hackerMode }) {
+export default function Hero({ toggleHackerMode, hackerMode }) {
   const [titleIdx,  setTitleIdx]  = useState(0)
   const [displayed, setDisplayed] = useState('')
   const [deleting,  setDeleting]  = useState(false)
@@ -116,7 +116,7 @@ export default function Hero({ portfolio, toggleHackerMode, hackerMode }) {
               Explore Projects <i className="ph ph-arrow-right text-lg" />
             </a>
             <a
-              href={portfolio?.cvUrl || "/cv.pdf"}
+              href="/cv.pdf"
               download
               id="hero-cv-btn"
               className="flex items-center gap-2 px-7 py-3.5 border border-primary/50 hover:border-primary text-primary font-medium rounded-xl transition-all bg-primary/5 hover:bg-primary/10"
@@ -170,9 +170,8 @@ export default function Hero({ portfolio, toggleHackerMode, hackerMode }) {
               onTouchStart={handlePointerDown}
               onTouchEnd={handlePointerUp}
             >
-              {(hackerMode && portfolio?.hackerProfileImage) || portfolio?.profilePhotoUrl ? (
                 <img
-                  src={hackerMode && portfolio?.hackerProfileImage ? portfolio.hackerProfileImage : portfolio?.profilePhotoUrl}
+                  src={hackerMode ? "/hacker-mask.jpeg" : "/profile.jpeg"}
                   alt="Nuwan MC — Cyber Security Developer"
                   className={`w-full h-full object-cover rounded-full opacity-90 mix-blend-screen select-none filter contrast-125 transition-all duration-500 grayscale ${isTouched ? 'grayscale-0' : 'md:hover:grayscale-0'}`}
                   onTouchStart={() => {
@@ -183,9 +182,6 @@ export default function Hero({ portfolio, toggleHackerMode, hackerMode }) {
                   draggable="false"
                   style={{ WebkitTouchCallout: 'none' }}
                 />
-              ) : (
-                <div className="w-full h-full rounded-full bg-primary/5 animate-pulse border border-primary/20 shadow-[inset_0_0_20px_rgba(var(--color-primary-rgb),0.2)]" />
-              )}
             </div>
             {/* Orbiting decoration dots */}
             <div className="absolute top-4 right-4 w-3 h-3 bg-primary rounded-full shadow-[0_0_8px_rgba(var(--color-primary-rgb),0.8)] animate-pulse" />

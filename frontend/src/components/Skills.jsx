@@ -1,4 +1,9 @@
-const fallbackSkillGroups = [
+import { useState, useEffect } from 'react';
+import axios from 'axios';
+
+const API = import.meta.env.VITE_API_URL || '/api';
+
+const defaultDummyData = [
   {
     icon:   'ph-terminal-window',
     title:  'Frontend & Design',
@@ -54,9 +59,17 @@ function SkillBar({ name, percentage }) {
   )
 }
 
-export default function Skills({ portfolio }) {
+export default function Skills() {
+  const [portfolio, setPortfolio] = useState(null);
+
+  useEffect(() => {
+    axios.get(`${API}/portfolio`)
+      .then(({ data }) => setPortfolio(data.data))
+      .catch(console.error);
+  }, []);
+
   const apiCategories = portfolio?.skillCategories || [];
-  const displayCategories = apiCategories.length > 0 ? apiCategories : fallbackSkillGroups;
+  const displayCategories = apiCategories.length > 0 ? apiCategories : defaultDummyData;
   // Reverse API data to show newest first, but keep fallback order as is
   const sortedCategories = apiCategories.length > 0 ? [...apiCategories].reverse() : displayCategories;
 

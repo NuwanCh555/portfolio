@@ -11,7 +11,7 @@ const TABS = [
 ]
 const ACCENT_COLORS = ['from-primary/20 to-secondary/20','from-secondary/20 to-primary/10','from-primary/10 to-primary/20']
 
-const fallbackProjects = [
+const defaultDummyData = [
   {
     _id: '1',
     title: 'Zero-Trust Secure Network',
@@ -85,7 +85,7 @@ export default function Projects() {
     axios.get(`${API}/projects`)
       .then(({ data }) => {
         const apiProjects = data.projects || [];
-        const displayProjects = apiProjects.length > 0 ? apiProjects : fallbackProjects;
+        const displayProjects = apiProjects.length > 0 ? apiProjects : defaultDummyData;
         const sorted = [...displayProjects].sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
         setAllProjects(sorted);
         setVisible(sorted);

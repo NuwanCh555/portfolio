@@ -1,3 +1,8 @@
+import { useState, useEffect } from 'react';
+import axios from 'axios';
+
+const API = import.meta.env.VITE_API_URL || '/api';
+
 // Utility to parse bio text and apply custom styling
 const parseBioText = (text) => {
   if (!text) return null;
@@ -34,40 +39,46 @@ const parseBioText = (text) => {
   return parts;
 };
 
-// Core Objectives fallback
-const fallbackObjectives = [
-  {
-    title: 'Full-Stack Engineering',
-    desc:  'Building responsive, data-driven applications with modern frameworks.',
-    icon:  'ph-code',
-  },
-  {
-    title: 'Cyber Security & Infra',
-    desc:  'Vulnerability testing & secure zero-trust routing principles.',
-    icon:  'ph-shield-check',
-  },
-  {
-    title: 'UI/UX & Branding',
-    desc:  'Crafting premium interfaces and cohesive digital identities.',
-    icon:  'ph-pen-nib',
-  },
-]
+const defaultDummyData = {
+  objectives: [
+    {
+      title: 'Full-Stack Engineering',
+      desc:  'Building responsive, data-driven applications with modern frameworks.',
+      icon:  'ph-code',
+    },
+    {
+      title: 'Cyber Security & Infra',
+      desc:  'Vulnerability testing & secure zero-trust routing principles.',
+      icon:  'ph-shield-check',
+    },
+    {
+      title: 'UI/UX & Branding',
+      desc:  'Crafting premium interfaces and cohesive digital identities.',
+      icon:  'ph-pen-nib',
+    },
+  ],
+  stats: [
+    { val: '2+',  label: 'Years Coding'    },
+    { val: '10+', label: 'Projects Built'  },
+    { val: '5+',  label: 'CTF Challenges'  },
+  ]
+};
 
-// Stats fallback
-const fallbackStats = [
-  { val: '2+',  label: 'Years Coding'    },
-  { val: '10+', label: 'Projects Built'  },
-  { val: '5+',  label: 'CTF Challenges'  },
-]
+export default function About() {
+  const [portfolio, setPortfolio] = useState(null);
 
-export default function About({ portfolio }) {
+  useEffect(() => {
+    axios.get(`${API}/portfolio`)
+      .then(({ data }) => setPortfolio(data.data))
+      .catch(console.error);
+  }, []);
+
   const apiStats = portfolio?.stats || [];
   const apiObjectives = portfolio?.coreObjectives || [];
   
-  const displayStats = apiStats.length > 0 ? apiStats : fallbackStats;
-  const displayObjectives = apiObjectives.length > 0 ? apiObjectives : fallbackObjectives;
+  const displayStats = apiStats.length > 0 ? apiStats : defaultDummyData.stats;
+  const displayObjectives = apiObjectives.length > 0 ? apiObjectives : defaultDummyData.objectives;
 
-  // Reverse API data to show newest at the top, but for fallbacks just keep as is
   const sortedStats = apiStats.length > 0 ? [...apiStats].reverse() : displayStats;
   const sortedObjectives = apiObjectives.length > 0 ? [...apiObjectives].reverse() : displayObjectives;
 

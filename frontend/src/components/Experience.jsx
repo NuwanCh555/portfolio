@@ -1,4 +1,9 @@
-const fallbackTimeline = [
+import { useState, useEffect } from 'react';
+import axios from 'axios';
+
+const API = import.meta.env.VITE_API_URL || '/api';
+
+const defaultDummyData = [
   {
     date:     '[ 2024 – 2026 Expected ]',
     active:   true,
@@ -25,9 +30,17 @@ const fallbackTimeline = [
   },
 ]
 
-export default function Experience({ portfolio }) {
+export default function Experience() {
+  const [portfolio, setPortfolio] = useState(null);
+
+  useEffect(() => {
+    axios.get(`${API}/portfolio`)
+      .then(({ data }) => setPortfolio(data.data))
+      .catch(console.error);
+  }, []);
+
   const apiExperiences = portfolio?.experience || [];
-  const displayExperiences = apiExperiences.length > 0 ? apiExperiences : fallbackTimeline;
+  const displayExperiences = apiExperiences.length > 0 ? apiExperiences : defaultDummyData;
   // Reverse API data to show newest first, but keep fallback order as is
   const sortedExperiences = apiExperiences.length > 0 ? [...apiExperiences].reverse() : displayExperiences;
   const isDynamic = apiExperiences.length > 0;
