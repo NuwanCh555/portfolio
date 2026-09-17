@@ -53,7 +53,11 @@ export default function Projects() {
 
   useEffect(() => {
     axios.get(`${API}/projects`)
-      .then(({ data }) => { setAllProjects(data.projects || []); setVisible(data.projects || []) })
+      .then(({ data }) => {
+        const sorted = (data.projects || []).sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+        setAllProjects(sorted);
+        setVisible(sorted);
+      })
       .catch(() => setError('Could not load projects from server.'))
       .finally(() => setLoading(false))
   }, [])

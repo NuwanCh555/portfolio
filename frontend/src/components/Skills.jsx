@@ -1,41 +1,4 @@
-const skillGroups = [
-  {
-    icon:   'ph-terminal-window',
-    title:  'Frontend & Design',
-    glow:   false,
-    skills: [
-      { name: 'React JS',      percentage: 88 },
-      { name: 'Tailwind CSS',  percentage: 92 },
-      { name: 'JavaScript',    percentage: 85 },
-      { name: 'Figma',         percentage: 78 },
-    ],
-    tags: ['React JS', 'Tailwind CSS', 'JavaScript', 'Figma', 'HTML5', 'CSS3'],
-  },
-  {
-    icon:   'ph-database',
-    title:  'Backend & Systems',
-    glow:   false,
-    skills: [
-      { name: 'Node JS',  percentage: 82 },
-      { name: 'Python',   percentage: 75 },
-      { name: 'MongoDB',  percentage: 70 },
-      { name: 'MySQL',    percentage: 72 },
-    ],
-    tags: ['Node JS', 'Express', 'Python', 'MongoDB', 'MySQL', 'REST APIs'],
-  },
-  {
-    icon:   'ph-shield-check',
-    title:  'Security & Infra',
-    glow:   true,
-    skills: [
-      { name: 'Linux/Kali',   percentage: 80 },
-      { name: 'Networking',   percentage: 77 },
-      { name: 'Pen-Testing',  percentage: 73 },
-      { name: 'JWT Auth',     percentage: 85 },
-    ],
-    tags: ['Linux / Kali', 'Networking', 'Pen-Testing', 'JWT Auth', 'Wireshark', 'OWASP'],
-  },
-]
+// No fallback data needed since we have a loading state in App.jsx
 
 function SkillBar({ name, percentage }) {
   return (
@@ -55,7 +18,8 @@ function SkillBar({ name, percentage }) {
 }
 
 export default function Skills({ portfolio }) {
-  const categories = portfolio?.skillCategories?.length > 0 ? portfolio.skillCategories : skillGroups;
+  const categories = portfolio?.skillCategories || [];
+  const sortedCategories = [...categories].reverse();
 
   return (
     <section
@@ -73,7 +37,7 @@ export default function Skills({ portfolio }) {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {categories.map(({ icon, title, glow, skills, tags }) => (
+          {sortedCategories.map(({ icon, title, glow, skills, tags }) => (
             <div
               key={title}
               className={`glass p-6 rounded-2xl transition-all duration-300 hover:-translate-y-1 ${

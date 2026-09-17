@@ -34,33 +34,15 @@ const parseBioText = (text) => {
   return parts;
 };
 
-// Core Objectives fallback if none exist in DB
-const fallbackObjectives = [
-  {
-    title: 'Full-Stack Engineering',
-    desc:  'Building responsive, data-driven applications with modern frameworks.',
-    icon:  'ph-code',
-  },
-  {
-    title: 'Cyber Security & Infra',
-    desc:  'Vulnerability testing & secure zero-trust routing principles.',
-    icon:  'ph-shield-check',
-  },
-  {
-    title: 'UI/UX & Branding',
-    desc:  'Crafting premium interfaces and cohesive digital identities.',
-    icon:  'ph-pen-nib',
-  },
-]
-
-// Stats fallback if none exist in DB
-const fallbackStats = [
-  { val: '2+',  label: 'Years Coding'    },
-  { val: '10+', label: 'Projects Built'  },
-  { val: '5+',  label: 'CTF Challenges'  },
-]
+// No fallback data needed since we have a loading state in App.jsx
 
 export default function About({ portfolio }) {
+  const stats = portfolio?.stats || [];
+  const coreObjectives = portfolio?.coreObjectives || [];
+  // Reverse to show newest at the top
+  const sortedStats = [...stats].reverse();
+  const sortedObjectives = [...coreObjectives].reverse();
+
   return (
     <section
       id="about"
@@ -110,7 +92,7 @@ export default function About({ portfolio }) {
 
             {/* Quick stats */}
             <div className="grid grid-cols-3 gap-4 pt-4">
-              {(portfolio?.stats?.length > 0 ? portfolio.stats : fallbackStats).map(({ val, label }) => (
+              {sortedStats.map(({ val, label }) => (
                 <div
                   key={label}
                   className="glass rounded-xl p-4 text-center border-primary/20"
@@ -128,7 +110,7 @@ export default function About({ portfolio }) {
               <i className="ph ph-target text-primary" /> Core Objectives
             </h3>
             <ul className="space-y-6 font-mono text-sm">
-              {(portfolio?.coreObjectives?.length > 0 ? portfolio.coreObjectives : fallbackObjectives).map(({ title, desc, icon }) => (
+              {sortedObjectives.map(({ title, desc, icon }) => (
                 <li key={title} className="flex items-start gap-4">
                   <div className="w-8 h-8 bg-primary/10 border border-primary/30 rounded-lg flex items-center justify-center flex-shrink-0 mt-0.5">
                     <i className={`ph ${icon || 'ph-target'} text-primary`} />

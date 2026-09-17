@@ -52,6 +52,7 @@ const BinaryBackground = () => (
 // ── Portfolio page (all sections) ────────────────────────────────────────────
 function PortfolioPage() {
   const [portfolio, setPortfolio] = useState(null)
+  const [isPortfolioLoading, setIsPortfolioLoading] = useState(true)
   const [hackerMode, setHackerMode] = useState(false)
   const [initializing, setInitializing] = useState(false)
   const [restoring, setRestoring] = useState(false)
@@ -81,6 +82,7 @@ function PortfolioPage() {
     axios.get(`${import.meta.env.VITE_API_URL || '/api'}/portfolio`)
       .then(({ data }) => setPortfolio(data.data))
       .catch(console.error)
+      .finally(() => setIsPortfolioLoading(false))
 
     const observer = new IntersectionObserver(
       (entries) => entries.forEach((e) => { if (e.isIntersecting) e.target.classList.add('active') }),
@@ -139,14 +141,23 @@ function PortfolioPage() {
       <div className="fixed top-[-10%] left-[-10%] w-[40%] h-[40%] bg-primary/10 rounded-full blur-[120px] pointer-events-none z-0" />
       <div className="fixed bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-secondary/10 rounded-full blur-[120px] pointer-events-none z-0" />
       <Navbar />
-      <main className="relative z-10">
-        <Hero portfolio={portfolio} toggleHackerMode={toggleHackerMode} hackerMode={hackerMode} />
-        <About portfolio={portfolio} />
-        <Skills portfolio={portfolio} />
-        <Experience portfolio={portfolio} />
-        <Projects />
-        <Contact />
-        <FeedbackForm />   {/* Only visible when logged in */}
+      <main className="relative z-10 min-h-screen">
+        {isPortfolioLoading ? (
+          <div className="flex flex-col items-center justify-center h-screen -mt-20">
+            <div className="w-16 h-16 border-4 border-primary/20 border-t-primary rounded-full animate-spin mb-6" />
+            <p className="text-primary font-mono text-xl animate-pulse tracking-widest">&gt; FETCHING_DATA...</p>
+          </div>
+        ) : (
+          <>
+            <Hero portfolio={portfolio} toggleHackerMode={toggleHackerMode} hackerMode={hackerMode} />
+            <About portfolio={portfolio} />
+            <Skills portfolio={portfolio} />
+            <Experience portfolio={portfolio} />
+            <Projects />
+            <Contact />
+            <FeedbackForm />   {/* Only visible when logged in */}
+          </>
+        )}
       </main>
       <Footer />
     </div>
