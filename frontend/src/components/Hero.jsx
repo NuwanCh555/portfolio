@@ -1,5 +1,7 @@
 import { useEffect, useState } from 'react'
+import axios from 'axios'
 
+const API = import.meta.env.VITE_API_URL || '/api'
 const TITLES = [
   'Full-Stack Developer',
   'Cyber Security Engineer',
@@ -8,12 +10,19 @@ const TITLES = [
 ]
 
 export default function Hero({ toggleHackerMode, hackerMode }) {
+  const [portfolio, setPortfolio] = useState(null)
   const [titleIdx,  setTitleIdx]  = useState(0)
   const [displayed, setDisplayed] = useState('')
   const [deleting,  setDeleting]  = useState(false)
   const [clicks, setClicks] = useState(0)
   const [holdTimer, setHoldTimer] = useState(null)
   const [isTouched, setIsTouched] = useState(false)
+
+  useEffect(() => {
+    axios.get(`${API}/portfolio`)
+      .then(({ data }) => setPortfolio(data.data))
+      .catch(console.error)
+  }, [])
 
   useEffect(() => {
     if (clicks === 3) {
@@ -116,7 +125,7 @@ export default function Hero({ toggleHackerMode, hackerMode }) {
               Explore Projects <i className="ph ph-arrow-right text-lg" />
             </a>
             <a
-              href="/cv.pdf"
+              href={portfolio?.cvUrl || "/cv.pdf"}
               download
               id="hero-cv-btn"
               className="flex items-center gap-2 px-7 py-3.5 border border-primary/50 hover:border-primary text-primary font-medium rounded-xl transition-all bg-primary/5 hover:bg-primary/10"
@@ -170,6 +179,20 @@ export default function Hero({ toggleHackerMode, hackerMode }) {
               onTouchStart={handlePointerDown}
               onTouchEnd={handlePointerUp}
             >
+              {(hackerMode && portfolio?.hackerProfileImage) || portfolio?.profilePhotoUrl ? (
+                <img
+                  src={hackerMode && portfolio?.hackerProfileImage ? portfolio.hackerProfileImage : portfolio?.profilePhotoUrl}
+                  alt="Nuwan MC — Cyber Security Developer"
+                  className={`w-full h-full object-cover rounded-full opacity-90 mix-blend-screen select-none filter contrast-125 transition-all duration-500 grayscale ${isTouched ? 'grayscale-0' : 'md:hover:grayscale-0'}`}
+                  onTouchStart={() => {
+                    setIsTouched(true);
+                    setTimeout(() => setIsTouched(false), 2000);
+                  }}
+                  onContextMenu={(e) => e.preventDefault()}
+                  draggable="false"
+                  style={{ WebkitTouchCallout: 'none' }}
+                />
+              ) : (
                 <img
                   src={hackerMode ? "/hacker-mask.jpeg" : "/profile.jpeg"}
                   alt="Nuwan MC — Cyber Security Developer"
@@ -182,6 +205,7 @@ export default function Hero({ toggleHackerMode, hackerMode }) {
                   draggable="false"
                   style={{ WebkitTouchCallout: 'none' }}
                 />
+              )}
             </div>
             {/* Orbiting decoration dots */}
             <div className="absolute top-4 right-4 w-3 h-3 bg-primary rounded-full shadow-[0_0_8px_rgba(var(--color-primary-rgb),0.8)] animate-pulse" />
