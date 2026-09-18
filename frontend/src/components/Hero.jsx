@@ -17,6 +17,7 @@ export default function Hero({ toggleHackerMode, hackerMode }) {
   const [clicks, setClicks] = useState(0)
   const [holdTimer, setHoldTimer] = useState(null)
   const [isTouched, setIsTouched] = useState(false)
+  const [imageLoaded, setImageLoaded] = useState(false)
 
   useEffect(() => {
     axios.get(`${API}/portfolio`)
@@ -171,7 +172,7 @@ export default function Hero({ toggleHackerMode, hackerMode }) {
             <div className="absolute inset-0 bg-gradient-to-tr from-primary to-secondary rounded-full blur-[60px] opacity-30 animate-pulse" />
             {/* Glass ring */}
             <div 
-              className="absolute inset-2 rounded-full border border-primary/30 p-2 glass cursor-pointer"
+              className="absolute inset-2 rounded-full border border-primary/30 p-2 glass bg-gray-900/50 cursor-pointer"
               onClick={() => setClicks(c => c + 1)}
               onMouseDown={handlePointerDown}
               onMouseUp={handlePointerUp}
@@ -183,7 +184,10 @@ export default function Hero({ toggleHackerMode, hackerMode }) {
                 <img
                   src={hackerMode && portfolio?.hackerProfileImage ? portfolio.hackerProfileImage : portfolio?.profilePhotoUrl}
                   alt="Nuwan MC — Cyber Security Developer"
-                  className={`w-full h-full object-cover rounded-full opacity-90 mix-blend-screen select-none filter contrast-125 transition-all duration-500 grayscale ${isTouched ? 'grayscale-0' : 'md:hover:grayscale-0'}`}
+                  loading="eager"
+                  fetchPriority="high"
+                  onLoad={() => setImageLoaded(true)}
+                  className={`w-full h-full object-cover rounded-full mix-blend-screen select-none filter contrast-125 transition-all duration-700 grayscale ${isTouched ? 'grayscale-0' : 'md:hover:grayscale-0'} ${imageLoaded ? 'opacity-90' : 'opacity-0'}`}
                   onTouchStart={() => {
                     setIsTouched(true);
                     setTimeout(() => setIsTouched(false), 2000);
@@ -196,7 +200,10 @@ export default function Hero({ toggleHackerMode, hackerMode }) {
                 <img
                   src={hackerMode ? "/hacker-mask.jpeg" : "/profile.jpeg"}
                   alt="Nuwan MC — Cyber Security Developer"
-                  className={`w-full h-full object-cover rounded-full opacity-90 mix-blend-screen select-none filter contrast-125 transition-all duration-500 grayscale ${isTouched ? 'grayscale-0' : 'md:hover:grayscale-0'}`}
+                  loading="eager"
+                  fetchPriority="high"
+                  onLoad={() => setImageLoaded(true)}
+                  className={`w-full h-full object-cover rounded-full mix-blend-screen select-none filter contrast-125 transition-all duration-700 grayscale ${isTouched ? 'grayscale-0' : 'md:hover:grayscale-0'} ${imageLoaded ? 'opacity-90' : 'opacity-0'}`}
                   onTouchStart={() => {
                     setIsTouched(true);
                     setTimeout(() => setIsTouched(false), 2000);
