@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 
 const API = import.meta.env.VITE_API_URL || '/api';
@@ -42,7 +42,7 @@ const defaultDummyData = [
   },
 ]
 
-function SkillBar({ name, percentage, hackerMode, isMounted }) {
+function SkillBar({ name, percentage, hackerMode, isVisible }) {
   return (
     <div>
       <div className="flex justify-between text-xs font-mono mb-1.5">
@@ -52,7 +52,7 @@ function SkillBar({ name, percentage, hackerMode, isMounted }) {
       <div className={`h-1.5 bg-black/60 rounded-full overflow-hidden border ${hackerMode ? 'border-red-500/20' : 'border-green-500/20'}`}>
         <div
           className={`h-full rounded-full transition-all duration-1000 ease-out ${hackerMode ? 'bg-red-500' : 'bg-green-500'}`}
-          style={{ width: isMounted ? `${percentage}%` : '0%' }}
+          style={{ width: isVisible ? `${percentage}%` : '0%' }}
         />
       </div>
     </div>
@@ -61,7 +61,8 @@ function SkillBar({ name, percentage, hackerMode, isMounted }) {
 
 export default function Skills({ hackerMode }) {
   const [portfolio,  setPortfolio]  = useState(null);
-  const [isMounted,  setIsMounted]  = useState(false);
+  const [isVisible,  setIsVisible]  = useState(false);
+  const sectionRef = useRef(null);
 
   // Fetch portfolio data
   useEffect(() => {
@@ -70,10 +71,23 @@ export default function Skills({ hackerMode }) {
       .catch(console.error);
   }, []);
 
-  // 300ms delay triggers the progress-bar fill animation
+  // Trigger bar animation once when the section scrolls into view
   useEffect(() => {
-    const timer = setTimeout(() => setIsMounted(true), 300);
-    return () => clearTimeout(timer);
+    const node = sectionRef.current;
+    if (!node) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setIsVisible(true);
+          observer.disconnect(); // fire only once
+        }
+      },
+      { threshold: 0.2 } // trigger when 20% of the section is visible
+    );
+
+    observer.observe(node);
+    return () => observer.disconnect();
   }, []);
 
   const apiCategories = portfolio?.skillCategories || [];
@@ -84,6 +98,7 @@ export default function Skills({ hackerMode }) {
   return (
     <section
       id="skills"
+      ref={sectionRef}
       className="py-24 px-6 border-t border-borderLight"
     >
       <div className="max-w-7xl mx-auto reveal">
@@ -111,7 +126,7 @@ export default function Skills({ hackerMode }) {
               
               <div className="space-y-3 mb-6">
                 {skills.map((s, idx) => (
-                  <SkillBar key={idx} name={s.name} percentage={s.percentage || s.level} hackerMode={hackerMode} isMounted={isMounted} />
+                  <SkillBar key={idx} name={s.name} percentage={s.percentage || s.level} hackerMode={hackerMode} isVisible={isVisible} />
                 ))}
               </div>
 
