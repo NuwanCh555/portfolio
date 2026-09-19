@@ -175,9 +175,9 @@ export default function Hero({ toggleHackerMode, hackerMode }) {
           <div className="relative w-72 h-72 md:w-[26rem] md:h-[26rem]">
             {/* Ambient glow */}
             <div className="absolute inset-0 bg-gradient-to-tr from-primary to-secondary rounded-full blur-[60px] opacity-30 animate-pulse" />
-            {/* Clean background circle */}
+            {/* Clean background circle with themed border */}
             <div 
-              className="absolute inset-2 rounded-full bg-gray-900/40 cursor-pointer"
+              className={`absolute inset-2 rounded-full bg-gray-900/40 border-2 p-1 cursor-pointer ${hackerMode ? 'border-red-500/50' : 'border-green-500/50'}`}
               onClick={() => setClicks(c => c + 1)}
               onMouseDown={handlePointerDown}
               onMouseUp={handlePointerUp}
