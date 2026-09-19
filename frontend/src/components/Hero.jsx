@@ -200,7 +200,7 @@ export default function Hero({ toggleHackerMode, hackerMode }) {
                   loading="eager"
                   fetchPriority="high"
                   onLoad={() => setImageLoaded(true)}
-                  className={`w-full h-full object-cover rounded-full select-none filter contrast-125 transition-all duration-100 grayscale ${isTouched ? 'grayscale-0' : 'md:hover:grayscale-0'} ${imageLoaded ? 'opacity-100' : 'opacity-0'}`}
+                  className={`w-full h-full object-cover rounded-full select-none transition-all duration-100 ${imageLoaded ? 'opacity-100' : 'opacity-0'}`}
                   onTouchStart={() => {
                     setIsTouched(true);
                     setTimeout(() => setIsTouched(false), 2000);
@@ -216,7 +216,7 @@ export default function Hero({ toggleHackerMode, hackerMode }) {
                   loading="eager"
                   fetchPriority="high"
                   onLoad={() => setImageLoaded(true)}
-                  className={`w-full h-full object-cover rounded-full select-none filter contrast-125 transition-all duration-100 grayscale ${isTouched ? 'grayscale-0' : 'md:hover:grayscale-0'} ${imageLoaded ? 'opacity-100' : 'opacity-0'}`}
+                  className={`w-full h-full object-cover rounded-full select-none transition-all duration-100 ${imageLoaded ? 'opacity-100' : 'opacity-0'}`}
                   onTouchStart={() => {
                     setIsTouched(true);
                     setTimeout(() => setIsTouched(false), 2000);
@@ -230,10 +230,6 @@ export default function Hero({ toggleHackerMode, hackerMode }) {
               {/* CRT overlays — hacker mode only, pointer-events-none so clicks pass through */}
               {hackerMode && (
                 <>
-                  {/* Overlay 1: static horizontal scanlines */}
-                  <div
-                    className="absolute inset-0 pointer-events-none z-10 bg-[repeating-linear-gradient(transparent,transparent_2px,rgba(0,0,0,0.6)_2px,rgba(0,0,0,0.6)_4px)]"
-                  />
                   {/* Overlay 2: moving scanner glow */}
                   <div
                     className="absolute left-0 right-0 h-24 bg-gradient-to-b from-transparent via-red-500/30 to-transparent pointer-events-none z-20 animate-scan"
