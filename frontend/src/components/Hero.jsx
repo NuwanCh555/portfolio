@@ -170,9 +170,9 @@ export default function Hero({ toggleHackerMode, hackerMode }) {
           <div className="relative w-72 h-72 md:w-[26rem] md:h-[26rem]">
             {/* Ambient glow */}
             <div className="absolute inset-0 bg-gradient-to-tr from-primary to-secondary rounded-full blur-[60px] opacity-30 animate-pulse" />
-            {/* Glass ring */}
+            {/* Clean background circle */}
             <div 
-              className="absolute inset-2 rounded-full border border-primary/30 p-2 glass bg-gray-900/50 cursor-pointer"
+              className="absolute inset-2 rounded-full bg-gray-900/40 cursor-pointer"
               onClick={() => setClicks(c => c + 1)}
               onMouseDown={handlePointerDown}
               onMouseUp={handlePointerUp}
@@ -187,7 +187,7 @@ export default function Hero({ toggleHackerMode, hackerMode }) {
                   loading="eager"
                   fetchPriority="high"
                   onLoad={() => setImageLoaded(true)}
-                  className={`w-full h-full object-cover rounded-full mix-blend-screen select-none filter contrast-125 transition-all duration-700 grayscale ${isTouched ? 'grayscale-0' : 'md:hover:grayscale-0'} ${imageLoaded ? 'opacity-90' : 'opacity-0'}`}
+                  className={`w-full h-full object-cover rounded-full mix-blend-screen select-none filter contrast-125 transition-all duration-100 grayscale ${isTouched ? 'grayscale-0' : 'md:hover:grayscale-0'} ${imageLoaded ? 'opacity-90' : 'opacity-0'}`}
                   onTouchStart={() => {
                     setIsTouched(true);
                     setTimeout(() => setIsTouched(false), 2000);
@@ -203,7 +203,7 @@ export default function Hero({ toggleHackerMode, hackerMode }) {
                   loading="eager"
                   fetchPriority="high"
                   onLoad={() => setImageLoaded(true)}
-                  className={`w-full h-full object-cover rounded-full mix-blend-screen select-none filter contrast-125 transition-all duration-700 grayscale ${isTouched ? 'grayscale-0' : 'md:hover:grayscale-0'} ${imageLoaded ? 'opacity-90' : 'opacity-0'}`}
+                  className={`w-full h-full object-cover rounded-full mix-blend-screen select-none filter contrast-125 transition-all duration-100 grayscale ${isTouched ? 'grayscale-0' : 'md:hover:grayscale-0'} ${imageLoaded ? 'opacity-90' : 'opacity-0'}`}
                   onTouchStart={() => {
                     setIsTouched(true);
                     setTimeout(() => setIsTouched(false), 2000);
