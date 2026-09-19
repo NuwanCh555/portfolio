@@ -175,7 +175,7 @@ export default function Hero({ toggleHackerMode, hackerMode }) {
           <div className="relative w-72 h-72 md:w-[26rem] md:h-[26rem]">
             {/* Offset solid shadow — no blur, no border, ultra-modern */}
             <div 
-              className="absolute inset-2 rounded-full cursor-pointer transition-[box-shadow] duration-300"
+              className="absolute inset-2 rounded-full cursor-pointer transition-[box-shadow] duration-300 overflow-hidden relative"
               style={{
                 boxShadow: hackerMode
                   ? '8px 8px 0px 0px rgba(239,68,68,1)'
@@ -221,6 +221,9 @@ export default function Hero({ toggleHackerMode, hackerMode }) {
                   style={{ WebkitTouchCallout: 'none' }}
                 />
               )}
+              {/* ── CRT overlays — pointer-events:none in CSS ── */}
+              <div className="crt-scanlines" />
+              <div className="crt-sweep" />
             </div>
             {/* Orbiting decoration dots */}
             <div className="absolute top-4 right-4 w-3 h-3 bg-primary rounded-full shadow-[0_0_8px_rgba(var(--color-primary-rgb),0.8)] animate-pulse" />
