@@ -200,7 +200,7 @@ export default function Hero({ toggleHackerMode, hackerMode }) {
                   loading="eager"
                   fetchPriority="high"
                   onLoad={() => setImageLoaded(true)}
-                  className={`w-full h-full object-cover rounded-full select-none transition-all duration-100 ${imageLoaded ? 'opacity-100' : 'opacity-0'}`}
+                  className={`w-full h-full object-cover rounded-full select-none transition-all duration-500 ease-in-out cursor-pointer grayscale hover:grayscale-0 ${imageLoaded ? 'opacity-100' : 'opacity-0'}`}
                   onTouchStart={() => {
                     setIsTouched(true);
                     setTimeout(() => setIsTouched(false), 2000);
@@ -216,7 +216,7 @@ export default function Hero({ toggleHackerMode, hackerMode }) {
                   loading="eager"
                   fetchPriority="high"
                   onLoad={() => setImageLoaded(true)}
-                  className={`w-full h-full object-cover rounded-full select-none transition-all duration-100 ${imageLoaded ? 'opacity-100' : 'opacity-0'}`}
+                  className={`w-full h-full object-cover rounded-full select-none transition-all duration-500 ease-in-out cursor-pointer grayscale hover:grayscale-0 ${imageLoaded ? 'opacity-100' : 'opacity-0'}`}
                   onTouchStart={() => {
                     setIsTouched(true);
                     setTimeout(() => setIsTouched(false), 2000);
