@@ -19,8 +19,8 @@ export default {
       },
       keyframes: {
         scan: {
-          '0%':   { transform: 'translateY(-100%)' },
-          '100%': { transform: 'translateY(100vh)'  },
+          '0%':   { top: '-10%' },
+          '100%': { top: '110%'  },
         },
       },
       animation: {

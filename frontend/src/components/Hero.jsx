@@ -232,7 +232,7 @@ export default function Hero({ toggleHackerMode, hackerMode }) {
                 <>
                   {/* Overlay 2: moving scanner glow */}
                   <div
-                    className="absolute left-0 right-0 h-24 bg-gradient-to-b from-transparent via-red-500/30 to-transparent pointer-events-none z-20 animate-scan"
+                    className="absolute w-full left-0 h-24 bg-gradient-to-b from-transparent via-red-500/30 to-transparent pointer-events-none z-20 animate-scan"
                   />
                 </>
               )}
