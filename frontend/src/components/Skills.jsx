@@ -42,7 +42,7 @@ const defaultDummyData = [
   },
 ]
 
-function SkillBar({ name, percentage, hackerMode }) {
+function SkillBar({ name, percentage, hackerMode, isMounted }) {
   return (
     <div>
       <div className="flex justify-between text-xs font-mono mb-1.5">
@@ -51,8 +51,8 @@ function SkillBar({ name, percentage, hackerMode }) {
       </div>
       <div className={`h-1.5 bg-black/60 rounded-full overflow-hidden border ${hackerMode ? 'border-red-500/20' : 'border-green-500/20'}`}>
         <div
-          className={`h-full rounded-full transition-all duration-1000 ${hackerMode ? 'bg-red-500' : 'bg-green-500'}`}
-          style={{ width: `${percentage}%` }}
+          className={`h-full rounded-full transition-all duration-1000 ease-out ${hackerMode ? 'bg-red-500' : 'bg-green-500'}`}
+          style={{ width: isMounted ? `${percentage}%` : '0%' }}
         />
       </div>
     </div>
@@ -60,12 +60,20 @@ function SkillBar({ name, percentage, hackerMode }) {
 }
 
 export default function Skills({ hackerMode }) {
-  const [portfolio, setPortfolio] = useState(null);
+  const [portfolio,  setPortfolio]  = useState(null);
+  const [isMounted,  setIsMounted]  = useState(false);
 
+  // Fetch portfolio data
   useEffect(() => {
     axios.get(`${API}/portfolio`)
       .then(({ data }) => setPortfolio(data.data))
       .catch(console.error);
+  }, []);
+
+  // 300ms delay triggers the progress-bar fill animation
+  useEffect(() => {
+    const timer = setTimeout(() => setIsMounted(true), 300);
+    return () => clearTimeout(timer);
   }, []);
 
   const apiCategories = portfolio?.skillCategories || [];
@@ -103,7 +111,7 @@ export default function Skills({ hackerMode }) {
               
               <div className="space-y-3 mb-6">
                 {skills.map((s, idx) => (
-                  <SkillBar key={idx} name={s.name} percentage={s.percentage || s.level} hackerMode={hackerMode} />
+                  <SkillBar key={idx} name={s.name} percentage={s.percentage || s.level} hackerMode={hackerMode} isMounted={isMounted} />
                 ))}
               </div>
 
