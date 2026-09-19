@@ -48,6 +48,8 @@ const portfolioSchema = new mongoose.Schema(
     cvUrl: { type: String, default: '' },
     profilePhotoUrl: { type: String, default: '' },
     hackerProfileImage: { type: String, default: '' },
+    githubUrl: { type: String, default: '' },
+    linkedinUrl: { type: String, default: '' },
   },
   { timestamps: true }
 )

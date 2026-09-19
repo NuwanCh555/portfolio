@@ -533,16 +533,20 @@ export function ExperienceManager() {
 }
 
 export function MediaManager() {
-  const [media,   setMedia]   = useState({ cvUrl: '', profilePhotoUrl: '', hackerProfileImage: '' });
+  const [media,   setMedia]   = useState({ cvUrl: '', profilePhotoUrl: '', hackerProfileImage: '', githubUrl: '', linkedinUrl: '' });
+  const [socialLoading, setSocialLoading] = useState(false);
+  const [socialMsg,     setSocialMsg]     = useState('');
   const [loading, setLoading] = useState(false);
   const [msg,     setMsg]     = useState('');
 
   useEffect(() => {
     axios.get(`${API}/portfolio`)
       .then(({ data }) => setMedia({
-        cvUrl:           data.data?.cvUrl           || '',
-        profilePhotoUrl: data.data?.profilePhotoUrl || '',
+        cvUrl:              data.data?.cvUrl              || '',
+        profilePhotoUrl:    data.data?.profilePhotoUrl    || '',
         hackerProfileImage: data.data?.hackerProfileImage || '',
+        githubUrl:          data.data?.githubUrl          || '',
+        linkedinUrl:        data.data?.linkedinUrl        || '',
       }));
   }, []);
 
@@ -744,6 +748,86 @@ export function MediaManager() {
             disabled={loading}
             className="text-gray-400 font-mono text-sm file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-sm file:font-bold file:bg-primary/20 file:text-primary hover:file:bg-primary/30 file:cursor-pointer file:transition-all"
           />
+        </div>
+      </div>
+
+      {/* ── Social Links ── */}
+      <div className="glass p-6 rounded-2xl border-primary/20 space-y-5">
+        <h3 className="text-white font-bold text-lg flex items-center gap-2">
+          <i className="ph ph-share-network text-primary" /> Social Links
+        </h3>
+
+        {socialMsg && (
+          <div className={`p-3 rounded-xl text-sm font-mono border ${
+            socialMsg.startsWith('✅') ? 'bg-primary/10 border-primary/30 text-primary'
+            : 'bg-red-950/60 border-red-500/40 text-red-400'
+          }`}>{socialMsg}</div>
+        )}
+
+        {/* GitHub */}
+        <div className="space-y-2">
+          <label className="block text-primary font-mono text-xs">GitHub Profile URL</label>
+          <div className="flex gap-3">
+            <div className="relative flex-1">
+              <i className="ph ph-github-logo absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 text-lg" />
+              <input
+                type="url"
+                id="admin-github-url"
+                placeholder="https://github.com/yourusername"
+                value={media.githubUrl}
+                onChange={(e) => setMedia(prev => ({ ...prev, githubUrl: e.target.value }))}
+                className="w-full pl-9 pr-4 py-2.5 bg-black/80 border border-primary/30 rounded-xl text-white font-mono text-sm focus:border-primary outline-none transition-all"
+              />
+            </div>
+            <button
+              id="admin-github-save-btn"
+              disabled={socialLoading}
+              onClick={async () => {
+                setSocialLoading(true); setSocialMsg('');
+                try {
+                  await axios.put(`${API}/portfolio`, { githubUrl: media.githubUrl });
+                  setSocialMsg('✅ GitHub URL saved.');
+                } catch { setSocialMsg('❌ Failed to save.'); }
+                finally { setSocialLoading(false); setTimeout(() => setSocialMsg(''), 3000); }
+              }}
+              className="px-5 py-2 bg-primary text-black font-bold rounded-xl hover:bg-white transition-all text-sm disabled:opacity-50 shrink-0"
+            >
+              {socialLoading ? '…' : 'Save'}
+            </button>
+          </div>
+        </div>
+
+        {/* LinkedIn */}
+        <div className="space-y-2">
+          <label className="block text-primary font-mono text-xs">LinkedIn Profile URL</label>
+          <div className="flex gap-3">
+            <div className="relative flex-1">
+              <i className="ph ph-linkedin-logo absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 text-lg" />
+              <input
+                type="url"
+                id="admin-linkedin-url"
+                placeholder="https://linkedin.com/in/yourusername"
+                value={media.linkedinUrl}
+                onChange={(e) => setMedia(prev => ({ ...prev, linkedinUrl: e.target.value }))}
+                className="w-full pl-9 pr-4 py-2.5 bg-black/80 border border-primary/30 rounded-xl text-white font-mono text-sm focus:border-primary outline-none transition-all"
+              />
+            </div>
+            <button
+              id="admin-linkedin-save-btn"
+              disabled={socialLoading}
+              onClick={async () => {
+                setSocialLoading(true); setSocialMsg('');
+                try {
+                  await axios.put(`${API}/portfolio`, { linkedinUrl: media.linkedinUrl });
+                  setSocialMsg('✅ LinkedIn URL saved.');
+                } catch { setSocialMsg('❌ Failed to save.'); }
+                finally { setSocialLoading(false); setTimeout(() => setSocialMsg(''), 3000); }
+              }}
+              className="px-5 py-2 bg-primary text-black font-bold rounded-xl hover:bg-white transition-all text-sm disabled:opacity-50 shrink-0"
+            >
+              {socialLoading ? '…' : 'Save'}
+            </button>
+          </div>
         </div>
       </div>
     </div>

@@ -138,27 +138,32 @@ export default function Hero({ toggleHackerMode, hackerMode }) {
           {/* Social links row */}
           <div className="flex items-center gap-4 pt-2">
             <a
-              href="https://github.com/"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-gray-500 hover:text-primary transition-colors"
+              href={portfolio?.githubUrl || undefined}
+              target={portfolio?.githubUrl ? '_blank' : undefined}
+              rel={portfolio?.githubUrl ? 'noopener noreferrer' : undefined}
+              onClick={!portfolio?.githubUrl ? (e) => e.preventDefault() : undefined}
+              className={`transition-colors text-2xl ${portfolio?.githubUrl ? 'text-gray-500 hover:text-primary cursor-pointer' : 'text-gray-700 cursor-default'}`}
               aria-label="GitHub"
+              id="hero-github-link"
             >
-              <i className="ph ph-github-logo text-2xl" />
+              <i className="ph ph-github-logo" />
             </a>
             <a
-              href="https://linkedin.com/"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-gray-500 hover:text-primary transition-colors"
+              href={portfolio?.linkedinUrl || undefined}
+              target={portfolio?.linkedinUrl ? '_blank' : undefined}
+              rel={portfolio?.linkedinUrl ? 'noopener noreferrer' : undefined}
+              onClick={!portfolio?.linkedinUrl ? (e) => e.preventDefault() : undefined}
+              className={`transition-colors text-2xl ${portfolio?.linkedinUrl ? 'text-gray-500 hover:text-primary cursor-pointer' : 'text-gray-700 cursor-default'}`}
               aria-label="LinkedIn"
+              id="hero-linkedin-link"
             >
-              <i className="ph ph-linkedin-logo text-2xl" />
+              <i className="ph ph-linkedin-logo" />
             </a>
             <a
               href="#contact"
               className="text-gray-500 hover:text-primary transition-colors"
               aria-label="Email"
+              id="hero-email-link"
             >
               <i className="ph ph-envelope-simple text-2xl" />
             </a>
