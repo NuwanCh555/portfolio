@@ -173,14 +173,9 @@ export default function Hero({ toggleHackerMode, hackerMode }) {
         {/* ── Right: Profile Image ── */}
         <div className="md:w-2/5 flex justify-center relative">
           <div className="relative w-72 h-72 md:w-[26rem] md:h-[26rem]">
-            {/* Offset solid shadow — no blur, no border, ultra-modern */}
+            {/* Profile image wrapper — border changes with theme, overlays only in hacker mode */}
             <div 
-              className="absolute inset-2 rounded-full cursor-pointer transition-[box-shadow] duration-300 overflow-hidden relative"
-              style={{
-                boxShadow: hackerMode
-                  ? '8px 8px 0px 0px rgba(239,68,68,1)'
-                  : '8px 8px 0px 0px rgba(34,197,94,1)'
-              }}
+              className={`absolute inset-2 rounded-full cursor-pointer transition-colors duration-300 overflow-hidden relative border-2 ${hackerMode ? 'border-red-500' : 'border-green-500'}`}
               onClick={() => setClicks(c => c + 1)}
               onMouseDown={handlePointerDown}
               onMouseUp={handlePointerUp}
@@ -221,9 +216,20 @@ export default function Hero({ toggleHackerMode, hackerMode }) {
                   style={{ WebkitTouchCallout: 'none' }}
                 />
               )}
-              {/* ── CRT overlays — pointer-events:none in CSS ── */}
-              <div className="crt-scanlines" />
-              <div className="crt-sweep" />
+
+              {/* CRT overlays — hacker mode only, pointer-events-none so clicks pass through */}
+              {hackerMode && (
+                <>
+                  {/* Overlay 1: static horizontal scanlines */}
+                  <div
+                    className="absolute inset-0 pointer-events-none z-10 bg-[repeating-linear-gradient(transparent,transparent_2px,rgba(0,0,0,0.6)_2px,rgba(0,0,0,0.6)_4px)]"
+                  />
+                  {/* Overlay 2: moving scanner glow */}
+                  <div
+                    className="absolute left-0 right-0 h-24 bg-gradient-to-b from-transparent via-red-500/30 to-transparent pointer-events-none z-20 animate-scan"
+                  />
+                </>
+              )}
             </div>
             {/* Orbiting decoration dots */}
             <div className="absolute top-4 right-4 w-3 h-3 bg-primary rounded-full shadow-[0_0_8px_rgba(var(--color-primary-rgb),0.8)] animate-pulse" />
