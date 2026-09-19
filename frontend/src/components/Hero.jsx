@@ -173,9 +173,19 @@ export default function Hero({ toggleHackerMode, hackerMode }) {
         {/* ── Right: Profile Image ── */}
         <div className="md:w-2/5 flex justify-center relative">
           <div className="relative w-72 h-72 md:w-[26rem] md:h-[26rem]">
-            {/* Profile image wrapper — border changes with theme, overlays only in hacker mode */}
+            {/* Pulsing background glow layer strictly separated from the image */}
             <div 
-              className={`absolute inset-2 rounded-full cursor-pointer transition-colors duration-300 overflow-hidden relative border-2 ${hackerMode ? 'border-red-500' : 'border-green-500'}`}
+              className="absolute inset-2 -z-10 rounded-full animate-pulse transition-[box-shadow] duration-300"
+              style={{
+                boxShadow: hackerMode
+                  ? '0 0 60px 20px rgba(239,68,68,0.3)'
+                  : '0 0 60px 20px rgba(34,197,94,0.3)'
+              }}
+            />
+
+            {/* Profile image wrapper — static border, crisp opaque image */}
+            <div 
+              className={`absolute inset-2 rounded-full cursor-pointer transition-colors duration-300 overflow-hidden z-10 bg-black border-2 ${hackerMode ? 'border-red-500' : 'border-green-500'}`}
               onClick={() => setClicks(c => c + 1)}
               onMouseDown={handlePointerDown}
               onMouseUp={handlePointerUp}
@@ -190,7 +200,7 @@ export default function Hero({ toggleHackerMode, hackerMode }) {
                   loading="eager"
                   fetchPriority="high"
                   onLoad={() => setImageLoaded(true)}
-                  className={`w-full h-full object-cover rounded-full mix-blend-screen select-none filter contrast-125 transition-all duration-100 grayscale ${isTouched ? 'grayscale-0' : 'md:hover:grayscale-0'} ${imageLoaded ? 'opacity-90' : 'opacity-0'}`}
+                  className={`w-full h-full object-cover rounded-full select-none filter contrast-125 transition-all duration-100 grayscale ${isTouched ? 'grayscale-0' : 'md:hover:grayscale-0'} ${imageLoaded ? 'opacity-100' : 'opacity-0'}`}
                   onTouchStart={() => {
                     setIsTouched(true);
                     setTimeout(() => setIsTouched(false), 2000);
@@ -206,7 +216,7 @@ export default function Hero({ toggleHackerMode, hackerMode }) {
                   loading="eager"
                   fetchPriority="high"
                   onLoad={() => setImageLoaded(true)}
-                  className={`w-full h-full object-cover rounded-full mix-blend-screen select-none filter contrast-125 transition-all duration-100 grayscale ${isTouched ? 'grayscale-0' : 'md:hover:grayscale-0'} ${imageLoaded ? 'opacity-90' : 'opacity-0'}`}
+                  className={`w-full h-full object-cover rounded-full select-none filter contrast-125 transition-all duration-100 grayscale ${isTouched ? 'grayscale-0' : 'md:hover:grayscale-0'} ${imageLoaded ? 'opacity-100' : 'opacity-0'}`}
                   onTouchStart={() => {
                     setIsTouched(true);
                     setTimeout(() => setIsTouched(false), 2000);
