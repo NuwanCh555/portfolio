@@ -18,6 +18,7 @@ export default function Hero({ toggleHackerMode, hackerMode }) {
   const [holdTimer, setHoldTimer] = useState(null)
   const [isTouched, setIsTouched] = useState(false)
   const [imageLoaded, setImageLoaded] = useState(false)
+  const [isHovered, setIsHovered] = useState(false)
 
   useEffect(() => {
     axios.get(`${API}/portfolio`)
@@ -200,11 +201,15 @@ export default function Hero({ toggleHackerMode, hackerMode }) {
                   loading="eager"
                   fetchPriority="high"
                   onLoad={() => setImageLoaded(true)}
-                  className={`w-full h-full object-cover rounded-full select-none transition-all duration-500 ease-in-out cursor-pointer grayscale hover:grayscale-0 ${imageLoaded ? 'opacity-100' : 'opacity-0'}`}
+                  className={`w-full h-full object-cover rounded-full select-none transition-all duration-500 ease-in-out cursor-pointer ${isHovered ? 'grayscale-0' : 'grayscale'} ${imageLoaded ? 'opacity-100' : 'opacity-0'}`}
+                  onMouseEnter={() => setIsHovered(true)}
+                  onMouseLeave={() => setIsHovered(false)}
                   onTouchStart={() => {
                     setIsTouched(true);
+                    setIsHovered(true);
                     setTimeout(() => setIsTouched(false), 2000);
                   }}
+                  onTouchEnd={() => setIsHovered(false)}
                   onContextMenu={(e) => e.preventDefault()}
                   draggable="false"
                   style={{ WebkitTouchCallout: 'none' }}
@@ -216,11 +221,15 @@ export default function Hero({ toggleHackerMode, hackerMode }) {
                   loading="eager"
                   fetchPriority="high"
                   onLoad={() => setImageLoaded(true)}
-                  className={`w-full h-full object-cover rounded-full select-none transition-all duration-500 ease-in-out cursor-pointer grayscale hover:grayscale-0 ${imageLoaded ? 'opacity-100' : 'opacity-0'}`}
+                  className={`w-full h-full object-cover rounded-full select-none transition-all duration-500 ease-in-out cursor-pointer ${isHovered ? 'grayscale-0' : 'grayscale'} ${imageLoaded ? 'opacity-100' : 'opacity-0'}`}
+                  onMouseEnter={() => setIsHovered(true)}
+                  onMouseLeave={() => setIsHovered(false)}
                   onTouchStart={() => {
                     setIsTouched(true);
+                    setIsHovered(true);
                     setTimeout(() => setIsTouched(false), 2000);
                   }}
+                  onTouchEnd={() => setIsHovered(false)}
                   onContextMenu={(e) => e.preventDefault()}
                   draggable="false"
                   style={{ WebkitTouchCallout: 'none' }}
