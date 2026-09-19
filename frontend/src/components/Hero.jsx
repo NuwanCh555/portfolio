@@ -173,11 +173,14 @@ export default function Hero({ toggleHackerMode, hackerMode }) {
         {/* ── Right: Profile Image ── */}
         <div className="md:w-2/5 flex justify-center relative">
           <div className="relative w-72 h-72 md:w-[26rem] md:h-[26rem]">
-            {/* Ambient glow */}
-            <div className="absolute inset-0 bg-gradient-to-tr from-primary to-secondary rounded-full blur-[60px] opacity-30 animate-pulse" />
-            {/* Clean static themed border ring */}
+            {/* Offset solid shadow — no blur, no border, ultra-modern */}
             <div 
-              className={`absolute inset-2 rounded-full border-2 p-[3px] cursor-pointer transition-colors duration-300 ${hackerMode ? 'border-red-500' : 'border-green-500'}`}
+              className="absolute inset-2 rounded-full cursor-pointer transition-[box-shadow] duration-300"
+              style={{
+                boxShadow: hackerMode
+                  ? '8px 8px 0px 0px rgba(239,68,68,1)'
+                  : '8px 8px 0px 0px rgba(34,197,94,1)'
+              }}
               onClick={() => setClicks(c => c + 1)}
               onMouseDown={handlePointerDown}
               onMouseUp={handlePointerUp}
