@@ -186,7 +186,7 @@ function AdminRoute({ children }) {
 function GuestRoute({ children }) {
   const { user, loading } = useAuth()
   if (loading) return null
-  if (user) return <Navigate to={user.role === 'admin' ? '/dashboard' : '/'} replace />
+  if (user) return <Navigate to={user.role === 'admin' ? '/admin' : '/'} replace />
   return children
 }
 
@@ -205,8 +205,8 @@ export default function App() {
           <Route path="/auth/forgot-password" element={<GuestRoute><ForgotPassword /></GuestRoute>} />
 
           {/* Admin dashboard — admin role only */}
-          <Route path="/dashboard" element={<AdminRoute><AdminDashboard /></AdminRoute>} />
-          <Route path="/admin" element={<Navigate to="/dashboard" replace />} />
+          <Route path="/admin" element={<AdminRoute><AdminDashboard /></AdminRoute>} />
+          <Route path="/dashboard" element={<Navigate to="/admin" replace />} />
 
           {/* Catch-all */}
           <Route path="*" element={<Navigate to="/" replace />} />

@@ -6,12 +6,14 @@ import ProjectManager from './ProjectManager'
 import MessageInbox   from './MessageInbox'
 import FeedbackInbox  from './FeedbackInbox'
 import VisitorLogPanel from './VisitorLog'
+import UsersTable from './UsersTable'
 import { AboutManager, SkillCategoriesManager, ExperienceManager, MediaManager } from './PortfolioSections'
 
 const API = import.meta.env.VITE_API_URL || '/api'
 
 const NAV_ITEMS = [
   { key: 'overview',  label: 'Overview',       icon: 'ph-squares-four'      },
+  { key: 'users',     label: 'Registered Users', icon: 'ph-users'             },
   { key: 'about',     label: 'About Me',       icon: 'ph-identification-card' },
   { key: 'skills',    label: 'Skills',         icon: 'ph-star'                },
   { key: 'experience',label: 'Experience',     icon: 'ph-briefcase'           },
@@ -183,6 +185,7 @@ export default function AdminDashboard() {
             </div>
           )}
 
+          {active === 'users'     && <UsersTable />}
           {active === 'projects'  && <ProjectManager  onRefresh={fetchStats} />}
           {active === 'about'     && <AboutManager />}
           {active === 'skills'    && <SkillCategoriesManager />}

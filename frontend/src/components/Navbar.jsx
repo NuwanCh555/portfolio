@@ -65,7 +65,7 @@ export default function Navbar() {
           {user ? (
             <>
               {user.role === 'admin' && (
-                <Link to="/dashboard"
+                <Link to="/admin"
                   className="flex items-center gap-2 text-sm font-medium text-black bg-primary px-4 py-2 rounded-xl hover:bg-white transition-all shadow-[0_0_10px_rgba(var(--color-primary-rgb),0.3)]">
                   <i className="ph ph-squares-four" /> Admin Panel
                 </Link>
@@ -117,7 +117,7 @@ export default function Navbar() {
           {user ? (
             <>
               {user.role === 'admin' && (
-                <Link to="/dashboard" onClick={() => setMobileOpen(false)} className="block text-primary font-mono">&gt; Admin Panel</Link>
+                <Link to="/admin" onClick={() => setMobileOpen(false)} className="block text-primary font-mono">&gt; Admin Panel</Link>
               )}
               <button onClick={() => { handleLogout(); setMobileOpen(false) }} className="block text-red-400 font-mono text-sm text-left">&gt; Logout</button>
             </>
