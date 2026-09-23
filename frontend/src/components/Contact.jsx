@@ -1,9 +1,10 @@
-import { useState } from 'react'
+import { useState, useContext } from 'react'
 import axios from 'axios'
+import { AuthContext } from '../context/AuthContext'
 
 const API = import.meta.env.VITE_API_URL || '/api'
 const URL_REGEX = /(https?:\/\/|www\.|\.com|\.net|\.lk|\.org|\.io|\.co\b)/i
-const INITIAL_FORM = { name: '', email: '', message: '' }
+const INITIAL_FORM = { name: '', message: '' }
 
 // ── Contact Info Data ─────────────────────────────────────────────────────────
 const CONTACT_DETAILS = [
@@ -13,6 +14,7 @@ const CONTACT_DETAILS = [
 ]
 
 export default function Contact() {
+  const { user } = useContext(AuthContext)
   const [form,    setForm]    = useState(INITIAL_FORM)
   const [errors,  setErrors]  = useState({})
   const [status,  setStatus]  = useState('idle')
@@ -28,8 +30,6 @@ export default function Contact() {
     const errs = {}
     if (!form.name.trim())    errs.name    = 'Name is required.'
     else if (URL_REGEX.test(form.name)) errs.name = 'FIREWALL: URLs are blocked.'
-    if (!form.email.trim())   errs.email   = 'Email is required.'
-    else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email)) errs.email = 'Enter a valid email.'
     if (!form.message.trim()) errs.message = 'Message cannot be empty.'
     else if (URL_REGEX.test(form.message)) errs.message = 'FIREWALL ALERT: URLs & external links are blocked.'
     setErrors(errs)
@@ -133,9 +133,8 @@ export default function Contact() {
                   {/* Email */}
                   <div>
                     <label htmlFor="contact-email" className="block text-primary font-mono text-sm mb-2">Email_Address</label>
-                    <input id="contact-email" name="email" type="email" value={form.email} onChange={handleChange} placeholder="admin@local.host"
-                      className={`w-full bg-black/80 border rounded-xl px-4 py-3 text-white font-mono placeholder:text-gray-700 focus:outline-none transition-all ${errors.email ? 'border-red-500/60' : 'border-primary/30 focus:border-primary focus:shadow-[0_0_10px_rgba(var(--color-primary-rgb),0.2)]'}`} />
-                    {errors.email && <p className="mt-1 text-xs font-mono text-red-400 flex items-center gap-1"><i className="ph-fill ph-warning-circle" />{errors.email}</p>}
+                    <input id="contact-email" name="email" type="email" value={user?.email || ''} readOnly disabled
+                      className="w-full bg-black/80 border rounded-xl px-4 py-3 text-white font-mono focus:outline-none transition-all opacity-70 cursor-not-allowed border-primary/30" />
                   </div>
 
                   {/* Message */}
