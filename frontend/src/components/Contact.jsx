@@ -8,7 +8,6 @@ const INITIAL_FORM = { name: '', email: '', message: '' }
 // ── Contact Info Data ─────────────────────────────────────────────────────────
 const CONTACT_DETAILS = [
   { icon: 'ph-user',          label: 'Name',     value: 'Nuwan MC'                    },
-  { icon: 'ph-map-pin',       label: 'Location', value: 'Balangoda, Sri Lanka'         },
   { icon: 'ph-phone',         label: 'Phone',    value: '076 621 4785 / 074 221 4785'  },
   { icon: 'ph-envelope',      label: 'Email',    value: 'nchathuranga533@gmail.com', link: 'mailto:nchathuranga533@gmail.com' },
 ]
