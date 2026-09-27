@@ -68,6 +68,43 @@ export default function Hero({ toggleHackerMode, hackerMode }) {
     return () => clearTimeout(timeout)
   }, [displayed, deleting, titleIdx])
 
+  const handleDownloadCV = async (e) => {
+    e.preventDefault();
+    const cvUrl = portfolio?.cvUrl || "/cv.pdf";
+    
+    try {
+      // 1. Try Cloudinary attachment flag if applicable
+      if (cvUrl.includes('cloudinary.com') && cvUrl.includes('/upload/')) {
+        const parts = cvUrl.split('/upload/');
+        const downloadUrl = `${parts[0]}/upload/fl_attachment:Nuwan_MC_CV/${parts[1]}`;
+        const a = document.createElement('a');
+        a.href = downloadUrl;
+        a.download = 'Nuwan_MC_CV.pdf';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        return;
+      }
+
+      // 2. Try fetching as Blob for other URLs
+      const response = await fetch(cvUrl);
+      if (!response.ok) throw new Error('Network response was not ok');
+      const blob = await response.blob();
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.style.display = 'none';
+      a.href = url;
+      a.download = 'Nuwan_MC_CV.pdf';
+      document.body.appendChild(a);
+      a.click();
+      window.URL.revokeObjectURL(url);
+      document.body.removeChild(a);
+    } catch (error) {
+      console.error('Failed to download CV:', error);
+      window.open(cvUrl, '_blank');
+    }
+  };
+
   return (
     <section
       id="home"
@@ -128,7 +165,8 @@ export default function Hero({ toggleHackerMode, hackerMode }) {
             </a>
             <a
               href={portfolio?.cvUrl || "/cv.pdf"}
-              download
+              onClick={handleDownloadCV}
+              download="Nuwan_MC_CV.pdf"
               id="hero-cv-btn"
               className="flex items-center gap-2 px-7 py-3.5 border border-primary/50 hover:border-primary text-primary font-medium rounded-xl transition-all bg-primary/5 hover:bg-primary/10"
             >
