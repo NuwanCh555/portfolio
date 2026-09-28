@@ -14,6 +14,7 @@ const projectRoutes  = require('./routes/projectRoutes')
 const adminRoutes    = require('./routes/adminRoutes')
 const portfolioRoutes = require('./routes/portfolioRoutes')
 const uploadRoutes    = require('./routes/uploadRoutes')
+const cvRoutes        = require('./routes/cvRoutes')
 
 // ── Connect to MongoDB ────────────────────────────────────────────────────────
 connectDB()
@@ -64,6 +65,7 @@ app.use('/api/projects',  projectRoutes)
 app.use('/api/admin',     adminRoutes)
 app.use('/api/portfolio', portfolioRoutes)
 app.use('/api/upload',    uploadRoutes)
+app.use('/api/cv',        cvRoutes)
 
 // ── Health check ──────────────────────────────────────────────────────────────
 app.get('/api/health', (_, res) => res.json({ status: 'ok', timestamp: new Date().toISOString() }))
