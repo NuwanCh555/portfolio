@@ -68,6 +68,21 @@ export default function Hero({ toggleHackerMode, hackerMode }) {
     return () => clearTimeout(timeout)
   }, [displayed, deleting, titleIdx])
 
+  // Build a Cloudinary SEO-suffix URL so the browser opens the PDF inline
+  // and the "Save As" dialog pre-fills the correct filename.
+  // e.g. .../upload/v123/abc.pdf  →  .../upload/v123/abc/Nuwan_MC_CV.pdf
+  const getCvUrl = (rawUrl) => {
+    if (!rawUrl) return '/cv.pdf';
+    if (rawUrl.includes('cloudinary.com') && rawUrl.includes('/upload/')) {
+      // Strip any existing fl_attachment or other transformation prefixes
+      const [base, rest] = rawUrl.split('/upload/');
+      // rest may look like: v12345/some_id.pdf
+      // We want:            v12345/some_id/Nuwan_MC_CV.pdf
+      const withoutExt = rest.replace(/\.pdf$/i, '');
+      return `${base}/upload/${withoutExt}/Nuwan_MC_CV.pdf`;
+    }
+    return rawUrl;
+  };
 
   return (
     <section
@@ -128,7 +143,7 @@ export default function Hero({ toggleHackerMode, hackerMode }) {
               Explore Projects <i className="ph ph-arrow-right text-lg" />
             </a>
             <a
-              href={portfolio?.cvUrl || "/cv.pdf"}
+              href={getCvUrl(portfolio?.cvUrl)}
               target="_blank"
               rel="noopener noreferrer"
               id="hero-cv-btn"
